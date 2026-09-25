@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Bank of America — Personal Banking, Checking, Savings &amp; Credit Cards</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#003580">
+  <link rel="shortcut icon" href="./downloaded_files/img/boa_box.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="./css/theme.css">
+  <link rel="stylesheet" href="./css/home.css">
+  <style>
+    /* ── Skip link ── */
+    .skip-link{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:9999}
+    .skip-link:focus{position:fixed;top:0;left:0;width:auto;height:auto;padding:.6rem 1.25rem;
+      background:#003580;color:#fff;font-size:.9rem;font-weight:700;border-radius:0 0 6px 0;
+      text-decoration:none;outline:3px solid #fff}
+    /* ── Focus ring ── */
+    *:focus-visible{outline:3px solid #005eb8;outline-offset:2px}
+    /* ── Touch ── */
+    a,button{touch-action:manipulation}
+    /* ── Tabular numbers on financials ── */
+    .home-card-offer__rate,.home-promo-card__big,.home-promo-card__tier span{font-variant-numeric:tabular-nums}
+    /* ── Balanced headings ── */
+    h1,h2,h3,.home-promo-hero__title,.home-goals__title,.home-news-card__title{text-wrap:balance}
+    /* ── Explicit transitions (no transition:all) ── */
+    .home-card-offer__cta{transition:background-color .15s ease,color .15s ease}
+    .home-feat__link{transition:color .15s ease}
+    .home-goal-card{transition:box-shadow .2s ease,transform .2s ease}
+    .home-connect-item{transition:border-color .15s ease,background-color .15s ease,color .15s ease}
+    /* ── Reduced motion ── */
+    @media(prefers-reduced-motion:reduce){
+      *{transition:none!important;animation:none!important;transform:none!important}
+    }
+  </style>
+</head>
+<body>
+  <!-- Skip to main content -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <div class="shell-wrap">
+
+    <!--
+      navbar.js injects: utility bar · primary nav · logo+search · product nav · mobile drawer · session modal
+      NO hardcoded chrome here — that was the source of duplication.
+    -->
+    <script>window.BOA_ROOT = './';</script>
+    <script src="./js/navbar.js"></script>
+
+    <!-- ===== MAIN ===== -->
+    <main class="home-main" id="main-content">
+      <div class="BOA-container">
+
+        <!-- ── HERO SPLIT: Login panel + Credit-card promo ── -->
+        <section class="home-hero-split" aria-label="Sign in and credit card promotions">
+
+          <!-- Login Panel -->
+          <div class="home-login-panel">
+            <form class="home-login-form" action="./login.html" method="get" id="homeLoginForm"
+              aria-label="Online Banking sign-in">
+              <div class="home-login-form__group">
+                <label for="home_userId" class="home-login-form__label">User ID</label>
+                <input type="text" id="home_userId" name="userId" class="home-login-form__input"
+                  autocomplete="username" aria-required="true" spellcheck="false">
+              </div>
+              <div class="home-login-form__group">
+                <label for="home_userPass" class="home-login-form__label">Password</label>
+                <input type="password" id="home_userPass" name="userPass" class="home-login-form__input"
+                  autocomplete="current-password" aria-required="true">
+              </div>
+              <div class="home-login-form__remember">
+                <label class="home-login-form__check">
+                  <input type="checkbox" name="saveId"> Save user ID
+                </label>
+              </div>
+              <button type="submit" class="home-login-form__btn">Log In</button>
+              <div class="home-login-form__links">
+                <a href="./forgot-password.html">Forgot user ID/password</a>
+                <span class="home-login-form__dot" aria-hidden="true">·</span>
+                <a href="./help.html">Security &amp; Help</a>
+                <span class="home-login-form__dot" aria-hidden="true">·</span>
+                <a href="./login.html">Enroll</a>
+              </div>
+            </form>
+            <div class="home-login-panel__open">
+              <a href="./login.html" class="home-login-panel__open-link">
+                <i class="fa fa-user-plus" aria-hidden="true"></i> Open an Account
+              </a>
+            </div>
+          </div><!-- /login panel -->
+
+          <!-- Credit-card promo -->
+          <div class="home-promo-hero" aria-label="Credit card promotions">
+            <div class="home-promo-hero__content">
+              <h1 class="home-promo-hero__title">Choose the Card That Works for You</h1>
+              <div class="home-card-offers">
+
+                <div class="home-card-offer">
+                  <div class="home-card-offer__rate" aria-label="6 percent">6<span class="home-card-offer__pct" aria-hidden="true">%</span></div>
+                  <div class="home-card-offer__label">cash back offer</div>
+                  <div class="home-card-offer__note">No annual fee</div>
+                  <img src="./downloaded_files/img/boa_box.jpg" alt="Customized Cash Rewards card"
+                    class="home-card-offer__img" width="80" height="50" loading="lazy">
+                  <div class="home-card-offer__name">Customized Cash Rewards</div>
+                  <a href="./login.html" class="home-card-offer__cta"><strong>$200</strong><br>online bonus offer</a>
+                </div>
+
+                <div class="home-card-offer home-card-offer--highlight">
+                  <div class="home-card-offer__badge">LIMITED-TIME OFFER</div>
+                  <div class="home-card-offer__rate" aria-label="1.5 percent">1.5<span class="home-card-offer__pct" aria-hidden="true">%</span></div>
+                  <div class="home-card-offer__label">cash back</div>
+                  <div class="home-card-offer__note">No annual fee</div>
+                  <img src="./downloaded_files/img/boa_box.jpg" alt="Unlimited Cash Rewards card"
+                    class="home-card-offer__img" width="80" height="50" loading="lazy">
+                  <div class="home-card-offer__name">Unlimited Cash Rewards</div>
+                  <a href="./login.html" class="home-card-offer__cta"><strong>$250</strong><br>online bonus offer</a>
+                </div>
+
+                <div class="home-card-offer">
+                  <div class="home-card-offer__rate" aria-label="1.5 points per dollar">1.5</div>
+                  <div class="home-card-offer__label">points for every $1<sup>†</sup></div>
+                  <div class="home-card-offer__note">No annual fee</div>
+                  <img src="./downloaded_files/img/boa_box.jpg" alt="Travel Rewards card"
+                    class="home-card-offer__img" width="80" height="50" loading="lazy">
+                  <div class="home-card-offer__name">Travel Rewards</div>
+                  <a href="./login.html" class="home-card-offer__cta"><strong>25,000</strong> online<br>bonus points offer</a>
+                </div>
+
+                <div class="home-card-offer">
+                  <div class="home-card-offer__rate" aria-label="0 percent intro APR">0<span class="home-card-offer__pct" aria-hidden="true">%</span></div>
+                  <div class="home-card-offer__label">Intro APR offer</div>
+                  <div class="home-card-offer__note">No annual fee</div>
+                  <img src="./downloaded_files/img/boa_box.jpg" alt="BankAmericard"
+                    class="home-card-offer__img" width="80" height="50" loading="lazy">
+                  <div class="home-card-offer__name">BankAmericard<sup>®</sup></div>
+                  <a href="./login.html" class="home-card-offer__cta">Intro APR offer<br>for 21 billing cycles</a>
+                </div>
+
+              </div>
+            </div>
+          </div><!-- /promo hero -->
+
+        </section>
+
+        <!-- ── PROMOTIONS ROW ── -->
+        <section class="home-promos" aria-label="Current promotions">
+          <div class="home-promos__grid">
+
+            <div class="home-promo-card home-promo-card--light">
+              <div class="home-promo-card__eyebrow">NEW CHECKING CUSTOMERS</div>
+              <p class="home-promo-card__sub">Earn more cash back in the category of your choice with the Customized Cash Rewards checking account.</p>
+              <a href="./login.html" class="home-promo-card__link">See Details</a>
+            </div>
+
+            <div class="home-promo-card home-promo-card--cash">
+              <div class="home-promo-card__tiers" aria-label="Earn $100 or $300">
+                <div class="home-promo-card__tier"><span>$100</span></div>
+                <div class="home-promo-card__tier"><span>$300</span></div>
+              </div>
+              <div class="home-promo-card__big" aria-label="Up to $500 cash offer">$500</div>
+              <div class="home-promo-card__big-label">cash offer</div>
+            </div>
+
+            <div class="home-promo-card home-promo-card--img">
+              <div class="home-promo-card__img-overlay">
+                <div class="home-promo-card__eyebrow home-promo-card__eyebrow--light">Soccer Is in Session</div>
+                <p class="home-promo-card__sub home-promo-card__sub--light">Bank of America and U.S. Soccer are committed to helping bring the game and its lessons to schools across the nation.</p>
+                <a href="./login.html" class="home-promo-card__link home-promo-card__link--light">Get Involved</a>
+              </div>
+              <img src="./downloaded_files/img/online_banking_hero.jpg"
+                alt="Student holding a soccer ball in a school hallway"
+                class="home-promo-card__bg" width="600" height="300" loading="lazy">
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ── FEATURES ROW ── -->
+        <section class="home-features" aria-label="Key banking features">
+          <div class="home-features__grid">
+
+            <div class="home-feat">
+              <div class="home-feat__icon home-feat__icon--blue"><i class="fa fa-credit-card" aria-hidden="true"></i></div>
+              <div class="home-feat__body">
+                <div class="home-feat__title">6% Customized <strong>Cash Back Offer</strong></div>
+                <p class="home-feat__desc">Earn more cash back in the category of your choice with the Customized Cash Rewards credit card.</p>
+                <a href="./login.html" class="home-feat__link">Apply Now</a>
+              </div>
+            </div>
+
+            <div class="home-feat">
+              <div class="home-feat__icon home-feat__icon--red"><i class="fa fa-dollar-sign" aria-hidden="true"></i></div>
+              <div class="home-feat__body">
+                <div class="home-feat__title">Cash Offer up to <strong>$500</strong></div>
+                <p class="home-feat__desc">Check out this offer for new checking customers.</p>
+                <a href="./login.html" class="home-feat__link">See Details</a>
+              </div>
+            </div>
+
+            <div class="home-feat">
+              <div class="home-feat__icon home-feat__icon--teal"><i class="fa fa-bell" aria-hidden="true"></i></div>
+              <div class="home-feat__body">
+                <div class="home-feat__title"><strong>Custom Mobile Alerts</strong></div>
+                <p class="home-feat__desc">Bank of America Mobile Banking app alerts prioritize what matters most to you.</p>
+                <a href="./login.html" class="home-feat__link">Get the App</a>
+              </div>
+            </div>
+
+            <div class="home-feat">
+              <div class="home-feat__icon home-feat__icon--purple">
+                <img src="./downloaded_files/img/boa_box.jpg" alt="Merrill Lynch" width="28" height="28" style="border-radius:4px">
+              </div>
+              <div class="home-feat__body">
+                <div class="home-feat__title">Solutions Built Around You</div>
+                <p class="home-feat__desc">At Merrill, we provide the tools, people and know-how to help you pursue your financial goals.</p>
+                <a href="./login.html" class="home-feat__link">Get Started</a>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ── FINANCIAL GOALS ── -->
+        <section class="home-goals" aria-labelledby="goals-heading">
+          <div class="home-goals__header">
+            <h2 id="goals-heading" class="home-goals__title">Your Financial Goals Matter</h2>
+            <p class="home-goals__sub">We can help you achieve them through Better Money Habits<sup>®</sup> financial education and programs that make communities stronger.</p>
+          </div>
+          <div class="home-goals__grid">
+
+            <a href="./login.html" class="home-goal-card">
+              <img src="./downloaded_files/img/main_carousel_1.jpg" alt="Two people discussing personal finances"
+                class="home-goal-card__img" width="280" height="140" loading="lazy">
+              <div class="home-goal-card__body">
+                <i class="fa fa-user home-goal-card__icon" aria-hidden="true"></i>
+                <p class="home-goal-card__text">Money Confessions — real people share their experiences and get helpful guidance</p>
+              </div>
+            </a>
+
+            <a href="./login.html" class="home-goal-card">
+              <img src="./downloaded_files/img/main_carousel_2.jpg" alt="Homeowner reviewing loan documents"
+                class="home-goal-card__img" width="280" height="140" loading="lazy">
+              <div class="home-goal-card__body">
+                <i class="fa fa-house home-goal-card__icon" aria-hidden="true"></i>
+                <p class="home-goal-card__text">How does a home equity line of credit work — and how can it help?</p>
+              </div>
+            </a>
+
+            <a href="./login.html" class="home-goal-card">
+              <img src="./downloaded_files/img/main_carousel_3.jpg" alt="Person reviewing savings options on a tablet"
+                class="home-goal-card__img" width="280" height="140" loading="lazy">
+              <div class="home-goal-card__body">
+                <i class="fa fa-piggy-bank home-goal-card__icon" aria-hidden="true"></i>
+                <p class="home-goal-card__text">Savings accounts and CDs (certificates of deposit): Which should I choose?</p>
+              </div>
+            </a>
+
+            <a href="./login.html" class="home-goal-card">
+              <img src="./downloaded_files/img/online_banking_hero.jpg" alt="Person using a budgeting app on a laptop"
+                class="home-goal-card__img" width="280" height="140" loading="lazy">
+              <div class="home-goal-card__body">
+                <i class="fa fa-brain home-goal-card__icon" aria-hidden="true"></i>
+                <p class="home-goal-card__text">Retrain your brain for savings success with these money-saving challenges</p>
+              </div>
+            </a>
+
+          </div>
+          <div class="home-goals__cta">
+            <p class="home-goals__cta-text">Explore more topics and build your financial know-how.</p>
+            <a href="./login.html" class="home-goals__cta-btn">Visit Better Money Habits<sup>®</sup></a>
+          </div>
+        </section>
+
+        <!-- ── NEWS & INFORMATION ── -->
+        <section class="home-news" aria-labelledby="news-heading">
+          <h2 id="news-heading" class="home-news__title">Your News and Information</h2>
+          <div class="home-news__grid">
+
+            <div class="home-news-card">
+              <div class="home-news-card__body">
+                <h3 class="home-news-card__title">Level Up Your Account Security</h3>
+                <p class="home-news-card__desc">Watch your security meter rise as you take action to help protect against fraud. See it in the Security Center in Mobile and Online Banking.</p>
+                <a href="./login.html" class="home-news-card__btn">Check Your Level</a>
+              </div>
+              <div class="home-news-card__media">
+                <img src="./downloaded_files/img/35202650_shield.jpg" alt="Security center dashboard on a smartphone"
+                  width="220" height="160" loading="lazy">
+              </div>
+            </div>
+
+            <div class="home-news-card home-news-card--dark">
+              <div class="home-news-card__body">
+                <h3 class="home-news-card__title">Convenient Banking with Our Mobile App</h3>
+                <a href="./login.html" class="home-news-card__btn home-news-card__btn--outline">Explore Our App</a>
+              </div>
+              <div class="home-news-card__media">
+                <img src="./downloaded_files/img/online_banking_hero.jpg" alt="Mobile banking app on a smartphone"
+                  width="220" height="160" loading="lazy">
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ── CONNECT WITH US ── -->
+        <section class="home-connect" aria-labelledby="connect-heading">
+          <h2 id="connect-heading" class="home-connect__title">Connect with Us</h2>
+          <div class="home-connect__grid">
+            <a href="./locations.html" class="home-connect-item">
+              <i class="fa fa-calendar-days home-connect-item__icon" aria-hidden="true"></i>
+              <span class="home-connect-item__label">Schedule an Appointment</span>
+            </a>
+            <a href="./locations.html" class="home-connect-item">
+              <i class="fa fa-location-dot home-connect-item__icon" aria-hidden="true"></i>
+              <span class="home-connect-item__label">Find a Location</span>
+            </a>
+            <a href="./feedback.html" class="home-connect-item">
+              <i class="fa fa-phone home-connect-item__icon" aria-hidden="true"></i>
+              <span class="home-connect-item__label">Contact Us</span>
+            </a>
+            <a href="./help.html" class="home-connect-item">
+              <i class="fa fa-circle-question home-connect-item__icon" aria-hidden="true"></i>
+              <span class="home-connect-item__label">Help Center</span>
+            </a>
+          </div>
+        </section>
+
+        <!-- ── INVESTMENT DISCLAIMERS ── -->
+        <section class="home-disclaimer" aria-label="Investment and insurance product disclaimers">
+          <div class="home-disclaimer__box">
+            <div class="home-disclaimer__grid">
+              <div class="home-disclaimer__cell">Are Not FDIC Insured</div>
+              <div class="home-disclaimer__cell">Are Not Bank Guaranteed</div>
+              <div class="home-disclaimer__cell">May Lose Value</div>
+              <div class="home-disclaimer__cell">Are Not Deposits</div>
+              <div class="home-disclaimer__cell">Are Not Insured by Any Federal Government Agency</div>
+              <div class="home-disclaimer__cell">Are Not a Condition to Any Banking Service or Activity</div>
+            </div>
+          </div>
+          <div class="home-disclaimer__legal">
+            <p><a href="./privacy.html" class="home-disclaimer__link">Online Banking Service Agreement</a></p>
+            <p>Investing in securities involves risks, and there is always the potential of losing money when you invest in securities. You should review any planned financial transactions that may have tax or legal implications with your personal tax or legal advisor.</p>
+            <p>Securities products are provided by Merrill Lynch, Pierce, Fenner &amp; Smith Incorporated (also referred to as "MLPF&amp;S" or "Merrill"), a registered broker-dealer, registered investment adviser, <a href="./privacy.html" class="home-disclaimer__link">Member SIPC</a>, and a wholly-owned subsidiary of Bank of America Corporation.</p>
+            <p>Banking, credit card, automobile loans, mortgage and home equity products are provided by Bank of America, N.A. and affiliated banks, Members FDIC and wholly owned subsidiaries of Bank of America Corporation. Credit and collateral are subject to approval. Terms and conditions apply.</p>
+          </div>
+        </section>
+
+      </div><!-- /BOA-container -->
+    </main>
+
+    <!-- ── FOOTER ── -->
+    <footer class="home-footer" role="contentinfo">
+      <div class="home-footer__links-bar">
+        <div class="BOA-container">
+          <ul class="home-footer__link-list" role="list">
+            <li><a href="./locations.html">Locations</a></li>
+            <li><a href="./feedback.html">Contact Us</a></li>
+            <li><a href="./help.html">Help &amp; Support</a></li>
+            <li><a href="./careers.html">Careers</a></li>
+            <li><a href="./privacy.html">Accessible Banking</a></li>
+            <li><a href="./privacy.html">Privacy</a></li>
+            <li><a href="./privacy.html">Children's Privacy</a></li>
+            <li><a href="./help.html">Security</a></li>
+            <li><a href="./privacy.html">Online Banking Service Agreement</a></li>
+            <li><a href="./privacy.html">AdChoices</a></li>
+            <li><a href="./search.html">Site Map</a></li>
+            <li><a href="./careers.html">Browse with Specialist</a></li>
+            <li><a href="./feedback.html">Share Your Feedback</a></li>
+            <li><a href="./online-banking.html">View Full Online Banking Site</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="home-footer__bottom">
+        <div class="BOA-container home-footer__bottom-inner">
+          <div class="home-footer__social">
+            <span class="home-footer__social-label">Connect with us</span>
+            <div class="home-footer__social-icons">
+              <a href="./login.html" aria-label="Facebook"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
+              <a href="./login.html" aria-label="LinkedIn"><i class="fab fa-linkedin-in" aria-hidden="true"></i></a>
+              <a href="./login.html" aria-label="Instagram"><i class="fab fa-instagram" aria-hidden="true"></i></a>
+              <a href="./login.html" aria-label="Pinterest"><i class="fab fa-pinterest-p" aria-hidden="true"></i></a>
+              <a href="./login.html" aria-label="X / Twitter"><i class="fab fa-x-twitter" aria-hidden="true"></i></a>
+              <a href="./login.html" aria-label="YouTube"><i class="fab fa-youtube" aria-hidden="true"></i></a>
+            </div>
+          </div>
+          <p class="home-footer__copy">
+            Bank of America, N.A. Member FDIC.
+            <a href="./privacy.html" class="home-footer__ehl">Equal Housing Lender <i class="fa fa-house" aria-hidden="true"></i></a><br>
+            © 2026 Bank of America Corporation. All rights reserved.<br>
+            Patent: <a href="./privacy.html">patents.bankofamerica.com</a>
+          </p>
+          <p class="home-footer__sim-notice">This is a simulated banking frontend for educational purposes only.</p>
+        </div>
+      </div>
+    </footer>
+
+  </div><!-- /shell-wrap -->
+
+  <script src="./js/ui.js"></script>
+</body>
+</html>

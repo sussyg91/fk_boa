@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Message Sent — Bank of America</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="./downloaded_files/img/boa_box.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="./css/theme.css">
+  <link rel="stylesheet" href="./css/home.css">
+</head>
+<body>
+<div class="shell-wrap">
+
+  <script>window.BOA_ROOT = './';</script>
+  <script src="./js/navbar.js"></script>
+
+  <div class="shell-page-header">
+    <div class="BOA-container shell-page-header__inner">
+      <h1 class="shell-page-header__title">Message Confirmation</h1>
+      <nav class="shell-breadcrumb" aria-label="Breadcrumb">
+        <a href="./index.html">Home</a>
+        <span class="shell-breadcrumb__sep"><i class="fa fa-chevron-right"></i></span>
+        <a href="./feedback.html">Feedback</a>
+        <span class="shell-breadcrumb__sep"><i class="fa fa-chevron-right"></i></span>
+        <span>Confirmation</span>
+      </nav>
+    </div>
+  </div>
+
+  <main class="shell-content" id="main-content">
+    <div class="BOA-container">
+      <div style="max-width:620px;margin:0 auto">
+
+        <div class="shell-card" id="sf_card">
+          <div class="shell-card__body" style="padding:2.5rem;text-align:center">
+            <div style="font-size:3rem;color:#16a34a;margin-bottom:1rem"><i class="fa fa-circle-check"></i></div>
+            <h2 style="font-size:1.4rem;font-weight:800;color:#0a2540;margin:0 0 .5rem">Your message has been sent!</h2>
+            <p style="font-size:.875rem;color:#555;line-height:1.6;margin:0 0 1.75rem">
+              Thank you for reaching out to Bank of America. We'll review your message and respond as soon as possible.
+            </p>
+
+            <div id="sf_details" class="sf-details" style="display:none">
+              <h3 style="font-size:.9rem;font-weight:700;color:#0a2540;margin:0 0 .85rem;text-align:left">Submission details</h3>
+              <div class="sf-detail-row"><span class="sf-detail-key">Name</span><span id="fd_name" class="sf-detail-val"></span></div>
+              <div class="sf-detail-row"><span class="sf-detail-key">Email</span><span id="fd_email" class="sf-detail-val"></span></div>
+              <div class="sf-detail-row"><span class="sf-detail-key">Subject</span><span id="fd_subject" class="sf-detail-val"></span></div>
+              <div class="sf-detail-row sf-detail-row--block"><span class="sf-detail-key">Message</span><span id="feedback_msg" class="sf-detail-val"></span></div>
+            </div>
+
+            <div style="display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;margin-top:1.5rem">
+              <a href="./feedback.html" class="BOA-btn BOA-btn--secondary">
+                <i class="fa fa-envelope"></i> Send Another
+              </a>
+              <a href="./index.html" class="BOA-btn BOA-btn--primary">
+                <i class="fa fa-house"></i> Return Home
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <footer class="shell-footer">
+    <div class="BOA-container shell-footer__inner">
+      <ul class="shell-footer__links">
+        <li><a href="./index.html">Home</a></li>
+        <li><a href="./help.html">Help</a></li>
+        <li><a href="#">Privacy</a></li>
+      </ul>
+      <p class="shell-footer__copy">© 2026 Bank of America Corporation. FDIC Insured.</p>
+    </div>
+  </footer>
+</div>
+
+<style>
+.sf-details{background:#f8f9fa;border:1px solid #eee;border-radius:6px;padding:1rem;text-align:left;margin-bottom:1rem}
+.sf-detail-row{display:flex;align-items:flex-start;gap:.75rem;padding:.45rem 0;border-bottom:1px solid #eee;font-size:.85rem}
+.sf-detail-row:last-child{border-bottom:none}
+.sf-detail-row--block{flex-direction:column;gap:.25rem}
+.sf-detail-key{font-weight:700;color:#444;min-width:65px;flex-shrink:0}
+.sf-detail-val{color:#222}
+</style>
+
+<script src="./js/ui.js"></script>
+<script src="./js/checkAccess.js"></script>
+<script>
+(function () {
+  // Try URL param first (legacy), then sessionStorage
+  let data = null;
+  const params = new URLSearchParams(window.location.search);
+  const raw = params.get('feedback');
+  if (raw) {
+    try { data = JSON.parse(decodeURIComponent(raw)); } catch (e) { /* ignore */ }
+  }
+  if (!data) {
+    const stored = sessionStorage.getItem('feedbackPayload');
+    if (stored) {
+      try { data = JSON.parse(stored); } catch (e) { /* ignore */ }
+      sessionStorage.removeItem('feedbackPayload');
+    }
+  }
+  if (!data) {
+    // No data — redirect back
+    window.location.href = './feedback.html';
+    return;
+  }
+  document.getElementById('fd_name').textContent    = data.name    || '';
+  document.getElementById('fd_email').textContent   = data.email   || '';
+  document.getElementById('fd_subject').textContent = data.subject || '';
+  document.getElementById('feedback_msg').textContent = data.message || '';
+  document.getElementById('sf_details').style.display = '';
+})();
+</script>
+</body>
+</html>

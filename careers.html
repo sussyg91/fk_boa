@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Careers — Bank of America</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#003580">
+  <link rel="shortcut icon" href="./downloaded_files/img/boa_box.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="./css/theme.css">
+  <link rel="stylesheet" href="./css/home.css">
+  <style>
+    .skip-link{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:9999}
+    .skip-link:focus{position:fixed;top:0;left:0;width:auto;height:auto;padding:.6rem 1.25rem;background:#003580;color:#fff;font-size:.9rem;font-weight:700;border-radius:0 0 6px 0;text-decoration:none;outline:3px solid #fff}
+    *:focus-visible{outline:3px solid #005eb8;outline-offset:2px}
+    a,button{touch-action:manipulation}
+    @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+  </style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<div class="shell-wrap">
+
+  <script>window.BOA_ROOT = './';</script>
+  <script src="./js/navbar.js"></script>
+
+  <div class="shell-page-header">
+    <div class="BOA-container shell-page-header__inner">
+      <h1 class="shell-page-header__title">Careers at Bank of America</h1>
+      <nav class="shell-breadcrumb" aria-label="Breadcrumb">
+        <a href="./index.html">Home</a>
+        <span class="shell-breadcrumb__sep" aria-hidden="true"><i class="fa fa-chevron-right"></i></span>
+        <span>Careers</span>
+      </nav>
+    </div>
+  </div>
+
+  <main class="shell-content" id="main-content">
+    <div class="BOA-container">
+
+      <!-- Hero banner -->
+      <div class="car-hero">
+        <div class="car-hero__text">
+          <h2 class="car-hero__title">Build a Career That Matters</h2>
+          <p class="car-hero__sub">Join over 200,000 employees who are making a difference for our clients, communities, and each other. Bank of America is a place where your work has real impact.</p>
+          <a href="./feedback.html" class="BOA-btn BOA-btn--primary BOA-btn--lg">
+            <i class="fa fa-paper-plane" aria-hidden="true"></i> Apply Now
+          </a>
+        </div>
+        <div class="car-hero__stats">
+          <div class="car-hero__stat"><span class="car-hero__stat-num">200K+</span><span class="car-hero__stat-label">Employees worldwide</span></div>
+          <div class="car-hero__stat"><span class="car-hero__stat-num">35+</span><span class="car-hero__stat-label">Countries</span></div>
+          <div class="car-hero__stat"><span class="car-hero__stat-num">$1B+</span><span class="car-hero__stat-label">Invested in employee development</span></div>
+          <div class="car-hero__stat"><span class="car-hero__stat-num">#1</span><span class="car-hero__stat-label">Best Employer for Diversity</span></div>
+        </div>
+      </div>
+
+      <!-- Search / filter -->
+      <div class="shell-card" style="margin-bottom:1.5rem">
+        <div class="shell-card__body">
+          <h2 style="font-size:1rem;font-weight:700;color:#0a2540;margin:0 0 .85rem">Find Your Role</h2>
+          <div class="car-search-row">
+            <div style="position:relative;flex:1">
+              <i class="fa fa-search" aria-hidden="true" style="position:absolute;left:.75rem;top:50%;transform:translateY(-50%);color:#999;pointer-events:none"></i>
+              <input type="text" id="job_search" class="BOA-input" placeholder="Job title, keyword, or location…"
+                aria-label="Search jobs" style="padding-left:2.3rem" oninput="filterJobs(this.value)">
+            </div>
+            <select id="job_dept" class="BOA-select" aria-label="Filter by department" onchange="filterJobs(document.getElementById('job_search').value)" style="width:200px">
+              <option value="">All Departments</option>
+              <option value="technology">Technology</option>
+              <option value="finance">Finance &amp; Accounting</option>
+              <option value="retail">Retail Banking</option>
+              <option value="risk">Risk &amp; Compliance</option>
+              <option value="marketing">Marketing</option>
+              <option value="hr">Human Resources</option>
+            </select>
+            <select id="job_type" class="BOA-select" aria-label="Filter by job type" onchange="filterJobs(document.getElementById('job_search').value)" style="width:160px">
+              <option value="">All Types</option>
+              <option value="full-time">Full-Time</option>
+              <option value="part-time">Part-Time</option>
+              <option value="internship">Internship</option>
+            </select>
+          </div>
+          <p id="job_count" class="BOA-muted" style="margin-top:.6rem;font-size:.8rem" aria-live="polite"></p>
+        </div>
+      </div>
+
+      <!-- Job listings -->
+      <div id="job_listings" aria-live="polite" aria-label="Job search results"></div>
+
+      <!-- Values section -->
+      <div style="margin-top:2.5rem">
+        <h2 style="font-size:1.2rem;font-weight:700;color:#0a2540;margin:0 0 1.25rem;text-align:center">Why Bank of America?</h2>
+        <div class="car-values">
+
+          <div class="car-value">
+            <div class="car-value__icon" style="background:#dbeafe;color:#1a56db"><i class="fa fa-heart" aria-hidden="true"></i></div>
+            <h3 class="car-value__title">Health &amp; Wellness</h3>
+            <p class="car-value__desc">Comprehensive medical, dental, and vision coverage for you and your family, plus wellness programmes and mental health support.</p>
+          </div>
+
+          <div class="car-value">
+            <div class="car-value__icon" style="background:#dcfce7;color:#16a34a"><i class="fa fa-piggy-bank" aria-hidden="true"></i></div>
+            <h3 class="car-value__title">Financial Benefits</h3>
+            <p class="car-value__desc">Competitive salaries, 401(k) with employer match, employee stock purchase plan, and banking fee waivers.</p>
+          </div>
+
+          <div class="car-value">
+            <div class="car-value__icon" style="background:#fef3c7;color:#d97706"><i class="fa fa-graduation-cap" aria-hidden="true"></i></div>
+            <h3 class="car-value__title">Growth &amp; Learning</h3>
+            <p class="car-value__desc">Tuition assistance, leadership development programmes, certifications, and a global learning platform.</p>
+          </div>
+
+          <div class="car-value">
+            <div class="car-value__icon" style="background:#ede9fe;color:#7c3aed"><i class="fa fa-scale-balanced" aria-hidden="true"></i></div>
+            <h3 class="car-value__title">Work-Life Balance</h3>
+            <p class="car-value__desc">Paid time off, parental leave, flexible scheduling, and remote-work options for eligible roles.</p>
+          </div>
+
+          <div class="car-value">
+            <div class="car-value__icon" style="background:#ccfbf1;color:#0d9488"><i class="fa fa-earth-americas" aria-hidden="true"></i></div>
+            <h3 class="car-value__title">Community Impact</h3>
+            <p class="car-value__desc">Volunteer paid time off, company-matched giving, and programmes that invest in local communities.</p>
+          </div>
+
+          <div class="car-value">
+            <div class="car-value__icon" style="background:#fee2e2;color:#c8102e"><i class="fa fa-users" aria-hidden="true"></i></div>
+            <h3 class="car-value__title">Diversity &amp; Inclusion</h3>
+            <p class="car-value__desc">Award-winning D&amp;I programmes, employee resource groups, and a culture where everyone belongs.</p>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Application process -->
+      <div style="margin-top:2.5rem">
+        <h2 style="font-size:1.2rem;font-weight:700;color:#0a2540;margin:0 0 1.25rem;text-align:center">How to Apply</h2>
+        <div class="car-steps">
+          <div class="car-step">
+            <div class="car-step__num">1</div>
+            <div><strong>Find a Role</strong><br><span style="font-size:.85rem;color:#555">Search openings above or browse by department.</span></div>
+          </div>
+          <div class="car-step__arrow" aria-hidden="true"><i class="fa fa-arrow-right"></i></div>
+          <div class="car-step">
+            <div class="car-step__num">2</div>
+            <div><strong>Apply Online</strong><br><span style="font-size:.85rem;color:#555">Submit your résumé and complete the online application.</span></div>
+          </div>
+          <div class="car-step__arrow" aria-hidden="true"><i class="fa fa-arrow-right"></i></div>
+          <div class="car-step">
+            <div class="car-step__num">3</div>
+            <div><strong>Interview</strong><br><span style="font-size:.85rem;color:#555">Phone screening followed by in-person or virtual interviews.</span></div>
+          </div>
+          <div class="car-step__arrow" aria-hidden="true"><i class="fa fa-arrow-right"></i></div>
+          <div class="car-step">
+            <div class="car-step__num">4</div>
+            <div><strong>Offer &amp; Onboarding</strong><br><span style="font-size:.85rem;color:#555">Receive your offer and begin your journey with us.</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Apply modal -->
+  <div id="modal-apply" class="BOA-modal-overlay" style="display:none" role="dialog" aria-modal="true" aria-labelledby="apply-modal-title">
+    <div class="BOA-modal">
+      <div class="BOA-modal__header">
+        <h3 class="BOA-modal__title" id="apply-modal-title">
+          <i class="fa fa-briefcase" aria-hidden="true" style="color:#1a56db;margin-right:.4rem"></i>
+          Apply for Position
+        </h3>
+        <button class="BOA-modal__close" onclick="closeModal('modal-apply')" aria-label="Close application form">
+          <i class="fa fa-xmark" aria-hidden="true"></i>
+        </button>
+      </div>
+      <div class="BOA-modal__body">
+        <p id="apply_job_title" style="font-size:.9rem;font-weight:700;color:#0a2540;margin:0 0 1rem"></p>
+
+        <div id="apply_error" class="BOA-alert BOA-alert--error" style="display:none;margin-bottom:1rem" role="alert">
+          <i class="fa fa-circle-xmark BOA-alert__icon" aria-hidden="true"></i>
+          <div class="BOA-alert__body"><div class="BOA-alert__title">All fields are required.</div></div>
+        </div>
+
+        <form id="apply_form" novalidate>
+          <div class="shell-form-row">
+            <div class="BOA-form-group">
+              <label for="apply_name" class="BOA-label">Full Name <span aria-hidden="true" style="color:#c8102e">*</span></label>
+              <input type="text" id="apply_name" class="BOA-input" placeholder="e.g. Marlo Crystal…" autocomplete="name" required>
+            </div>
+            <div class="BOA-form-group">
+              <label for="apply_email" class="BOA-label">Email <span aria-hidden="true" style="color:#c8102e">*</span></label>
+              <input type="email" id="apply_email" class="BOA-input" placeholder="you@example.com…" autocomplete="email" required spellcheck="false">
+            </div>
+          </div>
+          <div class="BOA-form-group">
+            <label for="apply_phone" class="BOA-label">Phone <span aria-hidden="true" style="color:#c8102e">*</span></label>
+            <input type="tel" id="apply_phone" class="BOA-input" placeholder="(555) 000-0000…" autocomplete="tel" inputmode="tel" required>
+          </div>
+          <div class="BOA-form-group">
+            <label for="apply_cover" class="BOA-label">Cover Letter <span style="font-weight:400;color:#999">(optional)</span></label>
+            <textarea id="apply_cover" class="BOA-textarea" rows="4" placeholder="Tell us why you're a great fit…" style="resize:vertical"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="BOA-modal__footer">
+        <button class="BOA-btn BOA-btn--secondary" onclick="closeModal('modal-apply')">Cancel</button>
+        <button class="BOA-btn BOA-btn--primary" onclick="submitApplication()">
+          <i class="fa fa-paper-plane" aria-hidden="true"></i> Submit Application
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="shell-footer">
+    <div class="BOA-container shell-footer__inner">
+      <ul class="shell-footer__links">
+        <li><a href="./index.html">Home</a></li>
+        <li><a href="./help.html">Help</a></li>
+        <li><a href="./feedback.html">Contact Us</a></li>
+        <li><a href="./privacy.html">Privacy</a></li>
+      </ul>
+      <p class="shell-footer__copy">© 2026 Bank of America Corporation. All rights reserved.</p>
+    </div>
+  </footer>
+
+</div>
+
+<style>
+/* Hero */
+.car-hero{background:linear-gradient(135deg,#003580 0%,#0050a0 60%,#0d9488 100%);border-radius:10px;padding:2.5rem;margin-bottom:2rem;display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:center}
+.car-hero__title{font-size:1.9rem;font-weight:800;color:#fff;margin:0 0 .75rem;text-wrap:balance}
+.car-hero__sub{font-size:.95rem;color:rgba(255,255,255,.8);max-width:480px;line-height:1.6;margin:0 0 1.5rem}
+.car-hero__stats{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+.car-hero__stat{background:rgba(255,255,255,.12);border-radius:8px;padding:.85rem 1rem;text-align:center}
+.car-hero__stat-num{display:block;font-size:1.4rem;font-weight:900;color:#fff;font-variant-numeric:tabular-nums}
+.car-hero__stat-label{font-size:.72rem;color:rgba(255,255,255,.7)}
+/* Search row */
+.car-search-row{display:flex;gap:.75rem;flex-wrap:wrap;align-items:stretch}
+.car-search-row .BOA-input,.car-search-row .BOA-select{height:42px}
+/* Job cards */
+.car-job-card{background:#fff;border:1px solid #ddd;border-radius:8px;padding:1.1rem 1.25rem;margin-bottom:.65rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;transition:box-shadow .18s,border-color .18s}
+.car-job-card:hover{box-shadow:0 3px 12px rgba(0,0,0,.1);border-color:#005eb8}
+.car-job-card__main{flex:1;min-width:0}
+.car-job-card__title{font-size:.95rem;font-weight:700;color:#0a2540;margin:0 0 .25rem}
+.car-job-card__meta{display:flex;gap:.75rem;flex-wrap:wrap;font-size:.78rem;color:#666;margin-bottom:.35rem}
+.car-job-card__meta .fa{color:#003580;margin-right:.2rem;font-size:.75rem}
+.car-job-card__tags{display:flex;gap:.35rem;flex-wrap:wrap}
+/* Values */
+.car-values{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem}
+.car-value{background:#fff;border:1px solid #ddd;border-radius:8px;padding:1.25rem}
+.car-value__icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:.75rem}
+.car-value__title{font-size:.9rem;font-weight:700;color:#0a2540;margin:0 0 .4rem}
+.car-value__desc{font-size:.8rem;color:#555;line-height:1.5;margin:0}
+/* Steps */
+.car-steps{display:flex;align-items:center;justify-content:center;gap:.5rem;flex-wrap:wrap;background:#fff;border:1px solid #ddd;border-radius:8px;padding:1.5rem}
+.car-step{display:flex;align-items:center;gap:.75rem;padding:.75rem 1rem}
+.car-step__num{width:36px;height:36px;border-radius:50%;background:#003580;color:#fff;font-weight:800;font-size:.95rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.car-step__arrow{color:#bbb;font-size:.9rem}
+/* No-results */
+.car-no-results{text-align:center;padding:2.5rem;color:#888}
+.car-no-results .fa{font-size:2.5rem;opacity:.3;display:block;margin-bottom:.75rem}
+@media(max-width:860px){
+  .car-hero{grid-template-columns:1fr}.car-hero__stats{display:none}
+  .car-values{grid-template-columns:repeat(2,1fr)}
+  .car-steps{flex-direction:column;align-items:flex-start}
+  .car-step__arrow{display:none}
+}
+@media(max-width:580px){.car-values{grid-template-columns:1fr}}
+</style>
+
+<script src="./js/ui.js"></script>
+<script src="./js/checkAccess.js"></script>
+<script>
+const JOBS = [
+  { id:1,  title:'Senior Software Engineer — Online Banking',     dept:'technology',  type:'full-time',  loc:'Charlotte, NC',     salary:'$120K–$155K', tags:['JavaScript','Node.js','AWS'] },
+  { id:2,  title:'Product Manager — Mobile App',                  dept:'technology',  type:'full-time',  loc:'New York, NY',      salary:'$110K–$140K', tags:['Product','Agile','Mobile'] },
+  { id:3,  title:'UX/UI Designer',                               dept:'technology',  type:'full-time',  loc:'San Francisco, CA', salary:'$95K–$125K',  tags:['Figma','UX','Design Systems'] },
+  { id:4,  title:'Financial Analyst — Corporate Finance',         dept:'finance',     type:'full-time',  loc:'Charlotte, NC',     salary:'$80K–$105K',  tags:['Excel','Financial Modelling','CFA'] },
+  { id:5,  title:'Retail Banker',                                 dept:'retail',      type:'full-time',  loc:'Atlanta, GA',       salary:'$42K–$58K',   tags:['Customer Service','Sales'] },
+  { id:6,  title:'Branch Manager',                                dept:'retail',      type:'full-time',  loc:'Miami, FL',         salary:'$65K–$85K',   tags:['Leadership','Banking','Operations'] },
+  { id:7,  title:'Compliance Officer — Financial Crimes',         dept:'risk',        type:'full-time',  loc:'Washington, DC',    salary:'$90K–$120K',  tags:['AML','KYC','Compliance'] },
+  { id:8,  title:'Summer Technology Intern',                      dept:'technology',  type:'internship', loc:'Charlotte, NC',     salary:'$28/hr',      tags:['Internship','Software','2026'] },
+  { id:9,  title:'Marketing Specialist — Digital Channels',       dept:'marketing',   type:'full-time',  loc:'Chicago, IL',       salary:'$70K–$90K',   tags:['Digital Marketing','SEO','Analytics'] },
+  { id:10, title:'HR Business Partner',                           dept:'hr',          type:'full-time',  loc:'Charlotte, NC',     salary:'$80K–$100K',  tags:['HR','HRBP','Talent'] },
+  { id:11, title:'Part-Time Teller',                              dept:'retail',      type:'part-time',  loc:'Dallas, TX',        salary:'$18–$22/hr',  tags:['Teller','Part-Time','Banking'] },
+  { id:12, title:'Data Engineer — Analytics Platform',            dept:'technology',  type:'full-time',  loc:'Boston, MA',        salary:'$115K–$145K', tags:['Python','Spark','Data Engineering'] },
+];
+
+let currentJob = null;
+
+function renderJobs(list) {
+  const container = document.getElementById('job_listings');
+  const countEl   = document.getElementById('job_count');
+  countEl.textContent = list.length + ' position' + (list.length !== 1 ? 's' : '') + ' found';
+
+  if (!list.length) {
+    container.innerHTML = '<div class="car-no-results"><i class="fa fa-magnifying-glass"></i><p>No positions match your search. Try different keywords or filters.</p></div>';
+    return;
+  }
+
+  container.innerHTML = list.map(function(j) {
+    var tagHTML = j.tags.map(function(t) {
+      return '<span class="BOA-badge BOA-badge--gray">' + t + '</span>';
+    }).join('');
+    return `<div class="car-job-card">
+      <div class="car-job-card__main">
+        <div class="car-job-card__title">${j.title}</div>
+        <div class="car-job-card__meta">
+          <span><i class="fa fa-location-dot" aria-hidden="true"></i>${j.loc}</span>
+          <span><i class="fa fa-briefcase" aria-hidden="true"></i>${j.dept.replace(/-/g,' ')}</span>
+          <span><i class="fa fa-clock" aria-hidden="true"></i>${j.type.replace('-',' ')}</span>
+          <span><i class="fa fa-dollar-sign" aria-hidden="true"></i>${j.salary}</span>
+        </div>
+        <div class="car-job-card__tags">${tagHTML}</div>
+      </div>
+      <button class="BOA-btn BOA-btn--primary BOA-btn--sm" onclick="openApplication(${j.id})">
+        <i class="fa fa-paper-plane" aria-hidden="true"></i> Apply
+      </button>
+    </div>`;
+  }).join('');
+}
+
+function filterJobs(query) {
+  var q    = (query || '').toLowerCase().trim();
+  var dept = document.getElementById('job_dept').value;
+  var type = document.getElementById('job_type').value;
+
+  var filtered = JOBS.filter(function(j) {
+    var matchQ    = !q || j.title.toLowerCase().includes(q) || j.loc.toLowerCase().includes(q) || j.tags.some(function(t){ return t.toLowerCase().includes(q); });
+    var matchDept = !dept || j.dept === dept;
+    var matchType = !type || j.type === type;
+    return matchQ && matchDept && matchType;
+  });
+  renderJobs(filtered);
+}
+
+function openApplication(id) {
+  currentJob = JOBS.find(function(j){ return j.id === id; });
+  if (!currentJob) return;
+  document.getElementById('apply_job_title').textContent = 'Position: ' + currentJob.title + ' — ' + currentJob.loc;
+  document.getElementById('apply_error').style.display = 'none';
+  document.getElementById('apply_form').reset();
+  openModal('modal-apply');
+}
+
+function submitApplication() {
+  var name  = document.getElementById('apply_name').value.trim();
+  var email = document.getElementById('apply_email').value.trim();
+  var phone = document.getElementById('apply_phone').value.trim();
+  var errEl = document.getElementById('apply_error');
+
+  if (!name || !email || !phone) {
+    errEl.style.display = 'flex';
+    if (!name)  { document.getElementById('apply_name').focus();  return; }
+    if (!email) { document.getElementById('apply_email').focus(); return; }
+    document.getElementById('apply_phone').focus();
+    return;
+  }
+  errEl.style.display = 'none';
+  closeModal('modal-apply');
+  showToast('Application submitted for "' + currentJob.title + '"! We will be in touch at ' + email, 'success', 6000);
+}
+
+// Init
+renderJobs(JOBS);
+document.getElementById('job_count').textContent = JOBS.length + ' positions found';
+</script>
+</body>
+</html>

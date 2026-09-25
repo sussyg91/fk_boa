@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Feedback &amp; Contact — Bank of America</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="./downloaded_files/img/boa_box.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="./css/theme.css">
+  <link rel="stylesheet" href="./css/home.css">
+</head>
+<body>
+<div class="shell-wrap">
+
+  <script>window.BOA_ROOT = './';</script>
+  <script src="./js/navbar.js"></script>
+
+  <div class="shell-page-header">
+    <div class="BOA-container shell-page-header__inner">
+      <h1 class="shell-page-header__title">Feedback &amp; Contact Us</h1>
+      <nav class="shell-breadcrumb" aria-label="Breadcrumb">
+        <a href="./index.html">Home</a>
+        <span class="shell-breadcrumb__sep"><i class="fa fa-chevron-right"></i></span>
+        <span>Feedback</span>
+      </nav>
+    </div>
+  </div>
+
+  <main class="shell-content" id="main-content">
+    <div class="BOA-container">
+      <div class="shell-two-col">
+
+        <!-- Form card -->
+        <div>
+          <div class="shell-card" id="fb_form_card">
+            <div class="shell-card__head">
+              <h2 class="shell-card__title">Send us a message</h2>
+            </div>
+            <div class="shell-card__body">
+
+              <div id="fb_error" class="BOA-alert BOA-alert--error" style="display:none;margin-bottom:1rem">
+                <i class="fa fa-circle-xmark BOA-alert__icon"></i>
+                <div class="BOA-alert__body">
+                  <div class="BOA-alert__title">Please fix the following</div>
+                  <span id="fb_error_msg">All fields are required.</span>
+                </div>
+              </div>
+
+              <form id="feedback_form" novalidate>
+                <div class="shell-form-row">
+                  <div class="BOA-form-group">
+                    <label for="fb_name" class="BOA-label">Full Name <span style="color:#c8102e">*</span></label>
+                    <input type="text" id="fb_name" class="BOA-input" placeholder="Marlo Crystal" autocomplete="name" required>
+                  </div>
+                  <div class="BOA-form-group">
+                    <label for="fb_email" class="BOA-label">Email Address <span style="color:#c8102e">*</span></label>
+                    <input type="email" id="fb_email" class="BOA-input" placeholder="you@example.com" autocomplete="email" required>
+                  </div>
+                </div>
+                <div class="BOA-form-group">
+                  <label for="fb_subject" class="BOA-label">Subject <span style="color:#c8102e">*</span></label>
+                  <select id="fb_subject" class="BOA-select" required>
+                    <option value="">— Select a topic —</option>
+                    <option>Account &amp; Balance Inquiry</option>
+                    <option>Transfer or Payment Issue</option>
+                    <option>Login or Access Problem</option>
+                    <option>Security Concern</option>
+                    <option>Product Feedback</option>
+                    <option>Other</option>
+                  </select>
+                </div>
+                <div class="BOA-form-group">
+                  <label for="fb_message" class="BOA-label">Message <span style="color:#c8102e">*</span></label>
+                  <textarea id="fb_message" class="BOA-textarea" rows="6" placeholder="Describe your question or feedback in detail…" required style="resize:vertical"></textarea>
+                </div>
+                <button type="submit" class="BOA-btn BOA-btn--primary BOA-btn--lg">
+                  <i class="fa fa-paper-plane"></i> Send Message
+                </button>
+              </form>
+            </div>
+          </div>
+
+          <!-- Success (hidden) -->
+          <div class="shell-card" id="fb_success_card" style="display:none">
+            <div class="shell-card__body" style="text-align:center;padding:2.5rem">
+              <div style="font-size:3rem;color:#16a34a;margin-bottom:.75rem"><i class="fa fa-circle-check"></i></div>
+              <h2 style="font-size:1.3rem;font-weight:800;color:#0a2540;margin:0 0 .5rem">Message Sent!</h2>
+              <p style="font-size:.875rem;color:#555;margin:0 0 1.5rem;line-height:1.6">Thank you for contacting us. A member of our team will respond to <strong id="fb_confirm_email"></strong> within 1–2 business days.</p>
+              <div style="display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap">
+                <button onclick="resetFeedback()" class="BOA-btn BOA-btn--secondary">
+                  <i class="fa fa-rotate-left"></i> Send Another Message
+                </button>
+                <a href="./index.html" class="BOA-btn BOA-btn--primary">
+                  <i class="fa fa-house"></i> Return Home
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div>
+          <div class="shell-card" style="margin-bottom:1rem">
+            <div class="shell-card__head"><h2 class="shell-card__title">Other ways to reach us</h2></div>
+            <div class="shell-card__body">
+              <ul class="help-contact-list">
+                <li><i class="fa fa-phone" style="color:#003580;font-size:1rem;margin-top:.1rem;flex-shrink:0"></i>
+                  <div><strong>Phone</strong><br>1-800-432-1000<br><small style="color:#888">Mon–Fri 8am–11pm ET</small></div>
+                </li>
+                <li><i class="fa fa-location-dot" style="color:#003580;font-size:1rem;margin-top:.1rem;flex-shrink:0"></i>
+                  <div><strong>Visit a Branch</strong><br><a href="#">Find a location near you</a></div>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="shell-card">
+            <div class="shell-card__head"><h2 class="shell-card__title">Need quick answers?</h2></div>
+            <div class="shell-card__body">
+              <p style="font-size:.8rem;color:#555;margin:0 0 .75rem;line-height:1.5">Browse our FAQ for instant answers to the most common questions.</p>
+              <a href="./faq.html" class="BOA-btn BOA-btn--secondary BOA-btn--full BOA-btn--sm">
+                <i class="fa fa-comments"></i> Browse FAQ
+              </a>
+              <a href="./help.html" class="BOA-btn BOA-btn--secondary BOA-btn--full BOA-btn--sm" style="margin-top:.5rem">
+                <i class="fa fa-circle-question"></i> Help Center
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <footer class="shell-footer">
+    <div class="BOA-container shell-footer__inner">
+      <ul class="shell-footer__links">
+        <li><a href="./index.html">Home</a></li>
+        <li><a href="./help.html">Help</a></li>
+        <li><a href="./faq.html">FAQ</a></li>
+        <li><a href="#">Privacy</a></li>
+      </ul>
+      <p class="shell-footer__copy">© 2026 Bank of America Corporation. FDIC Insured.</p>
+    </div>
+  </footer>
+</div>
+
+<style>
+.help-contact-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.85rem}
+.help-contact-list li{display:flex;align-items:flex-start;gap:.65rem;font-size:.875rem;color:#333;line-height:1.6}
+.help-contact-list a{color:#005eb8;text-decoration:none}
+.help-contact-list a:hover{text-decoration:underline}
+</style>
+
+<script src="./js/ui.js"></script>
+<script src="./js/checkAccess.js"></script>
+<script>
+document.getElementById('feedback_form').addEventListener('submit', function (e) {
+  e.preventDefault();
+  const name    = document.getElementById('fb_name').value.trim();
+  const email   = document.getElementById('fb_email').value.trim();
+  const subject = document.getElementById('fb_subject').value;
+  const message = document.getElementById('fb_message').value.trim();
+  const errEl   = document.getElementById('fb_error');
+  const errMsg  = document.getElementById('fb_error_msg');
+
+  if (!name || !email || !subject || !message) {
+    errMsg.textContent = 'All fields are required.';
+    errEl.style.display = 'flex';
+    return;
+  }
+  if (!email.includes('@') || !email.includes('.')) {
+    errMsg.textContent = 'Please enter a valid email address.';
+    errEl.style.display = 'flex';
+    return;
+  }
+  errEl.style.display = 'none';
+
+  // Store for sendFeedback page (optional navigation)
+  const payload = { name, email, subject, message };
+  sessionStorage.setItem('feedbackPayload', JSON.stringify(payload));
+
+  // Show success inline
+  document.getElementById('fb_confirm_email').textContent = email;
+  document.getElementById('fb_form_card').style.display = 'none';
+  document.getElementById('fb_success_card').style.display = '';
+});
+
+function resetFeedback() {
+  document.getElementById('feedback_form').reset();
+  document.getElementById('fb_error').style.display = 'none';
+  document.getElementById('fb_success_card').style.display = 'none';
+  document.getElementById('fb_form_card').style.display = '';
+}
+</script>
+</body>
+</html>

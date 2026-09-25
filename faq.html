@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>FAQ — Bank of America</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="./downloaded_files/img/boa_box.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="./css/theme.css">
+  <link rel="stylesheet" href="./css/home.css">
+</head>
+<body>
+<div class="shell-wrap">
+
+  <script>window.BOA_ROOT = './';</script>
+  <script src="./js/navbar.js"></script>
+
+  <div class="shell-page-header">
+    <div class="BOA-container shell-page-header__inner">
+      <h1 class="shell-page-header__title">Frequently Asked Questions</h1>
+      <nav class="shell-breadcrumb" aria-label="Breadcrumb">
+        <a href="./index.html">Home</a>
+        <span class="shell-breadcrumb__sep"><i class="fa fa-chevron-right"></i></span>
+        <a href="./help.html">Help Center</a>
+        <span class="shell-breadcrumb__sep"><i class="fa fa-chevron-right"></i></span>
+        <span>FAQ</span>
+      </nav>
+    </div>
+  </div>
+
+  <main class="shell-content" id="main-content">
+    <div class="BOA-container">
+      <div class="faq-layout">
+
+        <!-- Sidebar nav -->
+        <aside class="faq-sidebar">
+          <div class="shell-card">
+            <div class="shell-card__head"><h2 class="shell-card__title">Topics</h2></div>
+            <div class="shell-card__body" style="padding:.5rem 0">
+              <nav class="faq-sidebar__nav">
+                <a href="#signin"    class="faq-sidebar__link"><i class="fa fa-right-to-bracket"></i> Sign In &amp; Access</a>
+                <a href="#accounts"  class="faq-sidebar__link"><i class="fa fa-wallet"></i> Accounts &amp; Balances</a>
+                <a href="#transfers" class="faq-sidebar__link"><i class="fa fa-right-left"></i> Transfers &amp; Payments</a>
+                <a href="#security"  class="faq-sidebar__link"><i class="fa fa-shield-halved"></i> Security &amp; Fraud</a>
+                <a href="#mobile"    class="faq-sidebar__link"><i class="fa fa-mobile-screen"></i> Mobile Banking</a>
+              </nav>
+            </div>
+          </div>
+          <div class="shell-card" style="margin-top:1rem">
+            <div class="shell-card__body">
+              <p style="font-size:.8rem;color:#555;margin:0 0 .75rem">Still need help?</p>
+              <a href="./feedback.html" class="BOA-btn BOA-btn--primary BOA-btn--full BOA-btn--sm">
+                <i class="fa fa-envelope"></i> Contact Support
+              </a>
+            </div>
+          </div>
+        </aside>
+
+        <!-- FAQ content -->
+        <div class="faq-main">
+
+          <section id="signin">
+            <h2 class="faq-group-title"><i class="fa fa-right-to-bracket"></i> Sign In &amp; Access</h2>
+            <div class="shell-card">
+              <div class="BOA-faq-item open">
+                <button class="BOA-faq-toggle" onclick="toggleFaq(this)">
+                  How do I sign in to Online Banking?
+                  <i class="fa fa-chevron-down"></i>
+                </button>
+                <div class="BOA-faq-body">
+                  Visit the <a href="./login.html">Sign In page</a> and enter your User ID and Password. For this demo, use <strong>jimmyregina</strong> / <strong>jimmyregina2026</strong>.
+                </div>
+              </div>
+              <div class="BOA-faq-item">
+                <button class="BOA-faq-toggle" onclick="toggleFaq(this)">
+                  I forgot my User ID or Password. What should I do?
+                  <i class="fa fa-chevron-down"></i>
+                </button>
+                <div class="BOA-faq-body">
+                  Click "Forgot User ID/Password" on the sign-in page, or visit the <a href="./forgot-password.html">recovery page</a>. Enter your registered email address to receive reset instructions.
+                </div>
+              </div>
+              <div class="BOA-faq-item">
+                <button class="BOA-faq-toggle" onclick="toggleFaq(this)">
+                  My account is locked. How do I unlock it?
+                  <i class="fa fa-chevron-down"></i>
+                </button>
+                <div class="BOA-faq-body">
+                  After multiple failed sign-in attempts, your account may be temporarily locked for security. Use the <a href="./forgot-password.html">password recovery page</a> or call us at 1-800-432-1000.
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section id="accounts" style="margin-top:2rem">
+            <h2 class="faq-group-title"><i class="fa fa-wallet"></i> Accounts &amp; Balances</h2>
+            <div class="shell-card">
+              <div class="BOA-faq-item">
+                <button class="BOA-faq-toggle" onclick="toggleFaq(this)">
+                  How do I view my account balance?
+                  <i class="fa fa-chevron-down"></i>
+                </button>
+                <div class="BOA-faq-body">
+                  After signing in, go to <a href="./pages/bank/account-summary.html">Account Summary</a> to see all your balances at a glance.
+                </div>
+              </div>
+              <div class="BOA-faq-item">
+                <button class="BOA-faq-toggle" onclick="toggleFaq(this)">
+                  How far back can I view my transaction history?
+                  <i class="fa fa-chevron-down"></i>
+                </button>
+                <div class="BOA-faq-body">
+                  You can view up to 18 months of transactions in <a href="./pages/bank/account-activity.html">Account Activity</a>. For older records, download <a href="./pages/bank/online-statements.html">Online Statements</a>.
+                </div>
+              </div>
+              <div class="BOA-faq-item">
+                <button class="BOA-faq-toggle" onclick="toggleFaq(this)">
+                  How do I download my bank statement?
+                  <i class="fa fa-chevron-down"></i>
+                </button>
+                <div class="BOA-faq-body">
+                  Go to <a href="./pages/bank/online-statements.html">Online Statements</a>, select your account and month, then click the PDF button.
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section id="transfers" style="margin-top:2rem">
+            <h2 class="faq-group-title"><i class="fa fa-right-left"></i> Transfers &amp; Payments</h2>
+            <div class="shell-card">
+              <div class="BOA-faq-item">
+                <button class="BOA-faq-toggle" onclick="toggleFaq(this)">
+                  How do I transfer money between my accounts?
+                  <i class="fa fa-chevron-down"></i>
+                </button>
+                <div class="BOA-faq-body">
+                  Sign in and visit <a href="./pages/bank/transfer-funds.html">Transfer Funds</a>. Select the source account, enter the destination details and amount, then confirm.
+                </div>
+              </div>
+              <div class="BOA-faq-item">
+                <button class="BOA-faq-toggle" onclick="toggleFaq(this)">
+                  How do I pay a bill online?
+                  <i class="fa fa-chevron-down"></i>
+                </button>
+                <div class="BOA-faq-body">
+                  Go to <a href="./pages/bank/pay-bills.html">Pay Bills</a>, select your biller, enter the amount and payment date, and confirm. You can also add new billers.
+                </div>
+              </div>
+              <div class="BOA-faq-item">
+                <button class="BOA-faq-toggle" onclick="toggleFaq(this)">
+                  What are the daily transfer limits?
+                  <i class="fa fa-chevron-down"></i>
+                </button>
+                <div class="BOA-faq-body">
+                  Standard online transfers are limited to $5,000 per day. For higher limits, please call customer service at 1-800-432-1000.
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section id="security" style="margin-top:2rem">
+            <h2 class="faq-group-title"><i class="fa fa-shield-halved"></i> Security &amp; Fraud</h2>
+            <div class="shell-card">
+              <div class="BOA-faq-item">
+                <button class="BOA-faq-toggle" onclick="toggleFaq(this)">
+                  How do I know my online banking is secure?
+                  <i class="fa fa-chevron-down"></i>
+                </button>
+                <div class="BOA-faq-body">
+                  We use 256-bit SSL encryption, multi-factor authentication, and 24/7 fraud monitoring to protect your account. Always look for "https://" and the padlock icon in your browser.
+                </div>
+              </div>
+              <div class="BOA-faq-item">
+                <button class="BOA-faq-toggle" onclick="toggleFaq(this)">
+                  I think my account has been compromised. What do I do?
+                  <i class="fa fa-chevron-down"></i>
+                </button>
+                <div class="BOA-faq-body">
+                  Change your password immediately via the <a href="./forgot-password.html">password reset page</a> and call our fraud hotline at 1-800-432-1000 right away. Do not share your credentials with anyone.
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section id="mobile" style="margin-top:2rem">
+            <h2 class="faq-group-title"><i class="fa fa-mobile-screen"></i> Mobile Banking</h2>
+            <div class="shell-card">
+              <div class="BOA-faq-item">
+                <button class="BOA-faq-toggle" onclick="toggleFaq(this)">
+                  What features are available in the Mobile Banking app?
+                  <i class="fa fa-chevron-down"></i>
+                </button>
+                <div class="BOA-faq-body">
+                  The app offers everything available online: account balances, transaction history, fund transfers, bill pay, statements, and Money Map spending analysis — all on your phone.
+                </div>
+              </div>
+              <div class="BOA-faq-item">
+                <button class="BOA-faq-toggle" onclick="toggleFaq(this)">
+                  How do I set up mobile alerts?
+                  <i class="fa fa-chevron-down"></i>
+                </button>
+                <div class="BOA-faq-body">
+                  After downloading the app and signing in, go to Settings &gt; Alerts &amp; Notifications to customise which events trigger alerts (deposits, low balance, suspicious activity, etc.).
+                </div>
+              </div>
+            </div>
+          </section>
+
+        </div><!-- /faq-main -->
+      </div><!-- /faq-layout -->
+    </div>
+  </main>
+
+  <footer class="shell-footer">
+    <div class="BOA-container shell-footer__inner">
+      <ul class="shell-footer__links">
+        <li><a href="./index.html">Home</a></li>
+        <li><a href="./help.html">Help Center</a></li>
+        <li><a href="./feedback.html">Contact Us</a></li>
+        <li><a href="#">Privacy</a></li>
+      </ul>
+      <p class="shell-footer__copy">© 2026 Bank of America Corporation. FDIC Insured.</p>
+    </div>
+  </footer>
+</div>
+
+<style>
+.faq-layout{display:grid;grid-template-columns:220px 1fr;gap:1.5rem;align-items:start}
+.faq-sidebar__nav{display:flex;flex-direction:column}
+.faq-sidebar__link{display:flex;align-items:center;gap:.6rem;padding:.65rem 1.1rem;font-size:.85rem;color:#333;text-decoration:none;transition:background .12s,color .12s}
+.faq-sidebar__link .fa{width:16px;text-align:center;color:#666;font-size:.85rem}
+.faq-sidebar__link:hover{background:#f0f4fb;color:#005eb8;text-decoration:none}
+.faq-group-title{font-size:1rem;font-weight:700;color:#0a2540;margin:0 0 .75rem;display:flex;align-items:center;gap:.5rem}
+.faq-group-title .fa{color:#003580}
+@media(max-width:700px){.faq-layout{grid-template-columns:1fr}.faq-sidebar{display:none}}
+</style>
+
+<script src="./js/ui.js"></script>
+<script src="./js/checkAccess.js"></script>
+<script>
+function toggleFaq(btn) {
+  const item = btn.closest('.BOA-faq-item');
+  const isOpen = item.classList.contains('open');
+  // close all in same card
+  item.closest('.shell-card').querySelectorAll('.BOA-faq-item.open').forEach(i => i.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
+// Deep-link: ?question=N
+(function () {
+  const params = new URLSearchParams(window.location.search);
+  const q = params.get('question');
+  if (!q) return;
+  const items = document.querySelectorAll('.BOA-faq-item');
+  const idx = parseInt(q, 10) - 1;
+  if (items[idx]) {
+    items.forEach(i => i.classList.remove('open'));
+    items[idx].classList.add('open');
+    items[idx].scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+})();
+// Anchor scrolling for sidebar links
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('.faq-sidebar__link').forEach(link => {
+    link.addEventListener('click', function (e) {
+      const hash = this.getAttribute('href');
+      if (hash && hash.startsWith('#')) {
+        e.preventDefault();
+        const target = document.querySelector(hash);
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+});
+</script>
+</body>
+</html>

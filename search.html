@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Search — Bank of America</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="./downloaded_files/img/boa_box.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="./css/theme.css">
+  <link rel="stylesheet" href="./css/home.css">
+</head>
+<body>
+<div class="shell-wrap">
+
+  <script>window.BOA_ROOT = './';</script>
+  <script src="./js/navbar.js"></script>
+
+  <div class="shell-page-header">
+    <div class="BOA-container shell-page-header__inner">
+      <h1 class="shell-page-header__title">Search</h1>
+      <nav class="shell-breadcrumb" aria-label="Breadcrumb">
+        <a href="./index.html">Home</a>
+        <span class="shell-breadcrumb__sep"><i class="fa fa-chevron-right"></i></span>
+        <span>Search</span>
+      </nav>
+    </div>
+  </div>
+
+  <main class="shell-content" id="main-content">
+    <div class="BOA-container">
+
+      <!-- Search input -->
+      <div class="search-bar-wrap">
+        <form id="search_form" role="search">
+          <div class="search-bar">
+            <i class="fa fa-search search-bar__icon"></i>
+            <input type="text" id="search_input" class="search-bar__input"
+              placeholder="Search Bank of America…" aria-label="Search" autocomplete="off">
+            <button type="submit" class="search-bar__btn">Search</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Results -->
+      <div id="search_results_wrap">
+        <div id="search_meta" class="search-meta" style="display:none"></div>
+        <div id="search_results"></div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="shell-footer">
+    <div class="BOA-container shell-footer__inner">
+      <ul class="shell-footer__links">
+        <li><a href="./index.html">Home</a></li>
+        <li><a href="./help.html">Help</a></li>
+        <li><a href="#">Privacy</a></li>
+      </ul>
+      <p class="shell-footer__copy">© 2026 Bank of America Corporation. FDIC Insured.</p>
+    </div>
+  </footer>
+</div>
+
+<style>
+.search-bar-wrap{margin-bottom:1.75rem}
+.search-bar{display:flex;align-items:center;border:2px solid #ccc;border-radius:8px;overflow:hidden;background:#fff;transition:border-color .15s,box-shadow .15s}
+.search-bar:focus-within{border-color:#005eb8;box-shadow:0 0 0 3px rgba(0,94,184,.12)}
+.search-bar__icon{padding:0 .85rem;color:#999;font-size:1rem;flex-shrink:0}
+.search-bar__input{flex:1;border:none;outline:none;padding:.75rem .25rem;font-size:1rem;font-family:var(--font-sans);color:#222}
+.search-bar__btn{background:#003580;color:#fff;border:none;padding:.75rem 1.5rem;font-size:.9rem;font-weight:700;cursor:pointer;font-family:var(--font-sans);transition:background .15s;flex-shrink:0}
+.search-bar__btn:hover{background:#002060}
+.search-meta{font-size:.85rem;color:#666;margin-bottom:1rem}
+.search-result{display:flex;flex-direction:column;gap:.2rem;padding:1.1rem 1.25rem;background:#fff;border:1px solid #ddd;border-radius:6px;text-decoration:none;color:inherit;margin-bottom:.65rem;transition:box-shadow .15s,border-color .15s}
+.search-result:hover{box-shadow:0 3px 10px rgba(0,0,0,.1);border-color:#005eb8;text-decoration:none}
+.search-result__title{font-size:.975rem;font-weight:700;color:#005eb8}
+.search-result__url{font-size:.72rem;color:#16a34a}
+.search-result__desc{font-size:.83rem;color:#555;line-height:1.5}
+.search-result mark{background:#fff3cd;color:#333;padding:0 .1rem;border-radius:2px}
+.search-no-results{text-align:center;padding:3rem 1rem;color:#666}
+.search-no-results .fa{font-size:2.5rem;opacity:.3;display:block;margin-bottom:.75rem}
+</style>
+
+<script src="./js/ui.js"></script>
+<script src="./js/checkAccess.js"></script>
+<script>
+const PAGES = [
+  { title: 'Home',               url: './index.html',                          desc: 'Bank of America personal banking homepage.',                                tags: ['home','main','personal'] },
+  { title: 'Sign In',            url: './login.html',                          desc: 'Sign in to Online Banking with your User ID and Password.',                tags: ['login','sign in','password','access'] },
+  { title: 'Online Banking',     url: './online-banking.html',                 desc: 'Overview of all online banking features: balances, transfers, payments.',  tags: ['banking','features','overview'] },
+  { title: 'Account Summary',    url: './pages/bank/account-summary.html',     desc: 'View all account balances at a glance — savings, checking, loans.',       tags: ['balance','accounts','summary','savings','checking'] },
+  { title: 'Account Activity',   url: './pages/bank/account-activity.html',    desc: 'View and search your full transaction history for any account.',          tags: ['transactions','history','activity','deposits','withdrawals'] },
+  { title: 'Transfer Funds',     url: './pages/bank/transfer-funds.html',      desc: 'Transfer money between your accounts or to an external bank.',            tags: ['transfer','move money','send funds'] },
+  { title: 'Pay Bills',          url: './pages/bank/pay-bills.html',           desc: 'Schedule and manage bill payments to any biller.',                        tags: ['bills','payments','schedule','biller'] },
+  { title: 'Online Statements',  url: './pages/bank/online-statements.html',   desc: 'View and download monthly account statements as PDF.',                    tags: ['statements','pdf','download','history'] },
+  { title: 'Money Map',          url: './pages/bank/money-map.html',           desc: 'Track spending by category, manage budgets and savings goals.',           tags: ['spending','budget','analytics','charts','savings goal'] },
+  { title: 'Help Center',        url: './help.html',                           desc: 'Browse help topics, quick links, and contact information.',               tags: ['help','support','contact','phone'] },
+  { title: 'FAQ',                url: './faq.html',                            desc: 'Frequently asked questions about Online Banking features.',               tags: ['faq','questions','answers','how to'] },
+  { title: 'Forgot Password',    url: './forgot-password.html',                desc: 'Reset your User ID or Password via email recovery.',                     tags: ['forgot','reset','password','user id','locked'] },
+  { title: 'Feedback / Contact', url: './feedback.html',                       desc: 'Send us a message or feedback.',                                         tags: ['feedback','contact','message','support'] },
+];
+
+function highlight(text, query) {
+  if (!query) return text;
+  const re = new RegExp('(' + query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+  return text.replace(re, '<mark>$1</mark>');
+}
+
+function runSearch(query) {
+  const q = query.toLowerCase().trim();
+  const metaEl   = document.getElementById('search_meta');
+  const resultsEl = document.getElementById('search_results');
+
+  if (!q) {
+    metaEl.style.display = 'none';
+    resultsEl.innerHTML = '';
+    return;
+  }
+
+  const results = PAGES.filter(p =>
+    p.title.toLowerCase().includes(q) ||
+    p.desc.toLowerCase().includes(q) ||
+    p.tags.some(t => t.includes(q))
+  );
+
+  metaEl.style.display = '';
+  metaEl.textContent = results.length
+    ? `${results.length} result${results.length !== 1 ? 's' : ''} for "${query}"`
+    : '';
+
+  if (!results.length) {
+    resultsEl.innerHTML = `<div class="search-no-results"><i class="fa fa-magnifying-glass"></i><p>No results found for "<strong>${query}</strong>". Try different keywords.</p></div>`;
+    return;
+  }
+
+  resultsEl.innerHTML = results.map(p => `
+    <a href="${p.url}" class="search-result">
+      <div class="search-result__title">${highlight(p.title, query)}</div>
+      <div class="search-result__url">${p.url}</div>
+      <div class="search-result__desc">${highlight(p.desc, query)}</div>
+    </a>`).join('');
+}
+
+// Init from URL param
+(function () {
+  const params  = new URLSearchParams(window.location.search);
+  const term    = params.get('searchTerm') || '';
+  const input   = document.getElementById('search_input');
+  input.value   = term;
+  if (term) runSearch(term);
+  input.focus();
+})();
+
+// Live search
+document.getElementById('search_input').addEventListener('input', function () {
+  runSearch(this.value);
+});
+
+// Form submit → update URL
+document.getElementById('search_form').addEventListener('submit', function (e) {
+  e.preventDefault();
+  const q = document.getElementById('search_input').value.trim();
+  history.replaceState({}, '', `?searchTerm=${encodeURIComponent(q)}`);
+  runSearch(q);
+});
+</script>
+</body>
+</html>

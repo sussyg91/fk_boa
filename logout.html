@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Signed Out — Bank of America</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="./downloaded_files/img/boa_box.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="./css/theme.css">
+  <link rel="stylesheet" href="./css/home.css">
+</head>
+<body>
+<div class="shell-wrap">
+
+  <script>window.BOA_ROOT = './';</script>
+  <script src="./js/navbar.js"></script>
+
+  <main class="shell-content" id="main-content">
+    <div class="BOA-container">
+      <div class="logout-center">
+        <div class="logout-card">
+          <div class="logout-card__icon">
+            <i class="fa fa-circle-check"></i>
+          </div>
+          <h1 class="logout-card__title">You've been signed out</h1>
+          <p class="logout-card__sub">Your session has ended securely. Thank you for banking with Bank of America.</p>
+          <div class="logout-card__actions">
+            <a href="./login.html" class="BOA-btn BOA-btn--primary BOA-btn--lg">
+              <i class="fa fa-right-to-bracket"></i> Sign In Again
+            </a>
+            <a href="./index.html" class="BOA-btn BOA-btn--secondary BOA-btn--lg">
+              <i class="fa fa-house"></i> Return to Home
+            </a>
+          </div>
+          <div class="logout-card__tips">
+            <p><i class="fa fa-shield-halved"></i> For your security, close this browser tab when you're done.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="shell-footer">
+    <div class="BOA-container shell-footer__inner">
+      <ul class="shell-footer__links">
+        <li><a href="#">Privacy</a></li>
+        <li><a href="#">Security</a></li>
+        <li><a href="./help.html">Help</a></li>
+      </ul>
+      <p class="shell-footer__copy">© 2026 Bank of America Corporation. FDIC Insured.</p>
+    </div>
+  </footer>
+</div>
+
+<style>
+.logout-center{display:flex;justify-content:center;padding:3rem 0}
+.logout-card{background:#fff;border:1px solid #ddd;border-radius:10px;padding:2.5rem 2rem;max-width:480px;width:100%;text-align:center}
+.logout-card__icon{font-size:3rem;color:#16a34a;margin-bottom:1rem}
+.logout-card__title{font-size:1.5rem;font-weight:800;color:#0a2540;margin:0 0 .6rem}
+.logout-card__sub{font-size:.9rem;color:#555;line-height:1.6;margin:0 0 1.75rem}
+.logout-card__actions{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;margin-bottom:1.5rem}
+.logout-card__tips{font-size:.78rem;color:#888;border-top:1px solid #eee;padding-top:1rem}
+.logout-card__tips .fa{color:#d97706;margin-right:.3rem}
+</style>
+
+<script src="./js/ui.js"></script>
+<script src="./js/logout.js"></script>
+</body>
+</html>

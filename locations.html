@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Find a Location &amp; Schedule an Appointment — Bank of America</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#003580">
+  <link rel="shortcut icon" href="./downloaded_files/img/boa_box.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="./css/theme.css">
+  <link rel="stylesheet" href="./css/home.css">
+  <style>
+    /* Skip link */
+    .skip-link{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:9999}
+    .skip-link:focus{position:fixed;top:0;left:0;width:auto;height:auto;padding:.6rem 1.25rem;background:#003580;color:#fff;font-size:.9rem;font-weight:700;border-radius:0 0 6px 0;text-decoration:none;outline:3px solid #fff}
+    *:focus-visible{outline:3px solid #005eb8;outline-offset:2px}
+    a,button{touch-action:manipulation}
+    @media(prefers-reduced-motion:reduce){
+      *{transition:none!important;animation:none!important}
+    }
+  </style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<div class="shell-wrap">
+
+  <script>window.BOA_ROOT = './';</script>
+  <script src="./js/navbar.js"></script>
+
+  <!-- Page header -->
+  <div class="shell-page-header">
+    <div class="BOA-container shell-page-header__inner">
+      <h1 class="shell-page-header__title">Find a Location &amp; Schedule an Appointment</h1>
+      <nav class="shell-breadcrumb" aria-label="Breadcrumb">
+        <a href="./index.html">Home</a>
+        <span class="shell-breadcrumb__sep" aria-hidden="true"><i class="fa fa-chevron-right"></i></span>
+        <span>Locations</span>
+      </nav>
+    </div>
+  </div>
+
+  <main class="shell-content" id="main-content">
+    <div class="BOA-container">
+
+      <!-- Search bar -->
+      <div class="loc-search-bar">
+        <form id="loc_search_form" role="search" aria-label="Search for a branch or ATM">
+          <div class="loc-search-wrap">
+            <label for="loc_query" class="loc-search-label">Find a branch or ATM near you</label>
+            <div class="loc-search-row">
+              <div style="position:relative;flex:1">
+                <i class="fa fa-location-dot loc-search-icon" aria-hidden="true"></i>
+                <input
+                  type="text"
+                  id="loc_query"
+                  name="loc_query"
+                  class="BOA-input loc-search-input"
+                  placeholder="City, state, or ZIP code…"
+                  autocomplete="address-level2"
+                  aria-required="true"
+                  spellcheck="false">
+              </div>
+              <button type="submit" class="BOA-btn BOA-btn--primary loc-search-btn">
+                <i class="fa fa-search" aria-hidden="true"></i> Search
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Tabs: Branches / ATMs / Appointment -->
+      <div class="loc-tabs" role="tablist" aria-label="Location type">
+        <button class="loc-tab loc-tab--active" role="tab" aria-selected="true" aria-controls="tab-branches" id="tab-btn-branches" onclick="switchTab('branches')">
+          <i class="fa fa-building-columns" aria-hidden="true"></i> Branches
+        </button>
+        <button class="loc-tab" role="tab" aria-selected="false" aria-controls="tab-atms" id="tab-btn-atms" onclick="switchTab('atms')">
+          <i class="fa fa-money-bill-wave" aria-hidden="true"></i> ATMs
+        </button>
+        <button class="loc-tab" role="tab" aria-selected="false" aria-controls="tab-appt" id="tab-btn-appt" onclick="switchTab('appt')">
+          <i class="fa fa-calendar-days" aria-hidden="true"></i> Schedule Appointment
+        </button>
+      </div>
+
+      <!-- Branch Results -->
+      <div id="tab-branches" role="tabpanel" aria-labelledby="tab-btn-branches">
+        <div class="loc-layout">
+
+          <!-- Map placeholder -->
+          <div class="loc-map" aria-label="Branch locations map">
+            <div class="loc-map__placeholder">
+              <i class="fa fa-map" aria-hidden="true"></i>
+              <p>Enter your city, state, or ZIP above to see branches on the map.</p>
+            </div>
+            <!-- Demo pins shown after search -->
+            <div id="loc_map_pins" style="display:none" aria-live="polite"></div>
+          </div>
+
+          <!-- Branch list -->
+          <div class="loc-list" id="loc_branch_list" aria-live="polite">
+            <p class="loc-list__prompt"><i class="fa fa-circle-info" aria-hidden="true"></i> Search for a location above to see nearby branches.</p>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ATM Results -->
+      <div id="tab-atms" role="tabpanel" aria-labelledby="tab-btn-atms" hidden>
+        <div class="loc-atm-grid" id="loc_atm_list" aria-live="polite">
+          <p class="loc-list__prompt"><i class="fa fa-circle-info" aria-hidden="true"></i> Search above to find nearby ATMs.</p>
+        </div>
+      </div>
+
+      <!-- Schedule Appointment -->
+      <div id="tab-appt" role="tabpanel" aria-labelledby="tab-btn-appt" hidden>
+        <div class="shell-two-col" style="margin-top:1.5rem">
+
+          <!-- Appointment form -->
+          <div class="shell-card">
+            <div class="shell-card__head">
+              <h2 class="shell-card__title"><i class="fa fa-calendar-check" aria-hidden="true" style="color:#1a56db;margin-right:.4rem"></i> Book an Appointment</h2>
+            </div>
+            <div class="shell-card__body">
+
+              <div id="appt_error" class="BOA-alert BOA-alert--error" style="display:none;margin-bottom:1rem" role="alert" aria-live="polite">
+                <i class="fa fa-circle-xmark BOA-alert__icon" aria-hidden="true"></i>
+                <div class="BOA-alert__body">
+                  <div class="BOA-alert__title">Please fix the following</div>
+                  <span id="appt_error_msg"></span>
+                </div>
+              </div>
+
+              <form id="appt_form" novalidate>
+                <div class="shell-form-row">
+                  <div class="BOA-form-group">
+                    <label for="appt_first" class="BOA-label">First Name <span aria-hidden="true" style="color:#c8102e">*</span></label>
+                    <input type="text" id="appt_first" name="appt_first" class="BOA-input"
+                      placeholder="e.g. Marlo" autocomplete="given-name" required aria-required="true">
+                  </div>
+                  <div class="BOA-form-group">
+                    <label for="appt_last" class="BOA-label">Last Name <span aria-hidden="true" style="color:#c8102e">*</span></label>
+                    <input type="text" id="appt_last" name="appt_last" class="BOA-input"
+                      placeholder="e.g. Crystal" autocomplete="family-name" required aria-required="true">
+                  </div>
+                </div>
+
+                <div class="shell-form-row">
+                  <div class="BOA-form-group">
+                    <label for="appt_phone" class="BOA-label">Phone Number <span aria-hidden="true" style="color:#c8102e">*</span></label>
+                    <input type="tel" id="appt_phone" name="appt_phone" class="BOA-input"
+                      placeholder="(555) 000-0000…" autocomplete="tel" inputmode="tel" required aria-required="true">
+                  </div>
+                  <div class="BOA-form-group">
+                    <label for="appt_email" class="BOA-label">Email Address <span aria-hidden="true" style="color:#c8102e">*</span></label>
+                    <input type="email" id="appt_email" name="appt_email" class="BOA-input"
+                      placeholder="you@example.com…" autocomplete="email" required aria-required="true" spellcheck="false">
+                  </div>
+                </div>
+
+                <div class="BOA-form-group">
+                  <label for="appt_topic" class="BOA-label">Appointment Topic <span aria-hidden="true" style="color:#c8102e">*</span></label>
+                  <select id="appt_topic" name="appt_topic" class="BOA-select" required aria-required="true">
+                    <option value="">— Select a topic —</option>
+                    <option value="checking">Open a Checking Account</option>
+                    <option value="savings">Open a Savings Account</option>
+                    <option value="loan">Personal Loan Inquiry</option>
+                    <option value="mortgage">Home Loan / Mortgage</option>
+                    <option value="investment">Merrill Investment Advice</option>
+                    <option value="card">Credit Card Application</option>
+                    <option value="general">General Banking Help</option>
+                  </select>
+                </div>
+
+                <div class="shell-form-row">
+                  <div class="BOA-form-group">
+                    <label for="appt_date" class="BOA-label">Preferred Date <span aria-hidden="true" style="color:#c8102e">*</span></label>
+                    <input type="date" id="appt_date" name="appt_date" class="BOA-input" required aria-required="true">
+                  </div>
+                  <div class="BOA-form-group">
+                    <label for="appt_time" class="BOA-label">Preferred Time <span aria-hidden="true" style="color:#c8102e">*</span></label>
+                    <select id="appt_time" name="appt_time" class="BOA-select" required aria-required="true">
+                      <option value="">— Select time —</option>
+                      <option>9:00 AM</option>
+                      <option>9:30 AM</option>
+                      <option>10:00 AM</option>
+                      <option>10:30 AM</option>
+                      <option>11:00 AM</option>
+                      <option>11:30 AM</option>
+                      <option>1:00 PM</option>
+                      <option>1:30 PM</option>
+                      <option>2:00 PM</option>
+                      <option>2:30 PM</option>
+                      <option>3:00 PM</option>
+                      <option>3:30 PM</option>
+                      <option>4:00 PM</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="BOA-form-group">
+                  <label for="appt_branch" class="BOA-label">Preferred Branch <span aria-hidden="true" style="color:#c8102e">*</span></label>
+                  <select id="appt_branch" name="appt_branch" class="BOA-select" required aria-required="true">
+                    <option value="">— Select a branch —</option>
+                    <option>Main Street Branch — 123 Main St</option>
+                    <option>Downtown Financial Center — 456 Commerce Ave</option>
+                    <option>Northside Branch — 789 North Blvd</option>
+                    <option>Westpark Branch — 321 Park Lane</option>
+                    <option>Eastgate Branch — 654 East Drive</option>
+                  </select>
+                </div>
+
+                <div class="BOA-form-group">
+                  <label for="appt_notes" class="BOA-label">Additional Notes <span style="font-weight:400;color:#999">(optional)</span></label>
+                  <textarea id="appt_notes" name="appt_notes" class="BOA-textarea" rows="3"
+                    placeholder="Any additional details about your visit…" style="resize:vertical"></textarea>
+                </div>
+
+                <button type="submit" class="BOA-btn BOA-btn--primary BOA-btn--lg" id="appt_submit_btn">
+                  <i class="fa fa-calendar-check" aria-hidden="true"></i> Confirm Appointment
+                </button>
+              </form>
+            </div>
+          </div>
+
+          <!-- Sidebar info -->
+          <div>
+            <div class="shell-card" style="margin-bottom:1rem">
+              <div class="shell-card__head"><h2 class="shell-card__title">Branch Hours</h2></div>
+              <div class="shell-card__body">
+                <div class="loc-hours-row"><span>Monday – Friday</span><strong>9:00 AM – 5:00 PM</strong></div>
+                <div class="loc-hours-row"><span>Saturday</span><strong>9:00 AM – 1:00 PM</strong></div>
+                <div class="loc-hours-row"><span>Sunday</span><strong>Closed</strong></div>
+                <p class="BOA-muted" style="margin-top:.75rem;font-size:.75rem">Hours may vary by location. Contact your branch to confirm.</p>
+              </div>
+            </div>
+
+            <div class="shell-card" style="margin-bottom:1rem">
+              <div class="shell-card__head"><h2 class="shell-card__title">What to Bring</h2></div>
+              <div class="shell-card__body">
+                <ul class="loc-bring-list">
+                  <li><i class="fa fa-id-card" aria-hidden="true"></i> Government-issued photo ID</li>
+                  <li><i class="fa fa-file-lines" aria-hidden="true"></i> Recent bank statements (if applicable)</li>
+                  <li><i class="fa fa-dollar-sign" aria-hidden="true"></i> Initial deposit for new accounts</li>
+                  <li><i class="fa fa-phone" aria-hidden="true"></i> Mobile phone for verification</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="shell-card">
+              <div class="shell-card__head"><h2 class="shell-card__title">Call Us Instead</h2></div>
+              <div class="shell-card__body">
+                <p style="font-size:.875rem;color:#333;margin:0 0 .75rem">Prefer to speak with someone now?</p>
+                <p style="font-size:1.2rem;font-weight:800;color:#003580;margin:0 0 .5rem">1-800-432-1000</p>
+                <p class="BOA-muted" style="font-size:.78rem;margin:0">Mon–Fri 8 AM–11 PM ET &nbsp;·&nbsp; Sat–Sun 8 AM–8 PM ET</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div><!-- /tab-appt -->
+
+    </div>
+  </main>
+
+  <!-- Appointment success modal -->
+  <div id="modal-appt-success" class="BOA-modal-overlay" style="display:none" role="dialog" aria-modal="true" aria-labelledby="appt-modal-title">
+    <div class="BOA-modal">
+      <div class="BOA-modal__header">
+        <h3 class="BOA-modal__title" id="appt-modal-title">
+          <i class="fa fa-circle-check" style="color:#16a34a;margin-right:.4rem" aria-hidden="true"></i>
+          Appointment Confirmed
+        </h3>
+        <button class="BOA-modal__close" onclick="closeModal('modal-appt-success')" aria-label="Close confirmation">
+          <i class="fa fa-xmark" aria-hidden="true"></i>
+        </button>
+      </div>
+      <div class="BOA-modal__body">
+        <div class="BOA-alert BOA-alert--success" style="margin-bottom:1.1rem">
+          <i class="fa fa-circle-check BOA-alert__icon" aria-hidden="true"></i>
+          <div class="BOA-alert__body">Your appointment has been scheduled successfully.</div>
+        </div>
+        <div class="appt-confirm-grid">
+          <div class="appt-confirm-row"><span>Name</span><strong id="ac_name"></strong></div>
+          <div class="appt-confirm-row"><span>Topic</span><strong id="ac_topic"></strong></div>
+          <div class="appt-confirm-row"><span>Branch</span><strong id="ac_branch"></strong></div>
+          <div class="appt-confirm-row"><span>Date &amp; Time</span><strong id="ac_datetime"></strong></div>
+          <div class="appt-confirm-row"><span>Confirmation #</span><strong id="ac_ref" style="color:#005eb8;font-family:monospace"></strong></div>
+        </div>
+        <p style="font-size:.78rem;color:#888;margin:.85rem 0 0">A confirmation will be sent to your email address.</p>
+      </div>
+      <div class="BOA-modal__footer">
+        <button class="BOA-btn BOA-btn--secondary" onclick="closeModal('modal-appt-success')">Close</button>
+        <a href="./login.html" class="BOA-btn BOA-btn--primary">
+          <i class="fa fa-right-to-bracket" aria-hidden="true"></i> Sign In to Banking
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <footer class="shell-footer">
+    <div class="BOA-container shell-footer__inner">
+      <ul class="shell-footer__links">
+        <li><a href="./index.html">Home</a></li>
+        <li><a href="./help.html">Help</a></li>
+        <li><a href="./feedback.html">Contact Us</a></li>
+        <li><a href="./login.html">Privacy</a></li>
+      </ul>
+      <p class="shell-footer__copy">© 2026 Bank of America Corporation. FDIC Insured.</p>
+    </div>
+  </footer>
+</div><!-- /shell-wrap -->
+
+<style>
+/* ── Search bar ── */
+.loc-search-bar{background:#003580;padding:2rem 0;margin-bottom:1.5rem}
+.loc-search-wrap{max-width:700px}
+.loc-search-label{display:block;font-size:.85rem;font-weight:700;color:rgba(255,255,255,.85);margin-bottom:.5rem}
+.loc-search-row{display:flex;gap:.75rem;align-items:stretch}
+.loc-search-icon{position:absolute;left:.75rem;top:50%;transform:translateY(-50%);color:#999;font-size:.9rem;pointer-events:none}
+.loc-search-input{padding-left:2.3rem}
+.loc-search-btn{flex-shrink:0;background:#c8102e;white-space:nowrap}
+.loc-search-btn:hover{background:#a00d25}
+
+/* ── Tabs ── */
+.loc-tabs{display:flex;gap:0;border-bottom:2px solid #ddd;margin-bottom:1.5rem}
+.loc-tab{background:none;border:none;border-bottom:3px solid transparent;padding:.75rem 1.25rem;font-size:.9rem;font-weight:600;color:#555;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;gap:.4rem;margin-bottom:-2px;transition:color 0.15s ease,border-color 0.15s ease}
+.loc-tab:hover{color:#003580}
+.loc-tab--active{color:#003580;border-bottom-color:#003580}
+.loc-tab .fa{font-size:.85rem}
+
+/* ── Branch layout ── */
+.loc-layout{display:grid;grid-template-columns:1fr 340px;gap:1.25rem;align-items:start}
+.loc-map{background:#e8edf5;border:1px solid #ddd;border-radius:8px;height:420px;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.loc-map__placeholder{text-align:center;color:#888;padding:2rem}
+.loc-map__placeholder .fa{font-size:2.5rem;display:block;margin-bottom:.75rem;opacity:.4}
+.loc-map__placeholder p{font-size:.875rem;line-height:1.5;max-width:220px;margin:0 auto}
+
+/* ── Branch list ── */
+.loc-list{display:flex;flex-direction:column;gap:.75rem}
+.loc-list__prompt{font-size:.85rem;color:#888;display:flex;align-items:center;gap:.5rem;padding:.5rem 0}
+.loc-branch-card{background:#fff;border:1px solid #ddd;border-radius:6px;padding:1rem;transition:box-shadow 0.15s ease,border-color 0.15s ease}
+.loc-branch-card:hover{box-shadow:0 3px 10px rgba(0,0,0,.1);border-color:#005eb8}
+.loc-branch-card__name{font-size:.95rem;font-weight:700;color:#0a2540;margin-bottom:.2rem}
+.loc-branch-card__addr{font-size:.8rem;color:#555;margin-bottom:.5rem}
+.loc-branch-card__meta{display:flex;gap:.75rem;flex-wrap:wrap;font-size:.78rem;color:#888}
+.loc-branch-card__meta .fa{color:#003580;margin-right:.2rem}
+.loc-branch-card__actions{display:flex;gap:.5rem;margin-top:.75rem;flex-wrap:wrap}
+
+/* ── ATM grid ── */
+.loc-atm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem}
+.loc-atm-card{background:#fff;border:1px solid #ddd;border-radius:6px;padding:1rem}
+.loc-atm-card__name{font-size:.875rem;font-weight:700;color:#0a2540;margin-bottom:.2rem}
+.loc-atm-card__addr{font-size:.78rem;color:#555;margin-bottom:.4rem}
+.loc-atm-card__dist{font-size:.75rem;color:#888}
+
+/* ── Hours ── */
+.loc-hours-row{display:flex;justify-content:space-between;align-items:center;padding:.4rem 0;border-bottom:1px solid #f0f0f0;font-size:.85rem;color:#444}
+.loc-hours-row:last-of-type{border-bottom:none}
+
+/* ── Bring list ── */
+.loc-bring-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.55rem}
+.loc-bring-list li{display:flex;align-items:center;gap:.6rem;font-size:.85rem;color:#444}
+.loc-bring-list li .fa{width:16px;text-align:center;color:#003580;font-size:.85rem}
+
+/* ── Appointment confirm ── */
+.appt-confirm-grid{display:flex;flex-direction:column}
+.appt-confirm-row{display:flex;justify-content:space-between;align-items:center;padding:.5rem 0;border-bottom:1px solid #f0f0f0;font-size:.875rem}
+.appt-confirm-row:last-child{border-bottom:none}
+.appt-confirm-row span{color:#666}
+
+@media(max-width:860px){
+  .loc-layout{grid-template-columns:1fr}
+  .loc-map{height:260px}
+}
+@media(max-width:600px){
+  .loc-tabs{overflow-x:auto;scrollbar-width:none}
+  .loc-tabs::-webkit-scrollbar{display:none}
+  .loc-tab{white-space:nowrap}
+}
+</style>
+
+<script src="./js/ui.js"></script>
+<script src="./js/checkAccess.js"></script>
+<script>
+/* ── Tab switching ── */
+function switchTab(name) {
+  ['branches','atms','appt'].forEach(function(id) {
+    const panel = document.getElementById('tab-' + id);
+    const btn   = document.getElementById('tab-btn-' + id);
+    const active = id === name;
+    panel.hidden = !active;
+    btn.setAttribute('aria-selected', active);
+    btn.classList.toggle('loc-tab--active', active);
+  });
+}
+
+/* ── Demo branch/ATM data ── */
+const DEMO_BRANCHES = [
+  { name: 'Main Street Branch',         addr: '123 Main St, Anytown, ST 10001', dist: '0.3 mi', phone: '(555) 100-2001', hours: 'Mon–Fri 9 AM–5 PM' },
+  { name: 'Downtown Financial Center',  addr: '456 Commerce Ave, Anytown, ST 10002', dist: '0.9 mi', phone: '(555) 100-2002', hours: 'Mon–Fri 9 AM–5 PM, Sat 9 AM–1 PM' },
+  { name: 'Northside Branch',           addr: '789 North Blvd, Anytown, ST 10003', dist: '1.4 mi', phone: '(555) 100-2003', hours: 'Mon–Fri 9 AM–5 PM' },
+  { name: 'Westpark Branch',            addr: '321 Park Lane, Anytown, ST 10004', dist: '2.1 mi', phone: '(555) 100-2004', hours: 'Mon–Fri 9 AM–5 PM, Sat 9 AM–1 PM' },
+  { name: 'Eastgate Branch',            addr: '654 East Drive, Anytown, ST 10005', dist: '2.8 mi', phone: '(555) 100-2005', hours: 'Mon–Fri 9 AM–4 PM' },
+];
+
+const DEMO_ATMS = [
+  { name: 'Main Street ATM',        addr: '123 Main St Lobby',       dist: '0.3 mi' },
+  { name: 'Downtown ATM',           addr: '456 Commerce Ave Exterior',dist: '0.9 mi' },
+  { name: 'Northside Kiosk',        addr: '789 North Blvd Drive-Thru',dist: '1.4 mi' },
+  { name: 'Westpark ATM',           addr: '321 Park Lane',            dist: '2.1 mi' },
+  { name: 'Eastgate ATM',           addr: '654 East Drive',           dist: '2.8 mi' },
+  { name: 'Convenience Store ATM',  addr: '88 Corner St',             dist: '3.2 mi' },
+];
+
+function renderBranches() {
+  const list = document.getElementById('loc_branch_list');
+  list.innerHTML = DEMO_BRANCHES.map(function(b) {
+    return `<div class="loc-branch-card">
+      <div class="loc-branch-card__name">${b.name}</div>
+      <div class="loc-branch-card__addr"><i class="fa fa-location-dot" aria-hidden="true"></i> ${b.addr}</div>
+      <div class="loc-branch-card__meta">
+        <span><i class="fa fa-person-walking" aria-hidden="true"></i> ${b.dist}</span>
+        <span><i class="fa fa-phone" aria-hidden="true"></i> ${b.phone}</span>
+        <span><i class="fa fa-clock" aria-hidden="true"></i> ${b.hours}</span>
+      </div>
+      <div class="loc-branch-card__actions">
+        <button class="BOA-btn BOA-btn--secondary BOA-btn--sm" onclick="switchTab('appt')">
+          <i class="fa fa-calendar-days" aria-hidden="true"></i> Book Appointment
+        </button>
+        <a href="tel:+15551002001" class="BOA-btn BOA-btn--outline BOA-btn--sm">
+          <i class="fa fa-phone" aria-hidden="true"></i> Call
+        </a>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderATMs() {
+  const grid = document.getElementById('loc_atm_list');
+  grid.innerHTML = DEMO_ATMS.map(function(a) {
+    return `<div class="loc-atm-card">
+      <div class="loc-atm-card__name"><i class="fa fa-money-bill-wave" aria-hidden="true" style="color:#003580;margin-right:.3rem"></i>${a.name}</div>
+      <div class="loc-atm-card__addr">${a.addr}</div>
+      <div class="loc-atm-card__dist"><i class="fa fa-person-walking" aria-hidden="true"></i> ${a.dist} away</div>
+    </div>`;
+  }).join('');
+}
+
+/* ── Location search ── */
+document.getElementById('loc_search_form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const q = document.getElementById('loc_query').value.trim();
+  if (!q) return;
+  renderBranches();
+  renderATMs();
+  // Update map placeholder
+  document.querySelector('.loc-map__placeholder').innerHTML =
+    `<i class="fa fa-map-marked-alt" aria-hidden="true"></i>
+     <p>Showing results near <strong>${q}</strong>.<br>5 branches found.</p>`;
+  showToast('Found 5 branches near "' + q + '"', 'success');
+});
+
+/* ── Set min date for appointment to today ── */
+(function() {
+  const d = new Date();
+  // Move to next weekday if today is weekend
+  if (d.getDay() === 0) d.setDate(d.getDate() + 1);
+  if (d.getDay() === 6) d.setDate(d.getDate() + 2);
+  document.getElementById('appt_date').min = d.toISOString().split('T')[0];
+  document.getElementById('appt_date').value = d.toISOString().split('T')[0];
+})();
+
+/* ── Appointment form submission ── */
+document.getElementById('appt_form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const first  = document.getElementById('appt_first').value.trim();
+  const last   = document.getElementById('appt_last').value.trim();
+  const phone  = document.getElementById('appt_phone').value.trim();
+  const email  = document.getElementById('appt_email').value.trim();
+  const topic  = document.getElementById('appt_topic').value;
+  const date   = document.getElementById('appt_date').value;
+  const time   = document.getElementById('appt_time').value;
+  const branch = document.getElementById('appt_branch').value;
+  const errEl  = document.getElementById('appt_error');
+  const errMsg = document.getElementById('appt_error_msg');
+
+  if (!first || !last || !phone || !email || !topic || !date || !time || !branch) {
+    errMsg.textContent = 'All required fields must be filled in.';
+    errEl.style.display = 'flex';
+    errEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    // Focus first empty required field
+    var fields = ['appt_first','appt_last','appt_phone','appt_email','appt_topic','appt_date','appt_time','appt_branch'];
+    for (var i = 0; i < fields.length; i++) {
+      if (!document.getElementById(fields[i]).value) { document.getElementById(fields[i]).focus(); break; }
+    }
+    return;
+  }
+  if (!email.includes('@') || !email.includes('.')) {
+    errMsg.textContent = 'Please enter a valid email address.';
+    errEl.style.display = 'flex';
+    document.getElementById('appt_email').focus();
+    return;
+  }
+  errEl.style.display = 'none';
+
+  const ref = 'APPT' + Date.now().toString(36).toUpperCase();
+  document.getElementById('ac_name').textContent     = first + ' ' + last;
+  document.getElementById('ac_topic').textContent    = document.getElementById('appt_topic').options[document.getElementById('appt_topic').selectedIndex].text;
+  document.getElementById('ac_branch').textContent   = branch;
+  document.getElementById('ac_datetime').textContent = new Intl.DateTimeFormat('en-US', { dateStyle: 'long' }).format(new Date(date + 'T00:00:00')) + ' at ' + time;
+  document.getElementById('ac_ref').textContent      = ref;
+
+  openModal('modal-appt-success');
+  this.reset();
+});
+</script>
+</body>
+</html>

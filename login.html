@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sign In — Bank of America Online Banking</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="./downloaded_files/img/boa_box.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="./css/theme.css">
+  <link rel="stylesheet" href="./css/home.css">
+</head>
+<body>
+<div class="shell-wrap">
+
+  <script>window.BOA_ROOT = './';</script>
+  <script src="./js/navbar.js"></script>
+
+  <main class="shell-content" id="main-content">
+    <div class="BOA-container">
+      <div class="login-layout">
+
+        <!-- ── Login card ── -->
+        <div class="login-card">
+          <div class="login-card__header">
+            <h1 class="login-card__title">Sign In</h1>
+            <p class="login-card__sub">Online Banking &amp; Mobile App</p>
+          </div>
+
+          <!-- Error / timeout alert -->
+          <div id="login_error" class="BOA-alert BOA-alert--error" style="display:none">
+            <i class="fa fa-circle-xmark BOA-alert__icon"></i>
+            <div class="BOA-alert__body">
+              <div class="BOA-alert__title">Sign-in failed</div>
+              The User ID or Password you entered is incorrect. Please try again.
+            </div>
+          </div>
+
+          <form id="login_form" novalidate>
+            <div class="BOA-form-group">
+              <label for="user_login" class="BOA-label">User ID</label>
+              <input type="text" id="user_login" name="user_login"
+                class="BOA-input" autocomplete="username"
+                placeholder="Enter your User ID" required aria-required="true">
+            </div>
+
+            <div class="BOA-form-group">
+              <label for="user_password" class="BOA-label">Password</label>
+              <div class="login-pw-wrap">
+                <input type="password" id="user_password" name="user_password"
+                  class="BOA-input" autocomplete="current-password"
+                  placeholder="Enter your Password" required aria-required="true">
+                <button type="button" class="login-pw-toggle" id="toggle_pw" aria-label="Show password">
+                  <i class="fa fa-eye" id="toggle_pw_icon"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="login-options">
+              <label class="BOA-checkbox">
+                <input type="checkbox" id="user_remember_me" name="user_remember_me">
+                Keep me signed in
+              </label>
+              <a href="./forgot-password.html" class="login-forgot">Forgot User ID / Password?</a>
+            </div>
+
+            <button type="submit" class="BOA-btn BOA-btn--primary BOA-btn--full BOA-btn--lg" style="margin-top:1.25rem">
+              <i class="fa fa-right-to-bracket"></i> Sign In
+            </button>
+          </form>
+
+          <div class="login-card__divider"></div>
+          <div class="login-card__links">
+            <a href="./help.html" class="login-card__help">
+              <i class="fa fa-shield-halved"></i> Security &amp; Help
+            </a>
+            <a href="#" class="login-card__enroll">
+              <i class="fa fa-user-plus"></i> Enroll in Online Banking
+            </a>
+          </div>
+        </div>
+
+        <!-- ── Info panel ── -->
+        <div class="login-info">
+          <div class="login-info__badge"><i class="fa fa-shield-halved"></i> Secure &amp; Encrypted</div>
+          <h2 class="login-info__title">Your money,<br>fully protected.</h2>
+          <p class="login-info__sub">256-bit SSL encryption keeps every session safe. We monitor your account 24/7 for unusual activity.</p>
+
+          <ul class="login-info__list">
+            <li><i class="fa fa-circle-check"></i> View balances &amp; transactions</li>
+            <li><i class="fa fa-circle-check"></i> Transfer funds instantly</li>
+            <li><i class="fa fa-circle-check"></i> Pay bills &amp; manage payees</li>
+            <li><i class="fa fa-circle-check"></i> Download statements</li>
+            <li><i class="fa fa-circle-check"></i> Track spending with Money Map</li>
+          </ul>
+
+          <!-- <div class="login-info__demo">
+            <i class="fa fa-circle-info"></i>
+            <div>
+              <strong>Demo credentials</strong><br>
+              User ID: <code>jimmyregina</code><br>
+              Password: <code>jimmyregina2026</code>
+            </div>
+          </div> -->
+        </div>
+
+      </div><!-- /login-layout -->
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="shell-footer">
+    <div class="BOA-container shell-footer__inner">
+      <ul class="shell-footer__links">
+        <li><a href="#">Privacy</a></li>
+        <li><a href="#">Security</a></li>
+        <li><a href="./help.html">Help</a></li>
+        <li><a href="./faq.html">FAQ</a></li>
+      </ul>
+      <p class="shell-footer__copy">© 2026 Bank of America Corporation. FDIC Insured.</p>
+    </div>
+  </footer>
+
+</div><!-- /shell-wrap -->
+
+<style>
+.login-layout{display:grid;grid-template-columns:420px 1fr;gap:2.5rem;align-items:start;padding:2.5rem 0}
+.login-card{background:#fff;border:1px solid #ddd;border-radius:8px;overflow:hidden}
+.login-card__header{background:#003580;color:#fff;padding:1.5rem 1.75rem}
+.login-card__title{font-size:1.4rem;font-weight:800;margin:0 0 .2rem;color:#fff}
+.login-card__sub{font-size:.85rem;opacity:.75;margin:0}
+.login-card form{padding:1.5rem 1.75rem}
+.login-pw-wrap{position:relative}
+.login-pw-wrap .BOA-input{padding-right:2.5rem}
+.login-pw-toggle{position:absolute;right:.6rem;top:50%;transform:translateY(-50%);background:none;border:none;color:#666;cursor:pointer;padding:.2rem;font-size:.9rem}
+.login-pw-toggle:hover{color:#005eb8}
+.login-options{display:flex;align-items:center;justify-content:space-between;gap:.5rem;flex-wrap:wrap}
+.login-forgot{font-size:.8rem;color:#005eb8;text-decoration:none}
+.login-forgot:hover{text-decoration:underline}
+.login-card__divider{height:1px;background:#eee}
+.login-card__links{display:flex;gap:1rem;padding:1rem 1.75rem;flex-wrap:wrap}
+.login-card__help,.login-card__enroll{display:inline-flex;align-items:center;gap:.35rem;font-size:.8rem;font-weight:600;color:#005eb8;text-decoration:none}
+.login-card__help:hover,.login-card__enroll:hover{text-decoration:underline}
+/* info panel */
+.login-info{padding:2rem 0}
+.login-info__badge{display:inline-flex;align-items:center;gap:.4rem;background:#dbeafe;color:#1a56db;border-radius:20px;padding:.3rem .85rem;font-size:.75rem;font-weight:700;margin-bottom:1rem}
+.login-info__title{font-size:2rem;font-weight:800;color:#0a2540;line-height:1.2;margin:0 0 .75rem}
+.login-info__sub{font-size:.9rem;color:#555;line-height:1.6;margin:0 0 1.5rem}
+.login-info__list{list-style:none;margin:0 0 1.75rem;padding:0;display:flex;flex-direction:column;gap:.5rem}
+.login-info__list li{display:flex;align-items:center;gap:.6rem;font-size:.875rem;color:#333}
+.login-info__list li .fa{color:#c8102e;font-size:.9rem}
+.login-info__demo{background:#f8f9fa;border:1px solid #ddd;border-radius:6px;padding:.9rem 1.1rem;display:flex;gap:.75rem;align-items:flex-start;font-size:.8rem;color:#444;line-height:1.7}
+.login-info__demo .fa{color:#005eb8;font-size:1rem;margin-top:.1rem;flex-shrink:0}
+.login-info__demo code{background:#e8f0fb;color:#003580;border-radius:3px;padding:.05rem .35rem;font-size:.8rem}
+/* login error shown inside form */
+#login_error{margin:0 1.75rem 1rem}
+@media(max-width:860px){.login-layout{grid-template-columns:1fr;padding:1.5rem 0}.login-info{padding:0}}
+</style>
+
+<script src="./js/ui.js"></script>
+<script src="./js/login.js"></script>
+<script>
+// Password toggle
+document.getElementById('toggle_pw').addEventListener('click', function () {
+  const pw = document.getElementById('user_password');
+  const icon = document.getElementById('toggle_pw_icon');
+  if (pw.type === 'password') {
+    pw.type = 'text';
+    icon.className = 'fa fa-eye-slash';
+  } else {
+    pw.type = 'password';
+    icon.className = 'fa fa-eye';
+  }
+});
+</script>
+</body>
+</html>
