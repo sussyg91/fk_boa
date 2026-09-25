@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Transfer Funds — Bank of America Online Banking</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#003580">
+  <link rel="shortcut icon" href="../../downloaded_files/img/boa_box.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="../../css/theme.css">
+  <link rel="stylesheet" href="../../css/home.css">
+  <style>
+    /* Skip link */
+    .skip-link{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:9999}
+    .skip-link:focus{position:fixed;top:0;left:0;width:auto;height:auto;padding:.6rem 1.25rem;
+      background:#003580;color:#fff;font-size:.9rem;font-weight:700;border-radius:0 0 6px 0;
+      text-decoration:none;outline:3px solid #fff}
+    *:focus-visible{outline:3px solid #005eb8;outline-offset:2px}
+    a,button{touch-action:manipulation}
+    @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+    /* ── Bank institution grid ── */
+    .tf-bank-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.55rem;
+      max-height:320px;overflow-y:auto;padding:.1rem;scrollbar-width:thin}
+    .tf-bank-card{border:1.5px solid #e0e0e0;border-radius:8px;padding:.65rem .75rem;
+      cursor:pointer;background:#fff;display:flex;flex-direction:column;align-items:center;
+      gap:.4rem;text-align:center;transition:border-color .15s ease,background-color .15s ease,
+      box-shadow .15s ease}
+    .tf-bank-card:hover{border-color:#005eb8;background:#f0f6ff}
+    .tf-bank-card.selected{border-color:#003580;background:#f0f4fb;
+      box-shadow:0 0 0 3px rgba(0,53,128,.12)}
+    .tf-bank-card:focus{outline:3px solid #005eb8;outline-offset:2px}
+    .tf-bank-card__logo{width:40px;height:40px;border-radius:10px;display:flex;
+      align-items:center;justify-content:center;font-size:.95rem;font-weight:900;
+      flex-shrink:0;letter-spacing:-.5px}
+    .tf-bank-card__name{font-size:.72rem;font-weight:700;color:#0a2540;line-height:1.3}
+    .tf-bank-card__routing{font-size:.65rem;color:#aaa;font-variant-numeric:tabular-nums}
+    .tf-bank-no-results{text-align:center;padding:1.5rem;color:#888;font-size:.85rem;
+      grid-column:1/-1}
+
+    /* ── Selected bank pill ── */
+    .tf-bank-pill{background:#f0f4fb;border:1.5px solid #c7d9f8;border-radius:8px;
+      padding:.75rem 1rem;display:flex;align-items:center;justify-content:space-between;
+      gap:.75rem;flex-wrap:wrap;margin-top:.25rem}
+    .tf-bank-pill__logo{width:40px;height:40px;border-radius:10px;display:flex;
+      align-items:center;justify-content:center;font-size:.9rem;font-weight:900;
+      flex-shrink:0}
+    .tf-bank-pill__name{font-size:.9rem;font-weight:800;color:#003580}
+    .tf-bank-pill__routing{font-size:.75rem;color:#888;margin-top:.1rem;
+      font-variant-numeric:tabular-nums}
+    .tf-bank-pill__clear{background:none;border:1px solid #bbb;border-radius:6px;
+      padding:.3rem .7rem;font-size:.75rem;font-weight:600;color:#555;cursor:pointer;
+      font-family:var(--font-sans);display:flex;align-items:center;gap:.3rem;
+      transition:border-color .15s ease,color .15s ease,background-color .15s ease}
+    .tf-bank-pill__clear:hover{border-color:#c8102e;color:#c8102e;background:#fff5f5}
+    .tf-type-toggle{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1.5px solid #ddd;
+      border-radius:8px;overflow:hidden;margin-bottom:1.25rem}
+    .tf-type-btn{background:#fff;border:none;padding:.65rem 1rem;font-size:.875rem;font-weight:600;
+      color:#555;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;
+      justify-content:center;gap:.4rem;transition:background-color .15s ease,color .15s ease}
+    .tf-type-btn:first-child{border-right:1.5px solid #ddd}
+    .tf-type-btn.active{background:#003580;color:#fff}
+    .tf-type-btn:hover:not(.active){background:#f0f4fb;color:#003580}
+
+    /* ── Balance pill shown under From selector ── */
+    .tf-balance-pill{display:flex;align-items:center;justify-content:space-between;
+      background:#f0f4fb;border:1px solid #c7d9f8;border-radius:6px;padding:.55rem .9rem;
+      margin-top:.4rem;font-size:.82rem;color:#003580;font-weight:600;
+      font-variant-numeric:tabular-nums}
+    .tf-balance-pill span{color:#888;font-weight:400}
+    .tf-balance-pill__warn{color:#c8102e;font-size:.75rem;font-weight:700;display:none}
+
+    /* ── Amount quick-pick chips ── */
+    .tf-quick-picks{display:flex;gap:.45rem;flex-wrap:wrap;margin-top:.5rem}
+    .tf-chip{background:#f0f0f0;border:1px solid #ddd;border-radius:20px;padding:.2rem .75rem;
+      font-size:.78rem;font-weight:600;color:#444;cursor:pointer;
+      transition:background-color .15s ease,border-color .15s ease,color .15s ease}
+    .tf-chip:hover{background:#003580;color:#fff;border-color:#003580}
+
+    /* ── Internal "To" account cards ── */
+    .tf-account-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-top:.4rem}
+    .tf-account-card{border:1.5px solid #ddd;border-radius:8px;padding:.75rem .9rem;cursor:pointer;
+      transition:border-color .15s ease,background-color .15s ease;background:#fff;
+      display:flex;align-items:center;gap:.65rem}
+    .tf-account-card:hover{border-color:#005eb8;background:#f0f6ff}
+    .tf-account-card.selected{border-color:#003580;background:#f0f4fb;
+      box-shadow:0 0 0 3px rgba(0,53,128,.12)}
+    .tf-account-card__icon{width:34px;height:34px;border-radius:8px;display:flex;
+      align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+    .tf-account-card__name{font-size:.8rem;font-weight:700;color:#0a2540;margin-bottom:.1rem}
+    .tf-account-card__bal{font-size:.75rem;color:#888;font-variant-numeric:tabular-nums}
+
+    /* ── Limit & usage row ── */
+    .tf-limit-row{display:flex;justify-content:space-between;align-items:center;
+      padding:.45rem 0;border-bottom:1px solid #f0f0f0;font-size:.85rem;color:#444}
+    .tf-limit-row:last-of-type{border-bottom:none}
+
+    /* ── Limit usage bar ── */
+    .tf-usage-bar{height:6px;background:#f0f0f0;border-radius:99px;overflow:hidden;margin:.3rem 0 .4rem}
+    .tf-usage-bar__fill{height:100%;border-radius:99px;background:#003580;
+      transition:width .4s ease}
+
+    /* ── Recent transfers list ── */
+    .tf-recent-row{display:flex;align-items:center;justify-content:space-between;
+      padding:.8rem 1.25rem;border-bottom:1px solid #f0f0f0;gap:.75rem;flex-wrap:wrap}
+    .tf-recent-row:last-child{border-bottom:none}
+    .tf-recent-icon{width:36px;height:36px;border-radius:50%;background:#dbeafe;color:#1a56db;
+      display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0}
+    .tf-recent-desc{font-size:.875rem;font-weight:600;color:#0a2540}
+    .tf-recent-meta{font-size:.75rem;color:#888}
+    .tf-recent-amt{font-size:.9rem;font-weight:700;white-space:nowrap;
+      font-variant-numeric:tabular-nums}
+
+    /* ── Confirm rows ── */
+    .tf-confirm-row{display:flex;justify-content:space-between;align-items:center;
+      padding:.55rem 0;border-bottom:1px solid #f0f0f0;font-size:.875rem}
+    .tf-confirm-row:last-child{border-bottom:none}
+    .tf-confirm-row span{color:#666}
+
+    /* ── Review step ── */
+    .tf-review{background:#f8f9fa;border:1px solid #ddd;border-radius:8px;padding:1rem 1.1rem;
+      margin-bottom:1.1rem}
+    .tf-review-row{display:flex;justify-content:space-between;align-items:center;
+      font-size:.875rem;padding:.35rem 0;border-bottom:1px solid #eeeff0}
+    .tf-review-row:last-child{border-bottom:none}
+    .tf-review-row span{color:#666}
+    .tf-review-row strong{color:#0a2540;font-variant-numeric:tabular-nums}
+  </style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<div class="shell-wrap">
+
+  <script>window.BOA_ROOT = '../../'; window.BOA_BANKING_TAB = 'transfer-funds';</script>
+  <script src="../../js/data.js"></script>
+  <script src="../../js/navbar.js"></script>
+
+  <!-- Page header -->
+  <div class="shell-page-header">
+    <div class="BOA-container shell-page-header__inner">
+      <h1 class="shell-page-header__title">Transfer Funds</h1>
+      <nav class="shell-breadcrumb" aria-label="Breadcrumb">
+        <a href="../../index.html">Home</a>
+        <span class="shell-breadcrumb__sep" aria-hidden="true"><i class="fa fa-chevron-right"></i></span>
+        <a href="account-summary.html">Account Summary</a>
+        <span class="shell-breadcrumb__sep" aria-hidden="true"><i class="fa fa-chevron-right"></i></span>
+        <span>Transfer Funds</span>
+      </nav>
+    </div>
+  </div>
+
+  <main class="shell-content" id="main-content">
+    <div class="BOA-container">
+      <div class="shell-two-col">
+
+        <!-- ── LEFT: Transfer form ── -->
+        <div>
+
+          <!-- Step indicator -->
+          <div class="shell-card" style="margin-bottom:1.25rem">
+            <div class="shell-card__body" style="padding:.85rem 1.25rem">
+              <div style="display:flex;align-items:center;gap:0" id="tf_steps">
+                <div class="tf-step tf-step--active" data-step="1">
+                  <div class="tf-step__circle">1</div>
+                  <div class="tf-step__label">Details</div>
+                </div>
+                <div class="tf-step__line"></div>
+                <div class="tf-step" data-step="2">
+                  <div class="tf-step__circle">2</div>
+                  <div class="tf-step__label">Review</div>
+                </div>
+                <div class="tf-step__line"></div>
+                <div class="tf-step" data-step="3">
+                  <div class="tf-step__circle">3</div>
+                  <div class="tf-step__label">Confirm</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 1: Transfer details -->
+          <div class="shell-card" id="tf_step1">
+            <div class="shell-card__head">
+              <h2 class="shell-card__title">
+                <i class="fa fa-right-left" aria-hidden="true" style="color:#1a56db;margin-right:.4rem"></i>
+                New Transfer
+              </h2>
+              <span class="BOA-badge BOA-badge--info" id="tf_type_badge">Internal Transfer</span>
+            </div>
+            <div class="shell-card__body">
+
+              <!-- Error alert -->
+              <div id="tf_error" class="BOA-alert BOA-alert--error" style="display:none;margin-bottom:1rem" role="alert">
+                <i class="fa fa-circle-xmark BOA-alert__icon" aria-hidden="true"></i>
+                <div class="BOA-alert__body">
+                  <div class="BOA-alert__title">Please fix the following</div>
+                  <span id="tf_error_msg"></span>
+                </div>
+              </div>
+
+              <!-- Transfer type toggle -->
+              <div class="BOA-form-group">
+                <label class="BOA-label">Transfer Type</label>
+                <div class="tf-type-toggle" role="group" aria-label="Transfer type">
+                  <button type="button" class="tf-type-btn active" id="btn_internal"
+                    onclick="setTransferType('internal')" aria-pressed="true">
+                    <i class="fa fa-building-columns" aria-hidden="true"></i> Internal (My Accounts)
+                  </button>
+                  <button type="button" class="tf-type-btn" id="btn_external"
+                    onclick="setTransferType('external')" aria-pressed="false">
+                    <i class="fa fa-globe" aria-hidden="true"></i> External Bank
+                  </button>
+                </div>
+              </div>
+
+              <!-- From account -->
+              <div class="BOA-form-group">
+                <label for="tf_from" class="BOA-label">
+                  From Account <span aria-hidden="true" style="color:#c8102e">*</span>
+                </label>
+                <select id="tf_from" class="BOA-select" required aria-required="true"
+                  aria-describedby="tf_from_balance">
+                  <option value="">— Select account —</option>
+                </select>
+                <!-- Live balance pill -->
+                <div class="tf-balance-pill" id="tf_from_balance" style="display:none">
+                  <div>
+                    <span>Available balance</span>
+                    <div id="tf_from_bal_amt" style="font-size:1rem;font-weight:800;color:#003580"></div>
+                  </div>
+                  <div style="text-align:right">
+                    <div class="tf-balance-pill__warn" id="tf_from_bal_warn">
+                      <i class="fa fa-triangle-exclamation" aria-hidden="true"></i> Insufficient funds
+                    </div>
+                    <div id="tf_from_bal_after" style="font-size:.75rem;color:#888"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ── INTERNAL: To account card picker ── -->
+              <div class="BOA-form-group" id="tf_internal_to_group">
+                <label class="BOA-label">
+                  To Account <span aria-hidden="true" style="color:#c8102e">*</span>
+                </label>
+                <div class="tf-account-grid" id="tf_to_cards" role="radiogroup" aria-label="Select destination account">
+                  <!-- populated by JS from BOA_ACCOUNTS -->
+                </div>
+              </div>
+
+              <!-- ── EXTERNAL: Bank institution picker + account fields ── -->
+              <div id="tf_external_group" style="display:none">
+
+                <!-- Institution picker -->
+                <div class="BOA-form-group">
+                  <label class="BOA-label">
+                    Recipient Bank / Institution <span aria-hidden="true" style="color:#c8102e">*</span>
+                  </label>
+
+                  <!-- Search box -->
+                  <div style="position:relative;margin-bottom:.6rem">
+                    <i class="fa fa-search" aria-hidden="true"
+                      style="position:absolute;left:.75rem;top:50%;transform:translateY(-50%);
+                             color:#999;font-size:.85rem;pointer-events:none"></i>
+                    <input type="text" id="tf_bank_search" class="BOA-input"
+                      placeholder="Search banks — Chase, Wells Fargo, Citibank…"
+                      autocomplete="off" spellcheck="false"
+                      style="padding-left:2.3rem"
+                      aria-label="Search for a bank institution"
+                      oninput="filterBanks(this.value)">
+                  </div>
+
+                  <!-- Institution grid -->
+                  <div id="tf_bank_grid" class="tf-bank-grid" role="radiogroup"
+                    aria-label="Select a bank institution">
+                    <!-- populated by JS -->
+                  </div>
+
+                  <!-- Selected bank confirmation pill -->
+                  <div id="tf_bank_selected_pill" class="tf-bank-pill" style="display:none"
+                    aria-live="polite">
+                    <div style="display:flex;align-items:center;gap:.65rem">
+                      <div id="tf_bank_pill_logo" class="tf-bank-pill__logo"></div>
+                      <div>
+                        <div id="tf_bank_pill_name" class="tf-bank-pill__name"></div>
+                        <div id="tf_bank_pill_routing" class="tf-bank-pill__routing"></div>
+                      </div>
+                    </div>
+                    <button type="button" class="tf-bank-pill__clear"
+                      onclick="clearBankSelection()" aria-label="Change bank selection">
+                      <i class="fa fa-xmark" aria-hidden="true"></i> Change
+                    </button>
+                  </div>
+
+                  <!-- Hidden field carries the selected bank name for validation -->
+                  <input type="hidden" id="tf_bank" value="">
+                </div>
+
+                <!-- Routing (pre-filled when a bank is selected) -->
+                <div class="shell-form-row">
+                  <div class="BOA-form-group">
+                    <label for="tf_routing" class="BOA-label">
+                      Routing Number <span aria-hidden="true" style="color:#c8102e">*</span>
+                    </label>
+                    <input type="text" id="tf_routing" class="BOA-input"
+                      placeholder="9-digit ABA routing number…"
+                      inputmode="numeric" maxlength="9" pattern="[0-9]{9}"
+                      autocomplete="off" spellcheck="false"
+                      aria-describedby="tf_routing_hint">
+                    <p class="BOA-help-text" id="tf_routing_hint">Auto-filled when you select a bank above.</p>
+                  </div>
+                  <div class="BOA-form-group">
+                    <label for="tf_toAccount" class="BOA-label">
+                      Account Number <span aria-hidden="true" style="color:#c8102e">*</span>
+                    </label>
+                    <input type="text" id="tf_toAccount" class="BOA-input"
+                      placeholder="Recipient account number…"
+                      inputmode="numeric" pattern="[0-9]*"
+                      autocomplete="off" spellcheck="false">
+                  </div>
+                </div>
+
+                <!-- Account type -->
+                <div class="BOA-form-group">
+                  <label for="tf_acct_type" class="BOA-label">Account Type</label>
+                  <select id="tf_acct_type" class="BOA-select">
+                    <option value="checking">Checking</option>
+                    <option value="savings">Savings</option>
+                  </select>
+                </div>
+
+                <div class="BOA-form-group">
+                  <label for="tf_recipient" class="BOA-label">Recipient Full Name</label>
+                  <input type="text" id="tf_recipient" class="BOA-input"
+                    placeholder="Full name as it appears on the account…"
+                    autocomplete="name">
+                </div>
+
+              </div>
+
+              <!-- Amount + quick picks -->
+              <div class="BOA-form-group">
+                <label for="tf_amount" class="BOA-label">
+                  Amount <span aria-hidden="true" style="color:#c8102e">*</span>
+                </label>
+                <div class="BOA-input-prefix">
+                  <span class="BOA-input-prefix__symbol">$</span>
+                  <input type="number" id="tf_amount" class="BOA-input"
+                    placeholder="0.00" min="0.01" step="0.01" required
+                    aria-required="true" aria-describedby="tf_amount_hint">
+                </div>
+                <div class="tf-quick-picks" aria-label="Quick amount picks">
+                  <button type="button" class="tf-chip" onclick="setAmount(100)">$100</button>
+                  <button type="button" class="tf-chip" onclick="setAmount(250)">$250</button>
+                  <button type="button" class="tf-chip" onclick="setAmount(500)">$500</button>
+                  <button type="button" class="tf-chip" onclick="setAmount(1000)">$1,000</button>
+                  <button type="button" class="tf-chip" onclick="setAmount(2500)">$2,500</button>
+                  <button type="button" class="tf-chip" onclick="setAmount(5000)">$5,000</button>
+                </div>
+                <p class="BOA-help-text" id="tf_amount_hint" style="margin-top:.4rem">
+                  Internal transfers have no limit. External transfers: $5,000/day max.
+                </p>
+              </div>
+
+              <!-- Date + frequency row -->
+              <div class="shell-form-row">
+                <div class="BOA-form-group">
+                  <label for="tf_date" class="BOA-label">
+                    Transfer Date <span aria-hidden="true" style="color:#c8102e">*</span>
+                  </label>
+                  <input type="date" id="tf_date" class="BOA-input" required aria-required="true">
+                </div>
+                <div class="BOA-form-group">
+                  <label for="tf_frequency" class="BOA-label">Frequency</label>
+                  <select id="tf_frequency" class="BOA-select">
+                    <option value="once">One-time</option>
+                    <option value="weekly">Weekly</option>
+                    <option value="biweekly">Every 2 weeks</option>
+                    <option value="monthly">Monthly</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Memo -->
+              <div class="BOA-form-group">
+                <label for="tf_memo" class="BOA-label">
+                  Memo / Note <span style="font-weight:400;color:#999">(optional)</span>
+                </label>
+                <input type="text" id="tf_memo" class="BOA-input"
+                  placeholder="Add a note for this transfer…" maxlength="100">
+              </div>
+
+              <div style="display:flex;gap:.75rem;flex-wrap:wrap">
+                <button type="button" class="BOA-btn BOA-btn--primary BOA-btn--lg" onclick="goToReview()">
+                  <i class="fa fa-arrow-right" aria-hidden="true"></i> Review Transfer
+                </button>
+                <button type="button" class="BOA-btn BOA-btn--secondary BOA-btn--lg" onclick="resetForm()">
+                  <i class="fa fa-rotate-left" aria-hidden="true"></i> Clear
+                </button>
+              </div>
+
+            </div>
+          </div><!-- /step1 -->
+
+          <!-- STEP 2: Review -->
+          <div class="shell-card" id="tf_step2" style="display:none">
+            <div class="shell-card__head">
+              <h2 class="shell-card__title">
+                <i class="fa fa-eye" aria-hidden="true" style="color:#d97706;margin-right:.4rem"></i>
+                Review Transfer
+              </h2>
+              <span class="BOA-badge BOA-badge--warning">Review</span>
+            </div>
+            <div class="shell-card__body">
+              <p style="font-size:.875rem;color:#555;margin:0 0 1rem">
+                Please review your transfer details carefully before confirming.
+              </p>
+              <div class="tf-review" id="tf_review_details"></div>
+              <div class="BOA-alert BOA-alert--warning" style="margin-bottom:1.1rem">
+                <i class="fa fa-triangle-exclamation BOA-alert__icon" aria-hidden="true"></i>
+                <div class="BOA-alert__body">
+                  Transfers cannot be cancelled once confirmed. Please verify all details.
+                </div>
+              </div>
+              <div style="display:flex;gap:.75rem;flex-wrap:wrap">
+                <button type="button" class="BOA-btn BOA-btn--secondary BOA-btn--lg" onclick="goToStep(1)">
+                  <i class="fa fa-arrow-left" aria-hidden="true"></i> Back to Edit
+                </button>
+                <button type="button" class="BOA-btn BOA-btn--primary BOA-btn--lg" onclick="confirmTransfer()">
+                  <i class="fa fa-circle-check" aria-hidden="true"></i> Confirm &amp; Submit
+                </button>
+              </div>
+            </div>
+          </div><!-- /step2 -->
+
+        </div><!-- /left col -->
+
+        <!-- ── RIGHT: Sidebar ── -->
+        <div>
+
+          <!-- Account balances quick view -->
+          <div class="shell-card" style="margin-bottom:1rem">
+            <div class="shell-card__head">
+              <h2 class="shell-card__title">
+                <i class="fa fa-wallet" aria-hidden="true" style="color:#003580;margin-right:.35rem"></i>
+                Your Balances
+              </h2>
+              <a href="account-summary.html" class="BOA-btn BOA-btn--secondary BOA-btn--sm">Summary</a>
+            </div>
+            <div id="tf_sidebar_balances" class="shell-card__body" style="padding:.5rem 0">
+              <!-- populated from BOA_ACCOUNTS -->
+            </div>
+          </div>
+
+          <!-- Daily usage -->
+          <div class="shell-card" style="margin-bottom:1rem">
+            <div class="shell-card__head">
+              <h2 class="shell-card__title">
+                <i class="fa fa-gauge-high" aria-hidden="true" style="color:#d97706;margin-right:.35rem"></i>
+                Daily Usage
+              </h2>
+            </div>
+            <div class="shell-card__body">
+              <div style="display:flex;justify-content:space-between;font-size:.8rem;color:#555;margin-bottom:.3rem">
+                <span>External transfers today</span>
+                <span style="font-weight:700;font-variant-numeric:tabular-nums">
+                  <span id="tf_used_today">$0.00</span> / $5,000.00
+                </span>
+              </div>
+              <div class="tf-usage-bar">
+                <div class="tf-usage-bar__fill" id="tf_usage_fill" style="width:0%"></div>
+              </div>
+              <p class="BOA-muted" style="font-size:.75rem;margin:0">
+                Limit resets at midnight. Internal transfers are unlimited.
+              </p>
+            </div>
+          </div>
+
+          <!-- Transfer limits -->
+          <div class="shell-card" style="margin-bottom:1rem">
+            <div class="shell-card__head">
+              <h2 class="shell-card__title">Transfer Limits</h2>
+            </div>
+            <div class="shell-card__body">
+              <div class="tf-limit-row"><span>Internal (same day)</span><strong>Unlimited</strong></div>
+              <div class="tf-limit-row"><span>External daily max</span><strong>$5,000.00</strong></div>
+              <div class="tf-limit-row"><span>External monthly max</span><strong>$25,000.00</strong></div>
+              <div class="tf-limit-row"><span>Wire transfer</span><strong>$50,000.00</strong></div>
+            </div>
+          </div>
+
+          <!-- Processing times -->
+          <div class="shell-card" style="margin-bottom:1rem">
+            <div class="shell-card__head">
+              <h2 class="shell-card__title">
+                <i class="fa fa-clock" aria-hidden="true" style="color:#d97706;margin-right:.35rem"></i>
+                Processing Time
+              </h2>
+            </div>
+            <div class="shell-card__body">
+              <div class="tf-limit-row"><span>Internal transfers</span><strong style="color:#16a34a">Instant</strong></div>
+              <div class="tf-limit-row"><span>External (ACH)</span><strong>1–3 business days</strong></div>
+              <div class="tf-limit-row"><span>Wire transfer</span><strong>Same business day</strong></div>
+            </div>
+          </div>
+
+          <!-- Recent transfers -->
+          <div class="shell-card">
+            <div class="shell-card__head">
+              <h2 class="shell-card__title">
+                <i class="fa fa-clock-rotate-left" aria-hidden="true" style="color:#555;margin-right:.35rem"></i>
+                Recent Transfers
+              </h2>
+            </div>
+            <div id="tf_recent_list">
+              <!-- populated from BOA_TRANSACTIONS -->
+            </div>
+          </div>
+
+        </div><!-- /right col -->
+      </div><!-- /shell-two-col -->
+    </div><!-- /BOA-container -->
+  </main>
+
+  <!-- ── Success / confirmation modal ── -->
+  <div id="modal-tf-success" class="BOA-modal-overlay" style="display:none"
+    role="dialog" aria-modal="true" aria-labelledby="tf-modal-title">
+    <div class="BOA-modal">
+      <div class="BOA-modal__header" style="background:#003580">
+        <h3 class="BOA-modal__title" id="tf-modal-title" style="color:#fff">
+          <i class="fa fa-circle-check" aria-hidden="true" style="color:#4ade80;margin-right:.5rem"></i>
+          Transfer Confirmed
+        </h3>
+        <button class="BOA-modal__close" onclick="closeModal('modal-tf-success')"
+          aria-label="Close" style="color:#fff">
+          <i class="fa fa-xmark" aria-hidden="true"></i>
+        </button>
+      </div>
+      <div class="BOA-modal__body">
+        <div class="BOA-alert BOA-alert--success" style="margin-bottom:1.1rem">
+          <i class="fa fa-circle-check BOA-alert__icon" aria-hidden="true"></i>
+          <div class="BOA-alert__body">
+            Your transfer has been submitted successfully. Reference your confirmation number for records.
+          </div>
+        </div>
+        <!-- Confirmation reference number box -->
+        <div style="background:#f0f4fb;border:1px solid #c7d9f8;border-radius:6px;
+          padding:.85rem 1rem;display:flex;align-items:center;justify-content:space-between;
+          margin-bottom:1.1rem;flex-wrap:wrap;gap:.5rem">
+          <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;
+            letter-spacing:.06em;color:#888">Confirmation Number</div>
+          <div id="tf_confirm_ref" style="font-size:1rem;font-weight:800;color:#003580;
+            font-family:monospace;letter-spacing:.04em"></div>
+        </div>
+        <!-- Details grid -->
+        <div id="tf_confirm_grid"></div>
+      </div>
+      <div class="BOA-modal__footer">
+        <a href="transfer-funds-verify.html" id="tf_verify_link" class="BOA-btn BOA-btn--outline">
+          <i class="fa fa-file-lines" aria-hidden="true"></i> View Receipt
+        </a>
+        <a href="account-summary.html" class="BOA-btn BOA-btn--secondary">
+          <i class="fa fa-wallet" aria-hidden="true"></i> Account Summary
+        </a>
+        <button onclick="closeModal('modal-tf-success');resetForm()" class="BOA-btn BOA-btn--primary">
+          <i class="fa fa-plus" aria-hidden="true"></i> New Transfer
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="shell-footer">
+    <div class="BOA-container shell-footer__inner">
+      <ul class="shell-footer__links">
+        <li><a href="../../index.html">Home</a></li>
+        <li><a href="../../help.html">Help</a></li>
+        <li><a href="../../privacy.html">Privacy</a></li>
+        <li><a href="../../logout.html">Sign Out</a></li>
+      </ul>
+      <p class="shell-footer__copy">© 2026 Bank of America Corporation. FDIC Insured.</p>
+    </div>
+  </footer>
+
+</div><!-- /shell-wrap -->
+
+<!-- Step indicator styles (self-contained) -->
+<style>
+.tf-step{display:flex;flex-direction:column;align-items:center;gap:.3rem;flex:0 0 auto}
+.tf-step__circle{width:30px;height:30px;border-radius:50%;border:2px solid #ddd;background:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:800;
+  color:#aaa;transition:background-color .2s,border-color .2s,color .2s}
+.tf-step--active .tf-step__circle{background:#003580;border-color:#003580;color:#fff}
+.tf-step--done .tf-step__circle{background:#16a34a;border-color:#16a34a;color:#fff}
+.tf-step__label{font-size:.72rem;font-weight:600;color:#aaa}
+.tf-step--active .tf-step__label,.tf-step--done .tf-step__label{color:#003580}
+.tf-step__line{flex:1;height:2px;background:#e0e0e0;margin:0 .25rem;margin-bottom:1.2rem}
+.shell-form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+@media(max-width:640px){.shell-form-row{grid-template-columns:1fr}}
+</style>
+
+<script src="../../js/ui.js"></script>
+<script src="../../js/checkAccess.js"></script>
+<script>
+/* ================================================================
+   BANK INSTITUTIONS DATA
+   Real ABA routing numbers for major US banks.
+   ================================================================ */
+const BANK_INSTITUTIONS = [
+  // ── Major National Banks ────────────────────────────────────────
+  { id:'chase',       name:'Chase',                   short:'Chase',   routing:'021000021', color:'#003087', bg:'#dbeafe',  textColor:'#003087', category:'national' },
+  { id:'wellsfargo',  name:'Wells Fargo',              short:'WF',      routing:'121000248', color:'#d71e28', bg:'#fee2e2',  textColor:'#c8102e', category:'national' },
+  { id:'citi',        name:'Citibank',                 short:'Citi',    routing:'021000089', color:'#0069b4', bg:'#dbeafe',  textColor:'#0069b4', category:'national' },
+  { id:'usbank',      name:'U.S. Bank',                short:'USB',     routing:'091000022', color:'#002868', bg:'#ede9fe',  textColor:'#5b21b6', category:'national' },
+  { id:'truist',      name:'Truist Bank',              short:'Truist',  routing:'053101121', color:'#500078', bg:'#ede9fe',  textColor:'#7c3aed', category:'national' },
+  { id:'pnc',         name:'PNC Bank',                 short:'PNC',     routing:'031000053', color:'#f37f00', bg:'#fef3c7',  textColor:'#d97706', category:'national' },
+  { id:'capitalone',  name:'Capital One',              short:'CapOne',  routing:'051405515', color:'#cc0000', bg:'#fee2e2',  textColor:'#c8102e', category:'national' },
+  { id:'tdbank',      name:'TD Bank',                  short:'TD',      routing:'011103093', color:'#007b40', bg:'#dcfce7',  textColor:'#16a34a', category:'national' },
+  { id:'regions',     name:'Regions Bank',             short:'Rgns',    routing:'062000019', color:'#005151', bg:'#ccfbf1',  textColor:'#0d9488', category:'national' },
+  { id:'fifththird',  name:'Fifth Third Bank',         short:'5/3',     routing:'042000314', color:'#005f9e', bg:'#dbeafe',  textColor:'#1a56db', category:'national' },
+  { id:'keybank',     name:'KeyBank',                  short:'Key',     routing:'041001039', color:'#da291c', bg:'#fee2e2',  textColor:'#c8102e', category:'national' },
+  { id:'huntington',  name:'Huntington National Bank', short:'HNTB',    routing:'044000024', color:'#006747', bg:'#dcfce7',  textColor:'#16a34a', category:'national' },
+  // ── Online / Neobanks ───────────────────────────────────────────
+  { id:'ally',        name:'Ally Bank',                short:'Ally',    routing:'124003116', color:'ff5f00', bg:'#fef3c7',   textColor:'#d97706', category:'online'   },
+  { id:'discover',    name:'Discover Bank',            short:'Disc',    routing:'031100649', color:'#f76700', bg:'#fef3c7',  textColor:'#d97706', category:'online'   },
+  { id:'sofi',        name:'SoFi Bank',                short:'SoFi',    routing:'021214891', color:'#7b2d8b', bg:'#ede9fe',  textColor:'#7c3aed', category:'online'   },
+  { id:'chime',       name:'Chime (Bancorp)',          short:'Chime',   routing:'031101279', color:'#1dc49c', bg:'#ccfbf1',  textColor:'#0d9488', category:'online'   },
+  { id:'axos',        name:'Axos Bank',                short:'Axos',    routing:'122287675', color:'#003087', bg:'#dbeafe',  textColor:'#1a56db', category:'online'   },
+  { id:'marcus',      name:'Marcus by Goldman Sachs',  short:'Marcus',  routing:'124085066', color:'#00a3e0', bg:'#dbeafe',  textColor:'#1a56db', category:'online'   },
+  // ── Credit Unions ───────────────────────────────────────────────
+  { id:'navyfcu',     name:'Navy Federal Credit Union',short:'NFCU',    routing:'256074974', color:'#003087', bg:'#dbeafe',  textColor:'#003087', category:'credit_union' },
+  { id:'penfed',      name:'PenFed Credit Union',      short:'PenFed',  routing:'256078446', color:'#004990', bg:'#dbeafe',  textColor:'#1a56db', category:'credit_union' },
+  { id:'alliant',     name:'Alliant Credit Union',     short:'Alliant', routing:'271081528', color:'#6b21a8', bg:'#ede9fe',  textColor:'#7c3aed', category:'credit_union' },
+  { id:'becu',        name:'BECU',                     short:'BECU',    routing:'325081403', color:'#005eb8', bg:'#dbeafe',  textColor:'#1a56db', category:'credit_union' },
+  // ── Brokerage / Investment ──────────────────────────────────────
+  { id:'fidelity',    name:'Fidelity Investments',     short:'Fidelity',routing:'101205681', color:'#367c2b', bg:'#dcfce7',  textColor:'#16a34a', category:'brokerage' },
+  { id:'schwab',      name:'Charles Schwab Bank',      short:'Schwab',  routing:'121202211', color:'#00a8e0', bg:'#dbeafe',  textColor:'#1a56db', category:'brokerage' },
+  { id:'vanguard',    name:'Vanguard',                 short:'VGRD',    routing:'031000503', color:'#880000', bg:'#fee2e2',  textColor:'#c8102e', category:'brokerage' },
+  // ── Other ───────────────────────────────────────────────────────
+  { id:'other',       name:'Other / Manual Entry',     short:'Other',   routing:'',          color:'#555',    bg:'#f1f5f9',  textColor:'#475569', category:'other'     },
+];
+
+let selectedBankId = null;
+
+const CATEGORY_LABELS = {
+  national:     '🏦 Major National Banks',
+  online:       '💻 Online & Neobanks',
+  credit_union: '🤝 Credit Unions',
+  brokerage:    '📈 Brokerage & Investment',
+  other:        '➕ Other',
+};
+
+/* ── Render institution grid ── */
+function renderBankGrid(filter) {
+  const grid = document.getElementById('tf_bank_grid');
+  if (!grid) return;
+  const q = (filter || '').toLowerCase().trim();
+
+  const filtered = BANK_INSTITUTIONS.filter(function (b) {
+    if (!q) return true;
+    return b.name.toLowerCase().includes(q) ||
+           b.short.toLowerCase().includes(q) ||
+           b.routing.includes(q) ||
+           b.category.includes(q);
+  });
+
+  if (!filtered.length) {
+    grid.innerHTML = '<div class="tf-bank-no-results"><i class="fa fa-magnifying-glass" style="display:block;font-size:1.5rem;opacity:.3;margin-bottom:.5rem" aria-hidden="true"></i>No banks found. Try a different search term.</div>';
+    return;
+  }
+
+  // Group by category when not searching
+  if (!q) {
+    const groups = {};
+    filtered.forEach(function (b) {
+      if (!groups[b.category]) groups[b.category] = [];
+      groups[b.category].push(b);
+    });
+
+    const catOrder = ['national','online','credit_union','brokerage','other'];
+    let html = '';
+    catOrder.forEach(function (cat) {
+      if (!groups[cat] || !groups[cat].length) return;
+      html += `<div style="grid-column:1/-1;font-size:.7rem;font-weight:800;text-transform:uppercase;
+        letter-spacing:.07em;color:#999;padding:.4rem .1rem .1rem">${CATEGORY_LABELS[cat] || cat}</div>`;
+      html += groups[cat].map(bankCardHTML).join('');
+    });
+    grid.innerHTML = html;
+  } else {
+    grid.innerHTML = filtered.map(bankCardHTML).join('');
+  }
+}
+
+function bankCardHTML(b) {
+  const isSel = b.id === selectedBankId;
+  return `<div class="tf-bank-card${isSel ? ' selected' : ''}"
+    role="radio" aria-checked="${isSel}" tabindex="0"
+    data-bank-id="${b.id}"
+    onclick="selectBank('${b.id}')"
+    onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectBank('${b.id}')}"
+    aria-label="${b.name}, routing ${b.routing || 'manual entry'}">
+    <div class="tf-bank-card__logo" style="background:${b.bg};color:${b.textColor}">${b.short}</div>
+    <div class="tf-bank-card__name">${b.name}</div>
+    ${b.routing ? `<div class="tf-bank-card__routing">RTN ${b.routing}</div>` : '<div class="tf-bank-card__routing" style="color:#aaa">Manual entry</div>'}
+  </div>`;
+}
+
+function filterBanks(q) {
+  renderBankGrid(q);
+}
+
+/* ── Select a bank ── */
+function selectBank(id) {
+  const bank = BANK_INSTITUTIONS.find(function (b) { return b.id === id; });
+  if (!bank) return;
+
+  selectedBankId = id;
+
+  // Fill hidden field + routing
+  document.getElementById('tf_bank').value    = bank.name;
+  document.getElementById('tf_routing').value = bank.routing;
+
+  // Show confirmation pill
+  const pill = document.getElementById('tf_bank_selected_pill');
+  document.getElementById('tf_bank_pill_logo').innerHTML =
+    `<span style="background:${bank.bg};color:${bank.textColor};width:40px;height:40px;
+      border-radius:10px;display:flex;align-items:center;justify-content:center;
+      font-size:.85rem;font-weight:900">${bank.short}</span>`;
+  document.getElementById('tf_bank_pill_name').textContent    = bank.name;
+  document.getElementById('tf_bank_pill_routing').textContent =
+    bank.routing ? 'Routing: ' + bank.routing : 'Enter routing number manually';
+  pill.style.display = '';
+
+  // Hide search area, show pill only
+  document.getElementById('tf_bank_search').closest('.BOA-form-group').querySelector('#tf_bank_grid').style.display = 'none';
+  document.getElementById('tf_bank_search').style.display = 'none';
+
+  // For "Other" — clear routing so user fills it manually
+  if (id === 'other') {
+    document.getElementById('tf_bank').value    = '';
+    document.getElementById('tf_routing').value = '';
+    const routingInput = document.getElementById('tf_routing');
+    routingInput.removeAttribute('readonly');
+    routingInput.placeholder = 'Enter 9-digit routing number…';
+    routingInput.focus();
+  } else {
+    // Pre-filled routing — make it readonly but still submittable
+    const routingInput = document.getElementById('tf_routing');
+    routingInput.setAttribute('readonly', 'readonly');
+    routingInput.style.background = '#f5f7fa';
+    routingInput.style.color      = '#555';
+  }
+
+  // Re-render grid to reflect selection (for when user comes back)
+  renderBankGrid(document.getElementById('tf_bank_search').value);
+}
+
+function clearBankSelection() {
+  selectedBankId = null;
+  document.getElementById('tf_bank').value    = '';
+  document.getElementById('tf_routing').value = '';
+  document.getElementById('tf_bank_selected_pill').style.display = 'none';
+
+  // Restore search + grid
+  const searchEl = document.getElementById('tf_bank_search');
+  searchEl.style.display = '';
+  searchEl.value = '';
+  document.getElementById('tf_bank_grid').style.display = '';
+
+  // Restore routing as editable
+  const routingInput = document.getElementById('tf_routing');
+  routingInput.removeAttribute('readonly');
+  routingInput.style.background = '';
+  routingInput.style.color      = '';
+  routingInput.placeholder      = '9-digit ABA routing number…';
+
+  renderBankGrid('');
+  searchEl.focus();
+}
+
+/* Init bank grid when switching to External — patched inside DOMContentLoaded */
+/* ================================================================
+   ACCOUNT COLOURS & ICONS  (matches account-summary)
+  savings:   { bg:'#dbeafe', color:'#1a56db', icon:'fa-piggy-bank'          },
+  checking:  { bg:'#ccfbf1', color:'#0d9488', icon:'fa-money-check-dollar'  },
+  brokerage: { bg:'#dcfce7', color:'#16a34a', icon:'fa-chart-line'          },
+  loan:      { bg:'#fee2e2', color:'#c8102e', icon:'fa-file-invoice-dollar' },
+  credit:    { bg:'#ede9fe', color:'#7c3aed', icon:'fa-credit-card'         },
+};
+
+/* ================================================================
+   STATE
+   ================================================================ */
+let transferType   = 'internal';  // 'internal' | 'external'
+let selectedToId   = null;        // account id for internal transfers
+let dailyUsed      = 0;           // external amount used today (session)
+const DAILY_LIMIT  = 5000;
+
+/* ================================================================
+   INIT — populate everything from BOA_ACCOUNTS / BOA_TRANSACTIONS
+   ================================================================ */
+document.addEventListener('DOMContentLoaded', function () {
+  setDefaultDate();
+  populateFromDropdown();
+  populateToCards();
+  populateSidebarBalances();
+  populateRecentTransfers();
+  updateDailyUsage(0);
+
+  // Wire tf_amount input here so it's guaranteed after DOM ready
+  document.getElementById('tf_amount').addEventListener('input', updateBalancePillAfter);
+
+  // Extend setTransferType so switching to External auto-renders the bank grid
+  const _origSTT = window.setTransferType;
+  window.setTransferType = function (type) {
+    _origSTT(type);
+    if (type === 'external') {
+      const grid = document.getElementById('tf_bank_grid');
+      if (grid && !grid.children.length) renderBankGrid('');
+    }
+  };
+});
+
+function setDefaultDate() {
+  const today = new Date();
+  // Skip to Monday if today is Saturday/Sunday
+  if (today.getDay() === 6) today.setDate(today.getDate() + 2);
+  if (today.getDay() === 0) today.setDate(today.getDate() + 1);
+  document.getElementById('tf_date').value = today.toISOString().split('T')[0];
+  document.getElementById('tf_date').min   = new Date().toISOString().split('T')[0];
+}
+
+/* ── From dropdown — only non-loan/non-credit accounts ── */
+function populateFromDropdown() {
+  const sel = document.getElementById('tf_from');
+  const SENDABLE = ['savings','checking','brokerage'];
+  Object.keys(BOA_ACCOUNTS).forEach(function (id) {
+    const a = BOA_ACCOUNTS[id];
+    if (!SENDABLE.includes(a.type)) return;
+    const opt = document.createElement('option');
+    opt.value       = id;
+    opt.textContent = a.label + ' (' + a.mask + ')';
+    opt.dataset.balance = a.balance;
+    sel.appendChild(opt);
+  });
+  sel.addEventListener('change', onFromChange);
+}
+
+function onFromChange() {
+  const sel = document.getElementById('tf_from');
+  const id  = sel.value;
+  const balPill = document.getElementById('tf_from_balance');
+  if (!id) { balPill.style.display = 'none'; return; }
+
+  const acc    = BOA_ACCOUNTS[id];
+  const amount = parseFloat(document.getElementById('tf_amount').value) || 0;
+  const after  = acc.balance - amount;
+
+  document.getElementById('tf_from_bal_amt').textContent  = boaFmt(acc.balance);
+  document.getElementById('tf_from_bal_after').textContent =
+    amount > 0 ? 'After transfer: ' + boaFmt(after) : '';
+  document.getElementById('tf_from_bal_warn').style.display =
+    (amount > 0 && after < 0) ? 'block' : 'none';
+  balPill.style.display = '';
+
+  // Re-build To cards to exclude the From account
+  populateToCards(id);
+}
+
+/* ── To account cards (internal) ── */
+function populateToCards(excludeId) {
+  const grid = document.getElementById('tf_to_cards');
+  const RECEIVABLE = ['savings','checking','brokerage'];
+  grid.innerHTML = '';
+  selectedToId = null;
+
+  Object.keys(BOA_ACCOUNTS).forEach(function (id) {
+    const a = BOA_ACCOUNTS[id];
+    if (!RECEIVABLE.includes(a.type)) return;
+    if (id === excludeId) return;
+
+    const s = ACC_STYLE[a.type] || ACC_STYLE.savings;
+    const card = document.createElement('div');
+    card.className        = 'tf-account-card';
+    card.setAttribute('role', 'radio');
+    card.setAttribute('aria-checked', 'false');
+    card.setAttribute('tabindex', '0');
+    card.dataset.id       = id;
+    card.innerHTML = `
+      <div class="tf-account-card__icon" style="background:${s.bg};color:${s.color}" aria-hidden="true">
+        <i class="fa ${s.icon}"></i>
+      </div>
+      <div>
+        <div class="tf-account-card__name">${a.label}</div>
+        <div class="tf-account-card__bal">${a.mask} &nbsp;·&nbsp; ${boaFmt(a.balance)}</div>
+      </div>`;
+    card.addEventListener('click',   () => selectToCard(id));
+    card.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectToCard(id); } });
+    grid.appendChild(card);
+  });
+}
+
+function selectToCard(id) {
+  selectedToId = id;
+  document.querySelectorAll('.tf-account-card').forEach(function (c) {
+    const active = c.dataset.id === id;
+    c.classList.toggle('selected', active);
+    c.setAttribute('aria-checked', active ? 'true' : 'false');
+  });
+  updateBalancePillAfter();
+}
+
+/* ── Sidebar balances ── */
+function populateSidebarBalances() {
+  const container = document.getElementById('tf_sidebar_balances');
+  container.innerHTML = Object.keys(BOA_ACCOUNTS).map(function (id) {
+    const a = BOA_ACCOUNTS[id];
+    const s = ACC_STYLE[a.type] || ACC_STYLE.savings;
+    const label = a.type === 'loan' ? 'Outstanding' : a.type === 'credit' ? 'Owed' : 'Available';
+    return `<div style="display:flex;align-items:center;gap:.65rem;padding:.6rem 1.25rem;
+        border-bottom:1px solid #f5f5f5">
+      <div style="width:30px;height:30px;border-radius:8px;background:${s.bg};color:${s.color};
+        display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0"
+        aria-hidden="true"><i class="fa ${s.icon}"></i></div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:.78rem;font-weight:700;color:#0a2540;
+          white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${a.label}</div>
+        <div style="font-size:.72rem;color:#888">${a.mask}</div>
+      </div>
+      <div style="text-align:right;flex-shrink:0">
+        <div style="font-size:.85rem;font-weight:800;color:${a.type==='loan'||a.type==='credit'?'#c8102e':'#003580'};
+          font-variant-numeric:tabular-nums">${boaFmt(a.balance)}</div>
+        <div style="font-size:.65rem;color:#aaa">${label}</div>
+      </div>
+    </div>`;
+  }).join('');
+  // Remove last border
+  const rows = container.querySelectorAll('div[style*="border-bottom"]');
+  if (rows.length) rows[rows.length-1].style.borderBottom = 'none';
+}
+
+/* ── Recent transfers (pull transfer-category txns from all accounts) ── */
+function populateRecentTransfers() {
+  const container = document.getElementById('tf_recent_list');
+  const recent = [];
+  Object.keys(BOA_TRANSACTIONS).forEach(function (id) {
+    BOA_TRANSACTIONS[id].forEach(function (t) {
+      if (t.category === 'transfer') {
+        recent.push(Object.assign({ accountId: id }, t));
+      }
+    });
+  });
+  recent.sort((a,b) => b.date.localeCompare(a.date));
+  const top = recent.slice(0, 6);
+
+  if (!top.length) {
+    container.innerHTML = '<p style="padding:1rem;font-size:.85rem;color:#888;text-align:center">No recent transfers.</p>';
+    return;
+  }
+
+  container.innerHTML = top.map(function (t) {
+    const isDeposit = t.deposit != null;
+    const amt       = isDeposit ? t.deposit : t.withdrawal;
+    const color     = isDeposit ? '#16a34a' : '#c8102e';
+    const sign      = isDeposit ? '+' : '−';
+    const dt        = new Date(t.date + 'T00:00:00');
+    const dateStr   = dt.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+    return `<div class="tf-recent-row">
+      <div style="display:flex;align-items:center;gap:.65rem">
+        <div class="tf-recent-icon" aria-hidden="true">
+          <i class="fa ${isDeposit ? 'fa-arrow-down-to-bracket' : 'fa-arrow-up-from-bracket'}"></i>
+        </div>
+        <div>
+          <div class="tf-recent-desc">${t.desc}</div>
+          <div class="tf-recent-meta">${BOA_ACCOUNTS[t.accountId]?.label || ''} · ${dateStr}</div>
+        </div>
+      </div>
+      <div class="tf-recent-amt" style="color:${color}">${sign}${boaFmt(amt)}</div>
+    </div>`;
+  }).join('');
+}
+
+/* ================================================================
+   TRANSFER TYPE TOGGLE
+   ================================================================ */
+function setTransferType(type) {
+  transferType = type;
+  const isInternal = type === 'internal';
+
+  document.getElementById('btn_internal').classList.toggle('active', isInternal);
+  document.getElementById('btn_internal').setAttribute('aria-pressed', isInternal);
+  document.getElementById('btn_external').classList.toggle('active', !isInternal);
+  document.getElementById('btn_external').setAttribute('aria-pressed', !isInternal);
+
+  document.getElementById('tf_internal_to_group').style.display = isInternal ? '' : 'none';
+  document.getElementById('tf_external_group').style.display    = isInternal ? 'none' : '';
+  document.getElementById('tf_type_badge').textContent =
+    isInternal ? 'Internal Transfer' : 'External Transfer';
+  document.getElementById('tf_amount_hint').textContent =
+    isInternal
+      ? 'Internal transfers have no limit and post instantly.'
+      : 'External transfers: $5,000/day maximum. ACH takes 1–3 business days.';
+}
+
+/* ================================================================
+   QUICK AMOUNT CHIPS
+   ================================================================ */
+function setAmount(val) {
+  document.getElementById('tf_amount').value = val.toFixed(2);
+  updateBalancePillAfter();
+}
+
+function updateBalancePillAfter() {
+  const fromId = document.getElementById('tf_from').value;
+  if (!fromId) return;
+  const acc    = BOA_ACCOUNTS[fromId];
+  const amount = parseFloat(document.getElementById('tf_amount').value) || 0;
+  const after  = acc.balance - amount;
+  document.getElementById('tf_from_bal_amt').textContent  = boaFmt(acc.balance);
+  document.getElementById('tf_from_bal_after').textContent =
+    amount > 0 ? 'After transfer: ' + boaFmt(after) : '';
+  document.getElementById('tf_from_bal_warn').style.display =
+    (amount > 0 && after < 0) ? 'block' : 'none';
+  document.getElementById('tf_from_balance').style.display = '';
+}
+
+/* ================================================================
+   DAILY USAGE BAR
+function updateDailyUsage(addAmount) {
+  dailyUsed += addAmount;
+  const pct = Math.min(100, (dailyUsed / DAILY_LIMIT) * 100);
+  document.getElementById('tf_used_today').textContent = boaFmt(dailyUsed);
+  document.getElementById('tf_usage_fill').style.width = pct + '%';
+  document.getElementById('tf_usage_fill').style.background =
+    pct >= 100 ? '#c8102e' : pct >= 80 ? '#d97706' : '#003580';
+}
+
+/* ================================================================
+   STEP NAVIGATION
+   ================================================================ */
+function setStepActive(n) {
+  document.querySelectorAll('.tf-step').forEach(function (el) {
+    const s = parseInt(el.dataset.step, 10);
+    el.classList.toggle('tf-step--active', s === n);
+    el.classList.toggle('tf-step--done',   s < n);
+  });
+}
+
+function goToStep(n) {
+  document.getElementById('tf_step1').style.display = n === 1 ? '' : 'none';
+  document.getElementById('tf_step2').style.display = n === 2 ? '' : 'none';
+  setStepActive(n);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ================================================================
+   VALIDATION & REVIEW
+   ================================================================ */
+function showError(msg) {
+  const errEl  = document.getElementById('tf_error');
+  const errMsg = document.getElementById('tf_error_msg');
+  errMsg.textContent      = msg;
+  errEl.style.display     = 'flex';
+  errEl.scrollIntoView({ behavior:'smooth', block:'center' });
+}
+
+function clearError() {
+  document.getElementById('tf_error').style.display = 'none';
+}
+
+function goToReview() {
+  clearError();
+
+  const fromId = document.getElementById('tf_from').value;
+  const amount = parseFloat(document.getElementById('tf_amount').value);
+  const date   = document.getElementById('tf_date').value;
+  const freq   = document.getElementById('tf_frequency').value;
+  const memo   = document.getElementById('tf_memo').value.trim();
+
+  if (!fromId) return showError('Please select an account to transfer from.');
+  if (isNaN(amount) || amount <= 0) return showError('Please enter a valid transfer amount greater than $0.00.');
+  if (!date) return showError('Please select a transfer date.');
+
+  const fromAcc = BOA_ACCOUNTS[fromId];
+  if (amount > fromAcc.balance) {
+    return showError('Insufficient funds. Your available balance is ' + boaFmt(fromAcc.balance) + '.');
+  }
+
+  if (transferType === 'internal') {
+    if (!selectedToId) return showError('Please select a destination account.');
+    if (selectedToId === fromId) return showError('The source and destination accounts cannot be the same.');
+  } else {
+    const bank    = document.getElementById('tf_bank').value.trim();
+    const routing = document.getElementById('tf_routing').value.trim();
+    const acctNo  = document.getElementById('tf_toAccount').value.trim();
+    if (!bank)    return showError('Please select a recipient bank from the list above.');
+    if (!routing || !/^\d{9}$/.test(routing)) return showError('Please enter a valid 9-digit routing number.');
+    if (!acctNo || !/^\d+$/.test(acctNo))     return showError('Please enter a valid account number (digits only).');
+    if (dailyUsed + amount > DAILY_LIMIT) {
+      return showError('This transfer would exceed your $5,000.00 daily external transfer limit.');
+    }
+  }
+
+  // Build review panel
+  const toLabel = transferType === 'internal'
+    ? BOA_ACCOUNTS[selectedToId].label + ' (' + BOA_ACCOUNTS[selectedToId].mask + ')'
+    : document.getElementById('tf_bank').value.trim() + ' — ****' + document.getElementById('tf_toAccount').value.trim().slice(-4);
+
+  const freqLabels = { once:'One-time', weekly:'Weekly', biweekly:'Every 2 weeks', monthly:'Monthly' };
+  const dt = new Intl.DateTimeFormat('en-US',{dateStyle:'long'}).format(new Date(date+'T00:00:00'));
+
+  const rows = [
+    ['From',       fromAcc.label + ' (' + fromAcc.mask + ')'],
+    ['To',         toLabel],
+    ['Amount',     boaFmt(amount)],
+    ['New Balance', boaFmt(fromAcc.balance - amount) + ' (after transfer)'],
+    ['Date',       dt],
+    ['Frequency',  freqLabels[freq] || freq],
+    ['Type',       transferType === 'internal' ? 'Internal Transfer' : 'External ACH'],
+  ];
+  if (memo) rows.push(['Memo', memo]);
+
+  document.getElementById('tf_review_details').innerHTML = rows.map(function (r) {
+    const isAmt = r[0] === 'Amount';
+    return `<div class="tf-review-row">
+      <span>${r[0]}</span>
+      <strong style="${isAmt ? 'color:#003580;font-size:1.05rem' : ''}">${r[1]}</strong>
+    </div>`;
+  }).join('');
+
+  goToStep(2);
+}
+
+/* ================================================================
+   CONFIRM & SUBMIT
+   ================================================================ */
+function confirmTransfer() {
+  const fromId  = document.getElementById('tf_from').value;
+  const amount  = parseFloat(document.getElementById('tf_amount').value);
+  const date    = document.getElementById('tf_date').value;
+  const freq    = document.getElementById('tf_frequency').value;
+  const memo    = document.getElementById('tf_memo').value.trim();
+  const fromAcc = BOA_ACCOUNTS[fromId];
+  const ref     = 'BOA' + Date.now().toString(36).toUpperCase() +
+                  Math.random().toString(36).substring(2,5).toUpperCase();
+  const dt      = new Intl.DateTimeFormat('en-US',{dateStyle:'long'}).format(new Date(date+'T00:00:00'));
+  const freqLabels = { once:'One-time', weekly:'Weekly', biweekly:'Every 2 weeks', monthly:'Monthly' };
+
+  let toLabel, toMask;
+  if (transferType === 'internal') {
+    const toAcc = BOA_ACCOUNTS[selectedToId];
+    toLabel = toAcc.label;
+    toMask  = toAcc.mask;
+  } else {
+    toLabel = document.getElementById('tf_bank').value.trim();
+    toMask  = '****' + document.getElementById('tf_toAccount').value.trim().slice(-4);
+  }
+
+  // Deduct balance in session (BOA_ACCOUNTS is in memory)
+  fromAcc.balance = Math.max(0, fromAcc.balance - amount);
+  if (transferType === 'internal') {
+    BOA_ACCOUNTS[selectedToId].balance += amount;
+  } else {
+    updateDailyUsage(amount);
+  }
+
+  // Refresh sidebar
+  populateSidebarBalances();
+  onFromChange();
+
+  // Build confirm grid
+  const rows = [
+    ['From Account',  fromAcc.label + ' (' + fromAcc.mask + ')'],
+    ['To',            toLabel + ' (' + toMask + ')'],
+    ['Amount',        boaFmt(amount)],
+    ['New Balance',   boaFmt(fromAcc.balance)],
+    ['Date',          dt],
+    ['Frequency',     freqLabels[freq] || freq],
+  ];
+  if (memo) rows.push(['Memo', memo]);
+
+  document.getElementById('tf_confirm_ref').textContent = ref;
+  document.getElementById('tf_confirm_grid').innerHTML = rows.map(function (r) {
+    const isAmt = r[0] === 'Amount';
+    return `<div class="tf-confirm-row">
+      <span>${r[0]}</span>
+      <strong style="${isAmt ? 'color:#16a34a;font-size:1rem' : ''}">${r[1]}</strong>
+    </div>`;
+  }).join('');
+
+  // Store for verify page
+  sessionStorage.setItem('tfPayload', JSON.stringify({
+    ref, from: fromAcc.label + ' (' + fromAcc.mask + ')',
+    to: toLabel + ' (' + toMask + ')',
+    amount: boaFmt(amount), date: dt,
+    frequency: freqLabels[freq] || freq,
+    type: transferType === 'internal' ? 'Internal Transfer' : 'External ACH',
+    memo: memo || null,
+    newBalance: boaFmt(fromAcc.balance),
+  }));
+
+  document.getElementById('tf_verify_link').href = 'transfer-funds-verify.html?ref=' + ref;
+
+  // Update recent list
+  populateRecentTransfers();
+
+  // Mark step 3 as active
+  setStepActive(3);
+  openModal('modal-tf-success');
+}
+
+/* ================================================================
+   RESET
+   ================================================================ */
+function resetForm() {
+  clearError();
+  document.getElementById('tf_from').value = '';
+  document.getElementById('tf_amount').value = '';
+  document.getElementById('tf_memo').value = '';
+  document.getElementById('tf_frequency').value = 'once';
+  document.getElementById('tf_bank').value = '';
+  document.getElementById('tf_routing').value = '';
+  document.getElementById('tf_toAccount').value = '';
+  document.getElementById('tf_recipient').value = '';
+  document.getElementById('tf_from_balance').style.display = 'none';
+  selectedToId = null;
+  // Reset bank picker
+  if (typeof clearBankSelection === 'function') {
+    try { clearBankSelection(); } catch(e) {}
+  }
+  document.querySelectorAll('.tf-account-card').forEach(c => {
+    c.classList.remove('selected');
+    c.setAttribute('aria-checked','false');
+  });
+  setDefaultDate();
+  setTransferType('internal');
+  goToStep(1);
+}
+</script>
+</body>
+</html>

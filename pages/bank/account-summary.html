@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Account Summary — Bank of America Online Banking</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#003580">
+  <link rel="shortcut icon" href="../../downloaded_files/img/boa_box.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="../../css/theme.css">
+  <link rel="stylesheet" href="../../css/home.css">
+  <style>
+    .skip-link{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:9999}
+    .skip-link:focus{position:fixed;top:0;left:0;width:auto;height:auto;padding:.6rem 1.25rem;background:#003580;color:#fff;font-size:.9rem;font-weight:700;border-radius:0 0 6px 0;text-decoration:none;outline:3px solid #fff}
+    *:focus-visible{outline:3px solid #005eb8;outline-offset:2px}
+    a,button{touch-action:manipulation}
+    @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+
+    .as-greeting{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem}
+    .as-greeting__left{}
+    .as-greeting__title{font-size:1.35rem;font-weight:800;color:#0a2540;margin:0 0 .15rem;text-wrap:balance}
+    .as-greeting__sub{font-size:.85rem;color:#666;margin:0}
+    .as-greeting__actions{display:flex;gap:.5rem;flex-wrap:wrap}
+
+    /* Account-holder info card */
+    .as-profile{background:#fff;border:1px solid #ddd;border-radius:8px;padding:1.1rem 1.25rem;
+      display:flex;align-items:flex-start;gap:1.1rem;margin-bottom:1.5rem;flex-wrap:wrap}
+    .as-profile__avatar{width:52px;height:52px;border-radius:50%;background:#003580;color:#fff;
+      display:flex;align-items:center;justify-content:center;font-size:1.15rem;font-weight:900;
+      flex-shrink:0;letter-spacing:-.5px}
+    .as-profile__name{font-size:1rem;font-weight:800;color:#0a2540;margin:0 0 .15rem}
+    .as-profile__roles{font-size:.75rem;color:#888;margin:0 0 .55rem}
+    .as-profile__details{display:flex;flex-wrap:wrap;gap:.35rem .9rem}
+    .as-profile__detail{display:flex;align-items:center;gap:.4rem;font-size:.8rem;color:#444}
+    .as-profile__detail .fa{color:#003580;font-size:.8rem;width:14px;text-align:center}
+    .as-profile__badge{margin-left:auto;background:#dbeafe;color:#003580;border-radius:20px;
+      padding:.25rem .75rem;font-size:.72rem;font-weight:700;white-space:nowrap;align-self:flex-start}
+
+    /* Quick-action buttons */
+    .as-quick-btn{display:flex;align-items:center;gap:.6rem;padding:.65rem .85rem;
+      border:1px solid #e0e0e0;border-radius:6px;font-size:.85rem;font-weight:600;
+      color:#333;text-decoration:none;background:#fff;
+      transition:background-color .15s ease,border-color .15s ease,color .15s ease}
+    .as-quick-btn:hover{background:#f0f4fb;border-color:#005eb8;color:#005eb8;text-decoration:none}
+    .as-quick-btn .fa{width:16px;text-align:center;color:#555;font-size:.9rem}
+    .as-quick-btn:hover .fa{color:#005eb8}
+
+    /* Security items */
+    .as-security-item{display:flex;align-items:center;gap:.55rem;font-size:.82rem;color:#444;margin-bottom:.45rem}
+
+    /* Net-worth summary bar */
+    .as-networth{background:linear-gradient(135deg,#003580,#0050a0);border-radius:8px;
+      padding:1.1rem 1.4rem;margin-bottom:1.5rem;display:flex;align-items:center;
+      justify-content:space-between;flex-wrap:wrap;gap:1rem}
+    .as-networth__label{font-size:.72rem;font-weight:700;text-transform:uppercase;
+      letter-spacing:.07em;color:rgba(255,255,255,.7);margin-bottom:.2rem}
+    .as-networth__amount{font-size:1.55rem;font-weight:900;color:#fff;
+      font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+    .as-networth__divider{width:1px;height:40px;background:rgba(255,255,255,.2)}
+    .as-networth__stat{}
+  </style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<div class="shell-wrap">
+
+  <script>window.BOA_ROOT = '../../'; window.BOA_BANKING_TAB = 'account-summary';</script>
+  <script src="../../js/data.js"></script>
+  <script src="../../js/navbar.js"></script>
+
+  <!-- Page header -->
+  <div class="shell-page-header">
+    <div class="BOA-container shell-page-header__inner">
+      <h1 class="shell-page-header__title">Account Summary</h1>
+      <nav class="shell-breadcrumb" aria-label="Breadcrumb">
+        <a href="../../index.html">Home</a>
+        <span class="shell-breadcrumb__sep" aria-hidden="true"><i class="fa fa-chevron-right"></i></span>
+        <span>Account Summary</span>
+      </nav>
+    </div>
+  </div>
+
+  <main class="shell-content" id="main-content">
+    <div class="BOA-container">
+
+      <!-- Greeting -->
+      <div class="as-greeting">
+        <div class="as-greeting__left">
+          <h2 class="as-greeting__title" id="as_greeting">Welcome back, Jimmy &amp; Regina!</h2>
+          <p class="as-greeting__sub" id="as_date"></p>
+        </div>
+        <div class="as-greeting__actions">
+          <a href="transfer-funds.html" class="BOA-btn BOA-btn--primary BOA-btn--sm">
+            <i class="fa fa-right-left" aria-hidden="true"></i> Transfer Funds
+          </a>
+          <a href="pay-bills.html" class="BOA-btn BOA-btn--secondary BOA-btn--sm">
+            <i class="fa fa-credit-card" aria-hidden="true"></i> Pay Bills
+          </a>
+        </div>
+      </div>
+
+      <!-- Account-holder profile card -->
+      <div class="as-profile" role="region" aria-label="Account holder information">
+        <div class="as-profile__avatar" aria-hidden="true" id="as_avatar">JB</div>
+        <div style="flex:1;min-width:0">
+          <p class="as-profile__name" id="as_profile_name"></p>
+          <p class="as-profile__roles" id="as_profile_roles"></p>
+          <div class="as-profile__details">
+            <span class="as-profile__detail">
+              <i class="fa fa-phone" aria-hidden="true"></i>
+              <a href="#" id="as_phone_link" style="color:inherit;text-decoration:none"></a>
+            </span>
+            <span class="as-profile__detail">
+              <i class="fa fa-envelope" aria-hidden="true"></i>
+              <a href="#" id="as_email_link" style="color:inherit;text-decoration:none"></a>
+            </span>
+            <span class="as-profile__detail">
+              <i class="fa fa-id-badge" aria-hidden="true"></i>
+              <span id="as_customer_id"></span>
+            </span>
+            <span class="as-profile__detail">
+              <i class="fa fa-calendar" aria-hidden="true"></i>
+              Member since <span id="as_member_since"></span>
+            </span>
+          </div>
+        </div>
+        <span class="as-profile__badge"><i class="fa fa-shield-halved" aria-hidden="true"></i> Verified</span>
+      </div>
+
+      <!-- Net-worth summary bar (computed from data.js) -->
+      <div class="as-networth" role="region" aria-label="Financial summary">
+        <div class="as-networth__stat">
+          <div class="as-networth__label">Total Assets</div>
+          <div class="as-networth__amount" id="as_total_assets">—</div>
+        </div>
+        <div class="as-networth__divider" aria-hidden="true"></div>
+        <div class="as-networth__stat">
+          <div class="as-networth__label">Total Liabilities</div>
+          <div class="as-networth__amount" id="as_total_liabilities" style="color:#fca5a5">—</div>
+        </div>
+        <div class="as-networth__divider" aria-hidden="true"></div>
+        <div class="as-networth__stat">
+          <div class="as-networth__label">Net Worth</div>
+          <div class="as-networth__amount" id="as_net_worth">—</div>
+        </div>
+        <div class="as-networth__divider" aria-hidden="true"><b style="color:#fff">HOLD</b></div>
+        <div class="as-networth__stat">
+          <div class="as-networth__label">Accounts</div>
+          <div class="as-networth__amount" id="as_account_count">—</div>
+        </div>
+      </div>
+
+      <!-- Balance tiles (rendered by JS from BOA_ACCOUNTS) -->
+      <div class="shell-balance-strip" id="as_balance_strip" role="region" aria-label="Account balances">
+        <!-- populated by script -->
+      </div>
+
+      <!-- Two-col: recent transactions + sidebar -->
+      <div class="shell-two-col">
+
+        <!-- Recent transactions (latest 8 across all accounts) -->
+        <div class="shell-card">
+          <div class="shell-card__head">
+            <h2 class="shell-card__title">Recent Transactions</h2>
+            <a href="account-activity.html" class="BOA-btn BOA-btn--secondary BOA-btn--sm">View All</a>
+          </div>
+          <div class="BOA-table-wrap" id="as_recent_txns">
+            <!-- populated by script -->
+          </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div>
+          <!-- Quick actions -->
+          <div class="shell-card" style="margin-bottom:1rem">
+            <div class="shell-card__head"><h2 class="shell-card__title">Quick Actions</h2></div>
+            <div class="shell-card__body" style="display:flex;flex-direction:column;gap:.5rem;padding:.75rem 1rem">
+              <a href="transfer-funds.html"    class="as-quick-btn"><i class="fa fa-right-left" aria-hidden="true"></i> Transfer Funds</a>
+              <a href="pay-bills.html"         class="as-quick-btn"><i class="fa fa-credit-card" aria-hidden="true"></i> Pay a Bill</a>
+              <a href="online-statements.html" class="as-quick-btn"><i class="fa fa-file-lines" aria-hidden="true"></i> View Statements</a>
+              <a href="account-activity.html"  class="as-quick-btn"><i class="fa fa-list-ul" aria-hidden="true"></i> All Transactions</a>
+              <a href="money-map.html"         class="as-quick-btn"><i class="fa fa-chart-pie" aria-hidden="true"></i> Spending Analysis</a>
+            </div>
+          </div>
+
+          <!-- Security centre -->
+          <div class="shell-card">
+            <div class="shell-card__head">
+              <h2 class="shell-card__title">
+                <i class="fa fa-shield-halved" aria-hidden="true" style="color:#1a56db;margin-right:.35rem"></i>
+                Security Centre
+              </h2>
+            </div>
+            <div class="shell-card__body">
+              <div class="BOA-alert BOA-alert--success" style="margin-bottom:.85rem" role="status">
+                <i class="fa fa-circle-check BOA-alert__icon" aria-hidden="true"></i>
+                <div class="BOA-alert__body">Your account security looks good.</div>
+              </div>
+              <div class="as-security-item"><i class="fa fa-circle-check" style="color:#16a34a" aria-hidden="true"></i><span>256-bit SSL active</span></div>
+              <div class="as-security-item"><i class="fa fa-circle-check" style="color:#16a34a" aria-hidden="true"></i><span>No unusual sign-ins detected</span></div>
+              <div class="as-security-item"><i class="fa fa-circle-check" style="color:#16a34a" aria-hidden="true"></i><span id="as_last_login">Last login: just now</span></div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /shell-two-col -->
+
+    </div>
+  </main>
+
+  <footer class="shell-footer">
+    <div class="BOA-container shell-footer__inner">
+      <ul class="shell-footer__links">
+        <li><a href="../../index.html">Home</a></li>
+        <li><a href="../../help.html">Help</a></li>
+        <li><a href="../../privacy.html">Privacy</a></li>
+        <li><a href="../../logout.html">Sign Out</a></li>
+      </ul>
+      <p class="shell-footer__copy">© 2026 Bank of America Corporation. FDIC Insured.</p>
+    </div>
+  </footer>
+
+</div><!-- /shell-wrap -->
+
+<script src="../../js/ui.js"></script>
+<script src="../../js/checkAccess.js"></script>
+<script>
+(function () {
+  /* ── Greeting ─────────────────────────────────────────────── */
+  const h = new Date().getHours();
+  const greet = h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
+  document.getElementById('as_greeting').textContent = greet + ', ' + BOA_PROFILE.primary.firstName + ' & ' + BOA_PROFILE.joint.firstName + '!';
+
+  // Today's date
+  document.getElementById('as_date').textContent =
+    'Account snapshot — ' +
+    new Intl.DateTimeFormat('en-US', { dateStyle:'full' }).format(new Date());
+
+  // Last-login time
+  const lt = localStorage.getItem('loginTime');
+  if (lt) {
+    const diff = Math.round((Date.now() - Number(lt)) / 60000);
+    const msg  = diff < 2 ? 'just now' : diff + ' min ago';
+    document.getElementById('as_last_login').textContent = 'Last login: ' + msg;
+  }
+
+  /* ── Profile card from BOA_PROFILE ───────────────────────── */
+  document.getElementById('as_profile_name').textContent  = BOA_PROFILE.displayName;
+  document.getElementById('as_profile_roles').innerHTML   =
+    'Primary: <strong>' + BOA_PROFILE.primary.fullName + '</strong>' +
+    ' &nbsp;·&nbsp; ' +
+    'Joint: <strong>' + BOA_PROFILE.joint.fullName + '</strong>';
+  const phoneEl = document.getElementById('as_phone_link');
+  phoneEl.textContent = BOA_PROFILE.phone;
+  phoneEl.href = 'tel:' + BOA_PROFILE.phone.replace(/[^+\d]/g, '');
+  const emailEl = document.getElementById('as_email_link');
+  emailEl.textContent = BOA_PROFILE.email;
+  emailEl.href = 'mailto:' + BOA_PROFILE.email;
+  document.getElementById('as_customer_id').textContent  = BOA_PROFILE.customerId;
+  document.getElementById('as_member_since').textContent = BOA_PROFILE.memberSince;
+  // Avatar initials
+  const initials = BOA_PROFILE.primary.firstName[0] + BOA_PROFILE.joint.firstName[0];
+  document.getElementById('as_avatar').textContent = initials;
+
+  /* ── Net-worth bar ─────────────────────────────────────────── */
+  const ASSET_TYPES    = ['savings','checking','brokerage'];
+  const LIABILITY_TYPES = ['loan','credit'];
+
+  let totalAssets = 0, totalLiabilities = 0;
+  Object.values(BOA_ACCOUNTS).forEach(function (a) {
+    if (ASSET_TYPES.includes(a.type))     totalAssets      += a.balance;
+    if (LIABILITY_TYPES.includes(a.type)) totalLiabilities += a.balance;
+  });
+  const netWorth = totalAssets - totalLiabilities;
+
+  document.getElementById('as_total_assets').textContent      = boaFmt(totalAssets);
+  document.getElementById('as_total_liabilities').textContent = boaFmt(totalLiabilities);
+  document.getElementById('as_net_worth').textContent         = boaFmt(netWorth);
+  document.getElementById('as_account_count').textContent     = Object.keys(BOA_ACCOUNTS).length;
+
+  /* ── Balance tiles ─────────────────────────────────────────── */
+  const TILE_COLOURS = {
+    savings:   '',
+    checking:  'shell-balance-tile--teal',
+    brokerage: 'shell-balance-tile--green',
+    loan:      'shell-balance-tile--red',
+    credit:    'shell-balance-tile--purple',
+  };
+  const TILE_ICONS = {
+    savings:   'fa-piggy-bank',
+    checking:  'fa-money-check-dollar',
+    brokerage: 'fa-chart-line',
+    loan:      'fa-file-invoice-dollar',
+    credit:    'fa-credit-card',
+  };
+
+  const strip = document.getElementById('as_balance_strip');
+  strip.innerHTML = Object.keys(BOA_ACCOUNTS).map(function (id) {
+    const a       = BOA_ACCOUNTS[id];
+    const colour  = TILE_COLOURS[a.type] || '';
+    const icon    = TILE_ICONS[a.type]   || 'fa-bank';
+    const subText = a.type === 'loan'   ? 'Outstanding balance' :
+                    a.type === 'credit' ? 'Statement balance'   : 'Available balance';
+    return `<div class="shell-balance-tile ${colour}">
+      <div class="shell-balance-tile__label">${a.label}</div>
+      <div class="shell-balance-tile__amount" style="font-variant-numeric:tabular-nums">${boaFmt(a.balance)}</div>
+      <div class="shell-balance-tile__sub">${a.mask} &nbsp;·&nbsp; ${subText}</div>
+      <a href="account-activity.html?accountId=${id}" class="shell-balance-tile__link">
+        View activity <i class="fa fa-arrow-right" style="font-size:.65rem" aria-hidden="true"></i>
+      </a>
+      <i class="fa ${icon} shell-balance-tile__icon" aria-hidden="true"></i>
+    </div>`;
+  }).join('');
+
+  /* ── Recent transactions (8 newest across all accounts) ────── */
+  const allTxns = [];
+  Object.keys(BOA_TRANSACTIONS).forEach(function (id) {
+    BOA_TRANSACTIONS[id].forEach(function (t) {
+      allTxns.push(Object.assign({ accountId: id, accountLabel: BOA_ACCOUNTS[id].label }, t));
+    });
+  });
+  // Sort newest-first
+  allTxns.sort(function (a, b) { return b.date.localeCompare(a.date); });
+  const recent = allTxns.slice(0, 8);
+
+  function fmtDate(d) {
+    return new Date(d + 'T00:00:00').toLocaleDateString('en-US',
+      { month:'short', day:'numeric', year:'numeric' });
+  }
+
+  const rows = recent.map(function (t) {
+    const isDeposit = t.deposit != null;
+    const amt       = isDeposit ? t.deposit : t.withdrawal;
+    const cls       = isDeposit ? 'amount-positive' : 'amount-negative';
+    const sign      = isDeposit ? '+' : '−';
+    const badgeCls  = t.type === 'savings' ? 'BOA-badge--info' : 'BOA-badge--gray';
+    return `<tr>
+      <td style="white-space:nowrap">${fmtDate(t.date)}</td>
+      <td><span class="BOA-badge ${badgeCls}" style="font-size:.7rem">${t.accountLabel}</span></td>
+      <td>${t.desc}</td>
+      <td class="${cls}" style="text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums">
+        ${sign}${boaFmt(amt)}
+      </td>
+      <td>
+        <span class="BOA-badge BOA-badge--success" style="font-size:.68rem">
+          <i class="fa fa-circle" style="font-size:.4rem" aria-hidden="true"></i> ${t.status}
+        </span>
+      </td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('as_recent_txns').innerHTML = `
+    <table class="BOA-table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Account</th>
+          <th>Description</th>
+          <th style="text-align:right">Amount</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>`;
+})();
+</script>
+</body>
+</html>

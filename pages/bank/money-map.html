@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Money Map — Bank of America Online Banking</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#003580">
+  <link rel="shortcut icon" href="../../downloaded_files/img/boa_box.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="../../css/theme.css">
+  <link rel="stylesheet" href="../../css/home.css">
+  <style>
+    /* ── Accessibility ── */
+    .skip-link{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:9999}
+    .skip-link:focus{position:fixed;top:0;left:0;width:auto;height:auto;padding:.6rem 1.25rem;
+      background:#003580;color:#fff;font-size:.9rem;font-weight:700;border-radius:0 0 6px 0;
+      text-decoration:none;outline:3px solid #fff}
+    *:focus-visible{outline:3px solid #005eb8;outline-offset:2px}
+    a,button{touch-action:manipulation}
+    @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+    /* ── Money Map layout ── */
+    .mm-layout{display:grid;grid-template-columns:1fr 320px;gap:1.25rem;align-items:start}
+    .mm-col{display:flex;flex-direction:column;gap:1.25rem}
+
+    /* ── Stat tiles ── */
+    .mm-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.25rem}
+    .mm-stat{background:#fff;border:1px solid #ddd;border-radius:8px;padding:1.1rem 1.25rem}
+    .mm-stat__label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;
+      color:#888;margin-bottom:.35rem}
+    .mm-stat__val{font-size:1.5rem;font-weight:900;font-variant-numeric:tabular-nums;line-height:1.1}
+    .mm-stat__sub{font-size:.72rem;color:#888;margin-top:.25rem;display:flex;align-items:center;gap:.25rem}
+
+    /* ── Chart bar ── */
+    .mm-bar-row{display:grid;grid-template-columns:120px 1fr 70px;align-items:center;
+      gap:.75rem;font-size:.85rem;margin-bottom:.6rem}
+    .mm-bar-label{color:#444;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .mm-bar-track{background:#f0f0f0;border-radius:99px;height:10px;overflow:hidden}
+    .mm-bar-fill{height:100%;border-radius:99px;transition:width .5s ease}
+    @media(prefers-reduced-motion:reduce){.mm-bar-fill{transition:none}}
+    .mm-bar-amt{text-align:right;font-weight:600;color:#444;font-variant-numeric:tabular-nums}
+
+    /* ── Budget tracker ── */
+    .mm-budget-item{padding:.75rem 0;border-bottom:1px solid #f0f0f0}
+    .mm-budget-item:last-child{border-bottom:none}
+    .mm-budget-row{display:flex;justify-content:space-between;align-items:center;
+      font-size:.83rem;margin-bottom:.3rem}
+    .mm-budget-name{font-weight:600;color:#0a2540}
+    .mm-budget-bar{height:8px;background:#f0f0f0;border-radius:99px;overflow:hidden;margin-top:.25rem}
+    .mm-budget-bar__fill{height:100%;border-radius:99px;transition:width .5s ease}
+
+    /* ── Trend bars ── */
+    .mm-trend{display:flex;align-items:flex-end;gap:.4rem;height:120px;padding-bottom:.5rem}
+    .mm-trend-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px}
+    .mm-trend-bars{width:100%;display:flex;gap:2px;align-items:flex-end;flex:1}
+    .mm-trend-bar{flex:1;border-radius:3px 3px 0 0;min-height:3px;opacity:.85;transition:height .4s ease}
+    .mm-trend-label{font-size:.7rem;color:#888;margin-top:.3rem}
+    .mm-legend{display:flex;gap:1rem;margin-top:.75rem;font-size:.75rem;color:#555}
+    .mm-legend-dot{width:10px;height:10px;border-radius:2px;display:inline-block;margin-right:.3rem}
+
+    /* ── Donut ── */
+    .mm-donut-wrap{position:relative;width:160px;height:160px;margin:0 auto 1rem}
+    .mm-donut-wrap svg{transform:rotate(-90deg)}
+    .mm-donut-center{position:absolute;inset:0;display:flex;flex-direction:column;
+      align-items:center;justify-content:center;text-align:center}
+    .mm-donut-center__amt{font-size:1.2rem;font-weight:900;color:#0a2540;font-variant-numeric:tabular-nums}
+    .mm-donut-center__lbl{font-size:.7rem;color:#888}
+    .mm-legend-grid{display:flex;flex-wrap:wrap;gap:.35rem .75rem;justify-content:center;font-size:.75rem;color:#555}
+    .mm-legend-item{display:flex;align-items:center;gap:.3rem}
+
+    /* ── Top expenses ── */
+    .mm-expense-row{display:flex;align-items:center;justify-content:space-between;
+      padding:.7rem 1.25rem;border-bottom:1px solid #f0f0f0}
+    .mm-expense-row:last-child{border-bottom:none}
+    .mm-expense-desc{font-size:.85rem;font-weight:600;color:#0a2540}
+    .mm-expense-meta{font-size:.75rem;color:#888}
+    .mm-expense-amt{font-size:.875rem;font-weight:700;color:#c8102e;white-space:nowrap;font-variant-numeric:tabular-nums}
+
+    /* ── Savings goal ── */
+    .mm-goal-bar{height:10px;background:#f0f0f0;border-radius:99px;overflow:hidden;margin:.4rem 0}
+    .mm-goal-bar__fill{height:100%;border-radius:99px;background:#16a34a;transition:width .5s ease}
+
+    /* ── Month selector ── */
+    .mm-toolbar{display:flex;align-items:center;justify-content:space-between;
+      flex-wrap:wrap;gap:.75rem;margin-bottom:1.25rem}
+    .mm-toolbar__left h2{margin:0 0 .2rem;font-size:1.2rem;font-weight:800;color:#0a2540}
+    .mm-toolbar__left p{margin:0;font-size:.83rem;color:#777}
+
+    @media(max-width:860px){
+      .mm-layout{grid-template-columns:1fr}
+      .mm-stats{grid-template-columns:repeat(2,1fr)}
+    }
+    @media(max-width:480px){
+      .mm-stats{grid-template-columns:1fr 1fr}
+      .mm-bar-row{grid-template-columns:90px 1fr 60px}
+    }
+  </style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<div class="shell-wrap">
+
+  <script>window.BOA_ROOT = '../../'; window.BOA_BANKING_TAB = 'money-map';</script>
+  <script src="../../js/data.js"></script>
+  <script src="../../js/navbar.js"></script>
+
+  <!-- Page header -->
+  <div class="shell-page-header">
+    <div class="BOA-container shell-page-header__inner">
+      <h1 class="shell-page-header__title">Money Map</h1>
+      <nav class="shell-breadcrumb" aria-label="Breadcrumb">
+        <a href="../../index.html">Home</a>
+        <span class="shell-breadcrumb__sep" aria-hidden="true"><i class="fa fa-chevron-right"></i></span>
+        <a href="account-summary.html">Account Summary</a>
+        <span class="shell-breadcrumb__sep" aria-hidden="true"><i class="fa fa-chevron-right"></i></span>
+        <span>Money Map</span>
+      </nav>
+    </div>
+  </div>
+
+  <main class="shell-content" id="main-content">
+    <div class="BOA-container">
+
+      <!-- Toolbar: title + month picker -->
+      <div class="mm-toolbar">
+        <div class="mm-toolbar__left">
+          <h2>Spending Overview</h2>
+          <p>Track spending, set budgets, and understand your financial habits.</p>
+        </div>
+        <div>
+          <label for="mm_month" class="BOA-label" style="font-size:.78rem;margin-bottom:.25rem;display:block">Period</label>
+          <select id="mm_month" class="BOA-select" style="width:auto;min-width:170px" aria-label="Select month">
+            <option value="11">November 2026</option>
+            <option value="10">October 2026</option>
+            <option value="9">September 2026</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Summary stat tiles -->
+      <div class="mm-stats" role="region" aria-label="Monthly financial summary">
+        <div class="mm-stat">
+          <div class="mm-stat__label">Total Income</div>
+          <div class="mm-stat__val" style="color:#16a34a" id="mm_income">$4,200.00</div>
+          <div class="mm-stat__sub"><i class="fa fa-arrow-up" style="color:#16a34a" aria-hidden="true"></i> +8% vs last month</div>
+        </div>
+        <div class="mm-stat">
+          <div class="mm-stat__label">Total Spending</div>
+          <div class="mm-stat__val" style="color:#c8102e" id="mm_spending">$2,847.50</div>
+          <div class="mm-stat__sub"><i class="fa fa-arrow-down" style="color:#16a34a" aria-hidden="true"></i> -3% vs last month</div>
+        </div>
+        <div class="mm-stat">
+          <div class="mm-stat__label">Net Savings</div>
+          <div class="mm-stat__val" style="color:#1a56db" id="mm_net">$1,352.50</div>
+          <div class="mm-stat__sub">32% of income saved</div>
+        </div>
+        <div class="mm-stat">
+          <div class="mm-stat__label">Budget Used</div>
+          <div class="mm-stat__val" style="color:#d97706" id="mm_budget_pct">68%</div>
+          <div class="mm-stat__sub" id="mm_budget_rem">$1,352.50 remaining</div>
+        </div>
+      </div>
+
+      <!-- Main two-column layout -->
+      <div class="mm-layout">
+
+        <!-- Left column -->
+        <div class="mm-col">
+
+          <!-- Spending by category -->
+          <div class="shell-card">
+            <div class="shell-card__head">
+              <h2 class="shell-card__title">
+                <i class="fa fa-chart-bar" aria-hidden="true" style="color:#1a56db;margin-right:.4rem"></i>
+                Spending by Category
+              </h2>
+              <span class="BOA-badge BOA-badge--info" id="mm_month_badge">November 2026</span>
+            </div>
+            <div class="shell-card__body" id="spending_bars">
+              <!-- populated by JS -->
+            </div>
+          </div>
+
+          <!-- Budget tracker -->
+          <div class="shell-card">
+            <div class="shell-card__head">
+              <h2 class="shell-card__title">
+                <i class="fa fa-bullseye" aria-hidden="true" style="color:#0d9488;margin-right:.4rem"></i>
+                Budget Tracker
+              </h2>
+              <button class="BOA-btn BOA-btn--sm BOA-btn--outline" onclick="openBudgetEdit()"
+                aria-label="Edit monthly budgets">
+                <i class="fa fa-pen" aria-hidden="true"></i> Edit Budgets
+              </button>
+            </div>
+            <div class="shell-card__body" style="padding-top:.5rem;padding-bottom:.5rem" id="budget_list">
+              <!-- populated by JS -->
+            </div>
+          </div>
+
+          <!-- 6-month trend -->
+          <div class="shell-card">
+            <div class="shell-card__head">
+              <h2 class="shell-card__title">
+                <i class="fa fa-chart-line" aria-hidden="true" style="color:#16a34a;margin-right:.4rem"></i>
+                6-Month Trend
+              </h2>
+            </div>
+            <div class="shell-card__body">
+              <div class="mm-trend" id="trend_chart" role="img" aria-label="6-month income vs spending bar chart">
+                <!-- populated by JS -->
+              </div>
+              <div class="mm-legend">
+                <span><span class="mm-legend-dot" style="background:#1a56db" aria-hidden="true"></span>Income</span>
+                <span><span class="mm-legend-dot" style="background:#c8102e" aria-hidden="true"></span>Spending</span>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /left col -->
+
+        <!-- Right column -->
+        <div class="mm-col">
+
+          <!-- Donut breakdown -->
+          <div class="shell-card">
+            <div class="shell-card__head">
+              <h2 class="shell-card__title">
+                <i class="fa fa-chart-pie" aria-hidden="true" style="color:#1a56db;margin-right:.4rem"></i>
+                Spending Breakdown
+              </h2>
+            </div>
+            <div class="shell-card__body" style="text-align:center">
+              <div class="mm-donut-wrap" role="img" aria-label="Spending breakdown donut chart">
+                <svg width="160" height="160" viewBox="0 0 160 160" id="donut_svg" aria-hidden="true"></svg>
+                <div class="mm-donut-center">
+                  <div class="mm-donut-center__amt" id="donut_total">$2,847</div>
+                  <div class="mm-donut-center__lbl">Total Spent</div>
+                </div>
+              </div>
+              <div class="mm-legend-grid" id="donut_legend"></div>
+            </div>
+          </div>
+
+          <!-- Top expenses -->
+          <div class="shell-card">
+            <div class="shell-card__head">
+              <h2 class="shell-card__title">
+                <i class="fa fa-arrow-trend-up" aria-hidden="true" style="color:#d97706;margin-right:.4rem"></i>
+                Top Expenses
+              </h2>
+            </div>
+            <div id="top_expenses"><!-- populated by JS --></div>
+          </div>
+
+          <!-- Savings goal -->
+          <div class="shell-card">
+            <div class="shell-card__head">
+              <h2 class="shell-card__title">
+                <i class="fa fa-piggy-bank" aria-hidden="true" style="color:#16a34a;margin-right:.4rem"></i>
+                Savings Goal
+              </h2>
+              <button class="BOA-btn BOA-btn--sm BOA-btn--secondary" onclick="openModal('modal_savings_goal')"
+                aria-label="Edit savings goal">
+                <i class="fa fa-pen" aria-hidden="true"></i>
+              </button>
+            </div>
+            <div class="shell-card__body">
+              <div style="font-size:.875rem;font-weight:700;color:#0a2540;margin-bottom:.15rem" id="goal_name">Emergency Fund</div>
+              <div style="display:flex;justify-content:space-between;font-size:.78rem;color:#888;margin-bottom:.3rem">
+                <span id="goal_saved_lbl">$1,500 saved</span>
+                <span>Goal: <span id="goal_target_lbl">$10,000</span></span>
+              </div>
+              <div class="mm-goal-bar">
+                <div class="mm-goal-bar__fill" id="goal_bar" style="width:15%"></div>
+              </div>
+              <div style="font-size:.75rem;color:#888;margin-bottom:1rem" id="goal_pct_lbl">
+                15% complete · $8,500 to go
+              </div>
+              <div class="BOA-form-group">
+                <label for="goal_contrib" class="BOA-label" style="font-size:.8rem">Monthly Contribution</label>
+                <div class="BOA-input-prefix">
+                  <span class="BOA-input-prefix__symbol">$</span>
+                  <input type="number" id="goal_contrib" class="BOA-input" value="200" min="0" step="10"
+                    aria-describedby="goal_contrib_hint">
+                </div>
+                <p class="BOA-help-text" id="goal_contrib_hint">At $200/mo you'll reach your goal in ~43 months.</p>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /right col -->
+      </div><!-- /mm-layout -->
+
+    </div><!-- /BOA-container -->
+  </main>
+
+  <!-- ── Edit Budgets Modal ── -->
+  <div id="modal_edit_budget" class="BOA-modal-overlay" style="display:none"
+    role="dialog" aria-modal="true" aria-labelledby="budget-modal-title">
+    <div class="BOA-modal BOA-modal--lg">
+      <div class="BOA-modal__header">
+        <h3 class="BOA-modal__title" id="budget-modal-title">
+          <i class="fa fa-bullseye" aria-hidden="true" style="color:#0d9488;margin-right:.4rem"></i>
+          Edit Monthly Budgets
+        </h3>
+        <button class="BOA-modal__close" onclick="closeModal('modal_edit_budget')" aria-label="Close">
+          <i class="fa fa-xmark" aria-hidden="true"></i>
+        </button>
+      </div>
+      <div class="BOA-modal__body" id="budget_edit_form"></div>
+      <div class="BOA-modal__footer">
+        <button class="BOA-btn BOA-btn--secondary" onclick="closeModal('modal_edit_budget')">Cancel</button>
+        <button class="BOA-btn BOA-btn--primary" onclick="saveBudgets()">
+          <i class="fa fa-check" aria-hidden="true"></i> Save Budgets
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Savings Goal Modal ── -->
+  <div id="modal_savings_goal" class="BOA-modal-overlay" style="display:none"
+    role="dialog" aria-modal="true" aria-labelledby="goal-modal-title">
+    <div class="BOA-modal BOA-modal--sm">
+      <div class="BOA-modal__header">
+        <h3 class="BOA-modal__title" id="goal-modal-title">
+          <i class="fa fa-piggy-bank" aria-hidden="true" style="color:#16a34a;margin-right:.4rem"></i>
+          Edit Savings Goal
+        </h3>
+        <button class="BOA-modal__close" onclick="closeModal('modal_savings_goal')" aria-label="Close">
+          <i class="fa fa-xmark" aria-hidden="true"></i>
+        </button>
+      </div>
+      <div class="BOA-modal__body">
+        <div class="BOA-form-group">
+          <label for="sg_name" class="BOA-label">Goal Name</label>
+          <input type="text" id="sg_name" class="BOA-input" value="Emergency Fund">
+        </div>
+        <div class="BOA-form-group">
+          <label for="sg_saved" class="BOA-label">Current Amount Saved</label>
+          <div class="BOA-input-prefix">
+            <span class="BOA-input-prefix__symbol">$</span>
+            <input type="number" id="sg_saved" class="BOA-input" value="1500" min="0">
+          </div>
+        </div>
+        <div class="BOA-form-group">
+          <label for="sg_target" class="BOA-label">Target Amount</label>
+          <div class="BOA-input-prefix">
+            <span class="BOA-input-prefix__symbol">$</span>
+            <input type="number" id="sg_target" class="BOA-input" value="10000" min="1">
+          </div>
+        </div>
+        <div class="BOA-form-group">
+          <label for="sg_date" class="BOA-label">Target Date <span style="font-weight:400;color:#999">(optional)</span></label>
+          <input type="date" id="sg_date" class="BOA-input">
+        </div>
+      </div>
+      <div class="BOA-modal__footer">
+        <button class="BOA-btn BOA-btn--secondary" onclick="closeModal('modal_savings_goal')">Cancel</button>
+        <button class="BOA-btn BOA-btn--primary" onclick="saveSavingsGoal()">
+          <i class="fa fa-check" aria-hidden="true"></i> Save Goal
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="shell-footer">
+    <div class="BOA-container shell-footer__inner">
+      <ul class="shell-footer__links">
+        <li><a href="../../index.html">Home</a></li>
+        <li><a href="../../help.html">Help</a></li>
+        <li><a href="../../privacy.html">Privacy</a></li>
+        <li><a href="../../logout.html">Sign Out</a></li>
+      </ul>
+      <p class="shell-footer__copy">© 2026 Bank of America Corporation. FDIC Insured.</p>
+    </div>
+  </footer>
+
+</div><!-- /shell-wrap -->
+
+<script src="../../js/ui.js"></script>
+<script src="../../js/checkAccess.js"></script>
+<script>
+/* ================================================================
+   MONEY MAP DATA — all sourced live from BOA_MONEY_MAP (data.js)
+   ================================================================ */
+
+// Build CATEGORIES from BOA_MONEY_MAP.spending
+const CATEGORY_COLORS = {
+  'Housing':      '#1a56db',
+  'Food & Dining':'#0d9488',
+  'Transport':    '#7c3aed',
+  'Utilities':    '#d97706',
+  'Entertainment':'#dc2626',
+  'Shopping':     '#0ea5e9',
+  'Loan Payment': '#c8102e',
+  'ATM / Cash':   '#64748b',
+  'Travel':       '#f59e0b',
+  'Healthcare':   '#16a34a',
+};
+
+const DEFAULT_BUDGETS = {
+  'Housing':      1400,
+  'Food & Dining':600,
+  'Transport':    400,
+  'Utilities':    350,
+  'Entertainment':200,
+  'Shopping':     300,
+  'Loan Payment': 1000,
+  'ATM / Cash':   200,
+  'Travel':       500,
+  'Healthcare':   250,
+};
+
+const CATEGORIES = Object.keys(BOA_MONEY_MAP.spending).map(function (name) {
+  return {
+    name:   name,
+    spent:  Math.round(BOA_MONEY_MAP.spending[name] * 100) / 100,
+    budget: DEFAULT_BUDGETS[name] || 300,
+    color:  CATEGORY_COLORS[name] || '#64748b',
+  };
+});
+
+const TREND       = BOA_MONEY_MAP.trend;
+const TOP_EXPENSES = BOA_MONEY_MAP.topExpenses;
+
+// Savings goal state — derived from Account 3 (Secondary Savings)
+const acc3 = BOA_ACCOUNTS['3'];
+let GOAL = {
+  name:   'Emergency Fund',
+  saved:  acc3 ? Math.round(acc3.balance) : 1500,
+  target: 25000,
+};
+
+/* ================================================================
+   RENDERERS
+   ================================================================ */
+
+function renderStats() {
+  const mm = BOA_MONEY_MAP;
+  document.getElementById('mm_income').textContent   = boaFmt(mm.totalIncome);
+  document.getElementById('mm_spending').textContent = boaFmt(mm.totalSpending);
+  document.getElementById('mm_net').textContent      = boaFmt(mm.netSavings);
+  const totalBudget = CATEGORIES.reduce(function (s, c) { return s + c.budget; }, 0);
+  const pct = totalBudget > 0 ? Math.round(mm.totalSpending / totalBudget * 100) : 0;
+  document.getElementById('mm_budget_pct').textContent = pct + '%';
+  const rem = Math.max(0, totalBudget - mm.totalSpending);
+  document.getElementById('mm_budget_rem').textContent = boaFmt(rem) + ' remaining';
+  const badge = document.getElementById('mm_month_badge');
+  if (badge) badge.textContent = 'November 2026';
+}
+
+function renderSpendingBars() {  const max = Math.max(...CATEGORIES.map(c => c.spent));
+  document.getElementById('spending_bars').innerHTML = CATEGORIES.map(c => `
+    <div class="mm-bar-row">
+      <div class="mm-bar-label" title="${c.name}">${c.name}</div>
+      <div class="mm-bar-track" role="progressbar"
+        aria-valuenow="${c.spent}" aria-valuemax="${c.budget}" aria-label="${c.name} spending">
+        <div class="mm-bar-fill"
+          style="width:${(c.spent / max * 100).toFixed(1)}%;background:${c.color}"></div>
+      </div>
+      <div class="mm-bar-amt"
+        style="color:${c.spent > c.budget ? '#c8102e' : '#444'}">
+        $${c.spent.toLocaleString()}
+      </div>
+    </div>`).join('');
+}
+
+function renderBudgetList() {
+  document.getElementById('budget_list').innerHTML = CATEGORIES.map(c => {
+    const pct  = Math.min(100, (c.spent / c.budget * 100)).toFixed(0);
+    const over = c.spent > c.budget;
+    return `
+    <div class="mm-budget-item">
+      <div class="mm-budget-row">
+        <span class="mm-budget-name">${c.name}</span>
+        <span style="font-size:.78rem;color:${over ? '#c8102e' : '#888'}">
+          $${c.spent.toLocaleString()} / $${c.budget.toLocaleString()}
+          ${over ? '<span class="BOA-badge BOA-badge--danger" style="margin-left:.3rem;font-size:.65rem">Over</span>' : ''}
+        </span>
+      </div>
+      <div class="mm-budget-bar">
+        <div class="mm-budget-bar__fill"
+          style="width:${pct}%;background:${over ? '#c8102e' : c.color}"></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderDonut() {
+  const total = CATEGORIES.reduce((s, c) => s + c.spent, 0);
+  const cx = 80, cy = 80, r = 60;
+  const circ = 2 * Math.PI * r;
+  let offset = 0, paths = '';
+  CATEGORIES.forEach(c => {
+    const dash = (c.spent / total) * circ;
+    paths += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none"
+      stroke="${c.color}" stroke-width="20"
+      stroke-dasharray="${dash} ${circ - dash}"
+      stroke-dashoffset="${-offset}"
+      transform="rotate(-90 ${cx} ${cy})"/>`;
+    offset += dash;
+  });
+  document.getElementById('donut_svg').innerHTML  = paths;
+  document.getElementById('donut_total').textContent =
+    '$' + total.toLocaleString('en-US', { maximumFractionDigits:0 });
+  document.getElementById('donut_legend').innerHTML = CATEGORIES.map(c =>
+    `<div class="mm-legend-item">
+      <span style="width:10px;height:10px;border-radius:50%;background:${c.color};
+        display:inline-block;flex-shrink:0" aria-hidden="true"></span>
+      ${c.name}
+    </div>`
+  ).join('');
+}
+
+function renderTrend() {
+  const maxVal = Math.max(...TREND.flatMap(t => [t.income, t.spend]));
+  const H = 100;
+  document.getElementById('trend_chart').innerHTML = TREND.map(t => `
+    <div class="mm-trend-col">
+      <div class="mm-trend-bars">
+        <div class="mm-trend-bar" style="background:#1a56db;height:${(t.income/maxVal*H).toFixed(0)}px"
+          title="Income ${t.month}: $${t.income.toLocaleString()}"></div>
+        <div class="mm-trend-bar" style="background:#c8102e;height:${(t.spend/maxVal*H).toFixed(0)}px"
+          title="Spending ${t.month}: $${t.spend.toLocaleString()}"></div>
+      </div>
+      <div class="mm-trend-label">${t.month}</div>
+    </div>`).join('');
+}
+
+function renderTopExpenses() {
+  document.getElementById('top_expenses').innerHTML = TOP_EXPENSES.map(e => `
+    <div class="mm-expense-row">
+      <div>
+        <div class="mm-expense-desc">${e.desc}</div>
+        <div class="mm-expense-meta">${e.cat} · ${e.date}</div>
+      </div>
+      <div class="mm-expense-amt">−$${e.amount.toLocaleString()}</div>
+    </div>`).join('');
+}
+
+function renderGoal() {
+  const pct = Math.min(100, (GOAL.saved / GOAL.target * 100));
+  const rem = GOAL.target - GOAL.saved;
+  document.getElementById('goal_name').textContent    = GOAL.name;
+  document.getElementById('goal_saved_lbl').textContent = '$' + GOAL.saved.toLocaleString() + ' saved';
+  document.getElementById('goal_target_lbl').textContent = '$' + GOAL.target.toLocaleString();
+  document.getElementById('goal_bar').style.width    = pct.toFixed(1) + '%';
+  document.getElementById('goal_pct_lbl').textContent =
+    pct.toFixed(0) + '% complete · $' + rem.toLocaleString() + ' to go';
+  recalcContrib();
+}
+
+function recalcContrib() {
+  const monthly = parseFloat(document.getElementById('goal_contrib').value) || 0;
+  const rem = GOAL.target - GOAL.saved;
+  const hint = document.getElementById('goal_contrib_hint');
+  if (!hint) return;
+  hint.textContent = monthly > 0
+    ? `At $${monthly}/mo you'll reach your goal in ~${Math.ceil(rem / monthly)} months.`
+    : 'Enter a monthly contribution amount.';
+}
+
+/* ================================================================
+   BUDGET EDIT MODAL
+   ================================================================ */
+function openBudgetEdit() {
+  document.getElementById('budget_edit_form').innerHTML = CATEGORIES.map((c, i) => `
+    <div style="display:flex;align-items:center;gap:1rem;margin-bottom:.85rem">
+      <div style="width:12px;height:12px;border-radius:50%;background:${c.color};flex-shrink:0"
+        aria-hidden="true"></div>
+      <label for="bi_${i}" style="flex:1;font-size:.875rem;font-weight:600;color:#0a2540">${c.name}</label>
+      <div class="BOA-input-prefix" style="max-width:150px">
+        <span class="BOA-input-prefix__symbol">$</span>
+        <input type="number" id="bi_${i}" class="BOA-input budget-input"
+          data-idx="${i}" value="${c.budget}" min="0" step="10"
+          aria-label="${c.name} budget">
+      </div>
+    </div>`).join('');
+  openModal('modal_edit_budget');
+}
+
+function saveBudgets() {
+  document.querySelectorAll('.budget-input').forEach(inp => {
+    const idx = parseInt(inp.getAttribute('data-idx'), 10);
+    const val = parseFloat(inp.value);
+    if (!isNaN(val) && val >= 0) CATEGORIES[idx].budget = val;
+  });
+  renderBudgetList();
+  renderSpendingBars();
+  closeModal('modal_edit_budget');
+  showToast('Budgets updated successfully!', 'success');
+}
+
+/* ================================================================
+   SAVINGS GOAL MODAL
+   ================================================================ */
+function saveSavingsGoal() {
+  const name   = document.getElementById('sg_name').value.trim()      || GOAL.name;
+  const saved  = parseFloat(document.getElementById('sg_saved').value) || GOAL.saved;
+  const target = parseFloat(document.getElementById('sg_target').value)|| GOAL.target;
+  GOAL = { name, saved, target };
+  renderGoal();
+  closeModal('modal_savings_goal');
+  showToast('Savings goal updated!', 'success');
+}
+
+/* ================================================================
+   MONTH SELECTOR — update badge label (data stays static for demo)
+   ================================================================ */
+const MONTH_LABELS = { '11':'November 2026', '10':'October 2026', '9':'September 2026' };
+document.getElementById('mm_month').addEventListener('change', function () {
+  const lbl = MONTH_LABELS[this.value] || 'November 2026';
+  const badge = document.getElementById('mm_month_badge');
+  if (badge) badge.textContent = lbl;
+  showToast('Showing data for ' + lbl, 'info', 2500);
+});
+
+/* ================================================================
+   CONTRIBUTION RECALCULATION
+   ================================================================ */
+document.getElementById('goal_contrib').addEventListener('input', recalcContrib);
+
+/* ================================================================
+   INIT
+   ================================================================ */
+renderSpendingBars();
+renderBudgetList();
+renderDonut();
+renderTrend();
+renderTopExpenses();
+renderGoal();
+renderStats();
+</script>
+</body>
+</html>

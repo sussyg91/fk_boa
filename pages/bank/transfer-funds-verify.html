@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Transfer Verification — Bank of America Online Banking</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#003580">
+  <link rel="shortcut icon" href="../../downloaded_files/img/boa_box.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="../../css/theme.css">
+  <link rel="stylesheet" href="../../css/home.css">
+  <style>
+    .skip-link{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:9999}
+    .skip-link:focus{position:fixed;top:0;left:0;width:auto;height:auto;padding:.6rem 1.25rem;background:#003580;color:#fff;font-size:.9rem;font-weight:700;border-radius:0 0 6px 0;text-decoration:none;outline:3px solid #fff}
+    *:focus-visible{outline:3px solid #005eb8;outline-offset:2px}
+    a,button{touch-action:manipulation}
+    @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+  </style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<div class="shell-wrap">
+
+  <script>window.BOA_ROOT = '../../'; window.BOA_BANKING_TAB = 'transfer-funds';</script>
+  <script src="../../js/data.js"></script>
+  <script src="../../js/navbar.js"></script>
+
+  <div class="shell-page-header">
+    <div class="BOA-container shell-page-header__inner">
+      <h1 class="shell-page-header__title">Transfer Verification</h1>
+      <nav class="shell-breadcrumb" aria-label="Breadcrumb">
+        <a href="../../index.html">Home</a>
+        <span class="shell-breadcrumb__sep"><i class="fa fa-chevron-right"></i></span>
+        <a href="account-summary.html">Account Summary</a>
+        <span class="shell-breadcrumb__sep"><i class="fa fa-chevron-right"></i></span>
+        <a href="transfer-funds.html">Transfer Funds</a>
+        <span class="shell-breadcrumb__sep"><i class="fa fa-chevron-right"></i></span>
+        <span>Verification</span>
+      </nav>
+    </div>
+  </div>
+
+  <main class="shell-content" id="main-content">
+    <div class="BOA-container">
+      <div style="max-width:640px;margin:0 auto">
+
+        <!-- No data state -->
+        <div id="tv_no_data" class="shell-card" style="display:none">
+          <div class="shell-card__body" style="text-align:center;padding:2.5rem">
+            <i class="fa fa-circle-exclamation" style="font-size:2.5rem;color:#d97706;display:block;margin-bottom:.75rem"></i>
+            <h2 style="font-size:1.1rem;font-weight:700;color:#0a2540;margin:0 0 .5rem">No transfer to verify</h2>
+            <p style="font-size:.875rem;color:#666;margin:0 0 1.5rem">Please submit a transfer first.</p>
+            <a href="transfer-funds.html" class="BOA-btn BOA-btn--primary">
+              <i class="fa fa-right-left"></i> Go to Transfer Funds
+            </a>
+          </div>
+        </div>
+
+        <!-- Verification card -->
+        <div id="tv_card" class="shell-card" style="display:none">
+          <div class="shell-card__head" style="background:#003580">
+            <h2 class="shell-card__title" style="color:#fff">
+              <i class="fa fa-circle-check" aria-hidden="true" style="color:#4ade80;margin-right:.4rem"></i>
+              Transfer Receipt
+            </h2>
+          </div>
+          <div class="shell-card__body">
+
+            <div class="BOA-alert BOA-alert--success" style="margin-bottom:1.25rem">
+              <i class="fa fa-circle-check BOA-alert__icon" aria-hidden="true"></i>
+              <div class="BOA-alert__body">
+                <div class="BOA-alert__title">Transfer Submitted Successfully</div>
+                Save this receipt for your records.
+              </div>
+            </div>
+
+            <!-- Reference number -->
+            <div class="tv-ref-box">
+              <span class="tv-ref-label">Confirmation Number</span>
+              <span class="tv-ref-val" id="tv_ref"></span>
+            </div>
+
+            <!-- Status badge -->
+            <div style="display:flex;align-items:center;justify-content:space-between;
+              margin:1rem 0 .75rem;flex-wrap:wrap;gap:.5rem">
+              <span style="font-size:.8rem;color:#555">Transfer Status</span>
+              <span class="BOA-badge BOA-badge--info" style="font-size:.78rem">
+                <i class="fa fa-circle-notch fa-spin" aria-hidden="true" style="font-size:.65rem"></i>
+                &nbsp;Processing
+              </span>
+            </div>
+
+            <!-- Details table — populated dynamically -->
+            <div id="tv_detail_table" style="border:1px solid #eee;border-radius:6px;overflow:hidden"></div>
+
+            <div class="tv-print-bar">
+              <button onclick="window.print()" class="BOA-btn BOA-btn--secondary BOA-btn--sm">
+                <i class="fa fa-print" aria-hidden="true"></i> Print Receipt
+              </button>
+              <div style="display:flex;gap:.75rem;flex-wrap:wrap">
+                <a href="transfer-funds.html" class="BOA-btn BOA-btn--outline BOA-btn--sm">
+                  <i class="fa fa-right-left" aria-hidden="true"></i> New Transfer
+                </a>
+                <a href="account-summary.html" class="BOA-btn BOA-btn--primary BOA-btn--sm">
+                  <i class="fa fa-wallet" aria-hidden="true"></i> Account Summary
+                </a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <footer class="shell-footer">
+    <div class="BOA-container shell-footer__inner">
+      <ul class="shell-footer__links">
+        <li><a href="../../index.html">Home</a></li>
+        <li><a href="../../help.html">Help</a></li>
+        <li><a href="../../logout.html">Sign Out</a></li>
+        <li><a href="../../privacy.html">Privacy</a></li>
+      </ul>
+      <p class="shell-footer__copy">© 2026 Bank of America Corporation. FDIC Insured.</p>
+    </div>
+  </footer>
+</div>
+
+<style>
+.tv-ref-box{background:#f0f4fb;border:1px solid #c7d9f8;border-radius:6px;padding:1rem 1.25rem;display:flex;align-items:center;justify-content:space-between;gap:.75rem;flex-wrap:wrap}
+.tv-ref-label{font-size:.78rem;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.06em}
+.tv-ref-val{font-size:1.05rem;font-weight:800;color:#003580;letter-spacing:.03em;font-family:monospace}
+.tv-print-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem;margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid #eee}
+@media print{.shell-wrap>:not(main){display:none!important}.tv-print-bar{display:none}}
+</style>
+
+<script src="../../js/ui.js"></script>
+<script src="../../js/checkAccess.js"></script>
+<script>
+(function () {
+  const stored = sessionStorage.getItem('tfPayload');
+  let data = null;
+  if (stored) {
+    try { data = JSON.parse(stored); } catch (e) {}
+    sessionStorage.removeItem('tfPayload');
+  }
+  if (!data) {
+    document.getElementById('tv_no_data').style.display = '';
+    return;
+  }
+
+  document.getElementById('tv_card').style.display = '';
+  document.getElementById('tv_ref').textContent    = data.ref || '';
+
+  // Build detail rows from whatever fields exist in payload
+  const rows = [
+    ['From Account', data.from       || '—'],
+    ['To',           data.to         || (data.bank ? data.bank + ' — ' + data.acct : '—')],
+    ['Amount',       data.amount     || '—'],
+    ['New Balance',  data.newBalance || '—'],
+    ['Date',         data.date       || '—'],
+    ['Frequency',    data.frequency  || 'One-time'],
+    ['Transfer Type',data.type       || '—'],
+  ];
+  if (data.memo) rows.push(['Memo', data.memo]);
+
+  document.getElementById('tv_detail_table').innerHTML =
+    rows.map(function (r, i) {
+      const isAmt = r[0] === 'Amount';
+      const isLast = i === rows.length - 1;
+      return `<div style="display:flex;justify-content:space-between;align-items:center;
+        padding:.6rem 1rem;border-bottom:${isLast?'none':'1px solid #f0f0f0'};font-size:.875rem">
+        <span style="color:#666">${r[0]}</span>
+        <strong style="${isAmt?'color:#16a34a;font-size:1rem':'color:#0a2540'};
+          font-variant-numeric:tabular-nums">${r[1]}</strong>
+      </div>`;
+    }).join('');
+})();
+</script>
+</body>
+</html>

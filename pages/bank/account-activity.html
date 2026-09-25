@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Account Activity — Bank of America Online Banking</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#003580">
+  <link rel="shortcut icon" href="../../downloaded_files/img/boa_box.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="../../css/theme.css">
+  <link rel="stylesheet" href="../../css/home.css">
+  <style>
+    .skip-link{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:9999}
+    .skip-link:focus{position:fixed;top:0;left:0;width:auto;height:auto;padding:.6rem 1.25rem;background:#003580;color:#fff;font-size:.9rem;font-weight:700;border-radius:0 0 6px 0;text-decoration:none;outline:3px solid #fff}
+    *:focus-visible{outline:3px solid #005eb8;outline-offset:2px}
+    a,button{touch-action:manipulation}
+    @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+    .aa-toolbar{display:flex;align-items:flex-end;gap:1rem;flex-wrap:wrap}
+  </style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<div class="shell-wrap">
+
+  <script>window.BOA_ROOT = '../../'; window.BOA_BANKING_TAB = 'account-activity';</script>
+  <script src="../../js/data.js"></script>
+  <script src="../../js/navbar.js"></script>
+
+  <div class="shell-page-header">
+    <div class="BOA-container shell-page-header__inner">
+      <h1 class="shell-page-header__title">Account Activity</h1>
+      <nav class="shell-breadcrumb" aria-label="Breadcrumb">
+        <a href="../../index.html">Home</a>
+        <span class="shell-breadcrumb__sep"><i class="fa fa-chevron-right"></i></span>
+        <a href="account-summary.html">Account Summary</a>
+        <span class="shell-breadcrumb__sep"><i class="fa fa-chevron-right"></i></span>
+        <span>Activity</span>
+      </nav>
+    </div>
+  </div>
+
+  <main class="shell-content" id="main-content">
+    <div class="BOA-container">
+
+      <!-- Toolbar -->
+      <div class="shell-card" style="margin-bottom:1.25rem">
+        <div class="shell-card__body">
+          <div class="aa-toolbar">
+            <div class="BOA-form-group" style="margin:0;min-width:220px">
+              <label for="aa_accountId" class="BOA-label">Account</label>
+              <select id="aa_accountId" class="BOA-select">
+                <!-- populated from BOA_ACCOUNTS by accountActivity.js -->
+              </select>
+            </div>
+            <div class="BOA-form-group" style="margin:0;flex:1;min-width:180px">
+              <label for="aa_filter" class="BOA-label">Search transactions</label>
+              <div style="position:relative">
+                <i class="fa fa-search" style="position:absolute;left:.7rem;top:50%;transform:translateY(-50%);color:#999;font-size:.8rem;pointer-events:none"></i>
+                <input type="text" id="aa_filter" class="BOA-input" placeholder="Filter by description…" style="padding-left:2.1rem">
+              </div>
+            </div>
+            <div style="padding-top:1.55rem">
+              <span id="aa_count" class="BOA-badge BOA-badge--info" style="font-size:.78rem;padding:.35rem .7rem"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results card -->
+      <div class="shell-card">
+        <div class="shell-card__head">
+          <h2 class="shell-card__title" id="aa_account_label">Transactions</h2>
+          <a href="account-summary.html" class="BOA-btn BOA-btn--secondary BOA-btn--sm">
+            <i class="fa fa-arrow-left"></i> Back to Summary
+          </a>
+        </div>
+        <div id="all_transactions_for_account"></div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="shell-footer">
+    <div class="BOA-container shell-footer__inner">
+      <ul class="shell-footer__links">
+        <li><a href="../../index.html">Home</a></li>
+        <li><a href="../../help.html">Help</a></li>
+        <li><a href="../../logout.html">Sign Out</a></li>
+        <li><a href="../../privacy.html">Privacy</a></li>
+      </ul>
+      <p class="shell-footer__copy">© 2026 Bank of America Corporation. FDIC Insured.</p>
+    </div>
+  </footer>
+</div>
+
+<script src="../../js/ui.js"></script>
+<script src="../../js/checkAccess.js"></script>
+<script src="../../js/accountActivity.js"></script>
+</body>
+</html>

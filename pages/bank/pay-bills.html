@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pay Bills — Bank of America Online Banking</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#003580">
+  <link rel="shortcut icon" href="../../downloaded_files/img/boa_box.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="../../css/theme.css">
+  <link rel="stylesheet" href="../../css/home.css">
+  <style>
+    /* ── Accessibility ── */
+    .skip-link{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:9999}
+    .skip-link:focus{position:fixed;top:0;left:0;width:auto;height:auto;padding:.6rem 1.25rem;
+      background:#003580;color:#fff;font-size:.9rem;font-weight:700;border-radius:0 0 6px 0;
+      text-decoration:none;outline:3px solid #fff}
+    *:focus-visible{outline:3px solid #005eb8;outline-offset:2px}
+    a,button{touch-action:manipulation}
+    @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+    /* ── Summary stat tiles ── */
+    .pb-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.25rem}
+    .pb-stat{background:#fff;border:1px solid #ddd;border-radius:8px;padding:1rem 1.1rem}
+    .pb-stat__label{font-size:.7rem;font-weight:700;text-transform:uppercase;
+      letter-spacing:.05em;color:#888;margin-bottom:.3rem}
+    .pb-stat__val{font-size:1.4rem;font-weight:900;color:#0a2540;
+      font-variant-numeric:tabular-nums;line-height:1.1}
+    .pb-stat__sub{font-size:.72rem;color:#888;margin-top:.2rem}
+
+    /* ── Biller cards ── */
+    .pb-biller-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.65rem}
+    .pb-biller-card{border:1.5px solid #ddd;border-radius:8px;padding:.85rem .9rem;cursor:pointer;
+      background:#fff;display:flex;align-items:center;gap:.65rem;
+      transition:border-color .15s ease,background-color .15s ease,box-shadow .15s ease;position:relative}
+    .pb-biller-card:hover{border-color:#005eb8;background:#f0f6ff}
+    .pb-biller-card.selected{border-color:#003580;background:#f0f4fb;
+      box-shadow:0 0 0 3px rgba(0,53,128,.12)}
+    .pb-biller-card__icon{width:36px;height:36px;border-radius:8px;display:flex;
+      align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0}
+    .pb-biller-card__name{font-size:.8rem;font-weight:700;color:#0a2540;
+      white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .pb-biller-card__meta{font-size:.7rem;color:#888;margin-top:.05rem}
+    .pb-biller-card__autopay{position:absolute;top:.4rem;right:.4rem;
+      background:#16a34a;color:#fff;border-radius:4px;font-size:.58rem;
+      font-weight:800;padding:.05rem .35rem;letter-spacing:.04em}
+    .pb-biller-card__due{position:absolute;bottom:.4rem;right:.5rem;
+      font-size:.65rem;color:#d97706;font-weight:700}
+
+    /* ── Selected biller strip ── */
+    .pb-selected-strip{background:#f0f4fb;border:1.5px solid #c7d9f8;border-radius:8px;
+      padding:.85rem 1rem;display:flex;align-items:center;gap:.75rem;margin-bottom:1.1rem;
+      flex-wrap:wrap}
+    .pb-selected-strip__info{flex:1;min-width:0}
+    .pb-selected-strip__name{font-size:.95rem;font-weight:800;color:#003580}
+    .pb-selected-strip__meta{font-size:.75rem;color:#888;margin-top:.1rem}
+    .pb-selected-strip__due{font-size:.75rem;font-weight:700;color:#d97706;margin-top:.1rem}
+
+    /* ── Balance pill ── */
+    .pb-balance-pill{background:#f8f9fa;border:1px solid #e0e0e0;border-radius:6px;
+      padding:.5rem .85rem;display:flex;align-items:center;justify-content:space-between;
+      margin-top:.35rem;font-size:.8rem;font-variant-numeric:tabular-nums}
+    .pb-balance-pill__lbl{color:#888}
+    .pb-balance-pill__amt{font-weight:800;color:#003580}
+    .pb-balance-pill__after{font-size:.72rem;color:#888}
+    .pb-balance-pill__warn{color:#c8102e;font-size:.75rem;font-weight:700;display:none}
+
+    /* ── History rows ── */
+    .pb-hist-row{display:flex;align-items:center;gap:.75rem;padding:.85rem 1.25rem;
+      border-bottom:1px solid #f0f0f0}
+    .pb-hist-row:last-child{border-bottom:none}
+    .pb-hist-icon{width:36px;height:36px;border-radius:8px;display:flex;
+      align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+    .pb-hist-body{flex:1;min-width:0}
+    .pb-hist-name{font-size:.875rem;font-weight:600;color:#0a2540;
+      white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .pb-hist-sub{font-size:.75rem;color:#888;margin-top:.05rem}
+    .pb-hist-amount{font-size:.9rem;font-weight:700;color:#333;
+      white-space:nowrap;font-variant-numeric:tabular-nums}
+    .pb-hist-amount--neg{color:#c8102e}
+    .pb-hist-actions{display:flex;gap:.35rem;margin-left:.25rem}
+
+    /* ── Confirm grid ── */
+    .pb-confirm-row{display:flex;justify-content:space-between;align-items:center;
+      padding:.5rem 0;border-bottom:1px solid #f0f0f0;font-size:.875rem}
+    .pb-confirm-row:last-child{border-bottom:none}
+    .pb-confirm-row span{color:#666}
+
+    /* ── Autopay badge ── */
+    .pb-autopay-on{display:inline-flex;align-items:center;gap:.3rem;background:#dcfce7;
+      color:#16a34a;border-radius:20px;padding:.15rem .6rem;font-size:.7rem;font-weight:700}
+    .pb-autopay-off{display:inline-flex;align-items:center;gap:.3rem;background:#f1f5f9;
+      color:#888;border-radius:20px;padding:.15rem .6rem;font-size:.7rem;font-weight:600}
+
+    /* ── Category filter chips ── */
+    .pb-filter-chips{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.85rem}
+    .pb-chip{background:#f0f0f0;border:1px solid #ddd;border-radius:20px;
+      padding:.2rem .75rem;font-size:.78rem;font-weight:600;color:#444;
+      cursor:pointer;transition:background-color .12s,border-color .12s,color .12s}
+    .pb-chip:hover,.pb-chip.active{background:#003580;color:#fff;border-color:#003580}
+
+    /* ── Scheduled payment row ── */
+    .pb-sched-row{display:flex;align-items:center;gap:.75rem;padding:.85rem 1.25rem;
+      border-bottom:1px solid #f0f0f0}
+    .pb-sched-row:last-child{border-bottom:none}
+    .pb-sched-icon{width:36px;height:36px;border-radius:8px;background:#fef3c7;
+      color:#d97706;display:flex;align-items:center;justify-content:center;
+      font-size:.9rem;flex-shrink:0}
+    .pb-sched-body{flex:1;min-width:0}
+    .pb-sched-name{font-size:.875rem;font-weight:700;color:#0a2540}
+    .pb-sched-meta{font-size:.75rem;color:#888}
+    .pb-sched-amount{font-size:.9rem;font-weight:800;color:#d97706;
+      white-space:nowrap;font-variant-numeric:tabular-nums}
+    .pb-sched-due-soon{color:#c8102e}
+
+    @media(max-width:900px){.pb-stats{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:540px){.pb-stats{grid-template-columns:1fr 1fr};.pb-biller-grid{grid-template-columns:1fr 1fr}}
+  </style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<div class="shell-wrap">
+
+  <script>window.BOA_ROOT = '../../'; window.BOA_BANKING_TAB = 'pay-bills';</script>
+  <script src="../../js/data.js"></script>
+  <script src="../../js/navbar.js"></script>
+
+  <div class="shell-page-header">
+    <div class="BOA-container shell-page-header__inner">
+      <h1 class="shell-page-header__title">Pay Bills</h1>
+      <nav class="shell-breadcrumb" aria-label="Breadcrumb">
+        <a href="../../index.html">Home</a>
+        <span class="shell-breadcrumb__sep" aria-hidden="true"><i class="fa fa-chevron-right"></i></span>
+        <a href="account-summary.html">Account Summary</a>
+        <span class="shell-breadcrumb__sep" aria-hidden="true"><i class="fa fa-chevron-right"></i></span>
+        <span>Pay Bills</span>
+      </nav>
+    </div>
+  </div>
+
+  <main class="shell-content" id="main-content">
+    <div class="BOA-container">
+
+      <!-- ── Summary stats ── -->
+      <div class="pb-stats" role="region" aria-label="Bill payment summary">
+        <div class="pb-stat">
+          <div class="pb-stat__label">Due This Month</div>
+          <div class="pb-stat__val" id="stat_due_this_month">—</div>
+          <div class="pb-stat__sub" id="stat_due_count">— bills scheduled</div>
+        </div>
+        <div class="pb-stat">
+          <div class="pb-stat__label">Paid This Month</div>
+          <div class="pb-stat__val" id="stat_paid_this_month">—</div>
+          <div class="pb-stat__sub" id="stat_paid_count">— payments made</div>
+        </div>
+        <div class="pb-stat">
+          <div class="pb-stat__label">AutoPay Active</div>
+          <div class="pb-stat__val" id="stat_autopay_count" style="color:#16a34a">—</div>
+          <div class="pb-stat__sub">billers enrolled</div>
+        </div>
+        <div class="pb-stat">
+          <div class="pb-stat__label">Next Due Date</div>
+          <div class="pb-stat__val" id="stat_next_due" style="font-size:1rem">—</div>
+          <div class="pb-stat__sub" id="stat_next_name">—</div>
+        </div>
+      </div>
+
+      <!-- ── Main two-column layout ── -->
+      <div class="shell-two-col">
+
+        <!-- LEFT: Billers + payment form -->
+        <div>
+
+          <!-- Biller list card -->
+          <div class="shell-card" style="margin-bottom:1.25rem">
+            <div class="shell-card__head">
+              <h2 class="shell-card__title">My Billers</h2>
+              <div style="display:flex;gap:.5rem">
+                <button class="BOA-btn BOA-btn--secondary BOA-btn--sm" onclick="openManageBillers()"
+                  aria-label="Manage existing billers">
+                  <i class="fa fa-sliders" aria-hidden="true"></i> Manage
+                </button>
+                <button class="BOA-btn BOA-btn--primary BOA-btn--sm" onclick="openModal('modal-add-biller')"
+                  aria-label="Add a new biller">
+                  <i class="fa fa-plus" aria-hidden="true"></i> Add Biller
+                </button>
+              </div>
+            </div>
+            <div class="shell-card__body">
+              <!-- Search + category filter -->
+              <div style="position:relative;margin-bottom:.75rem">
+                <i class="fa fa-search" aria-hidden="true"
+                  style="position:absolute;left:.75rem;top:50%;transform:translateY(-50%);
+                         color:#999;font-size:.85rem;pointer-events:none"></i>
+                <input type="text" id="biller_search" class="BOA-input"
+                  placeholder="Search billers…" style="padding-left:2.25rem"
+                  aria-label="Search billers" oninput="filterBillers(this.value)">
+              </div>
+              <div class="pb-filter-chips" id="pb_cat_chips" role="group" aria-label="Filter by category">
+                <!-- populated by JS -->
+              </div>
+              <div id="biller_grid" class="pb-biller-grid" role="list"
+                aria-label="Your billers">
+                <!-- populated by JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Payment form (appears after biller selection) -->
+          <div class="shell-card" id="payment_form_card" style="display:none">
+            <div class="shell-card__head">
+              <h2 class="shell-card__title">
+                <i class="fa fa-credit-card" aria-hidden="true" style="color:#1a56db;margin-right:.4rem"></i>
+                Make a Payment
+              </h2>
+              <button class="BOA-btn BOA-btn--secondary BOA-btn--sm" onclick="clearBillerSelection()">
+                <i class="fa fa-xmark" aria-hidden="true"></i> Cancel
+              </button>
+            </div>
+            <div class="shell-card__body">
+
+              <!-- Selected biller info strip -->
+              <div class="pb-selected-strip" id="pb_selected_biller_info"></div>
+
+              <!-- Error alert -->
+              <div id="pb_pay_error" class="BOA-alert BOA-alert--error"
+                style="display:none;margin-bottom:1rem" role="alert" aria-live="polite">
+                <i class="fa fa-circle-xmark BOA-alert__icon" aria-hidden="true"></i>
+                <div class="BOA-alert__body">
+                  <div class="BOA-alert__title">Please fix the following</div>
+                  <span id="pb_pay_error_msg"></span>
+                </div>
+              </div>
+
+              <form id="payment_form" novalidate>
+                <!-- Pay From — populated from BOA_ACCOUNTS -->
+                <div class="BOA-form-group">
+                  <label for="pb_from" class="BOA-label">
+                    Pay From <span aria-hidden="true" style="color:#c8102e">*</span>
+                  </label>
+                  <select id="pb_from" class="BOA-select" required aria-required="true">
+                    <option value="">— Select account —</option>
+                  </select>
+                  <!-- Live balance pill -->
+                  <div class="pb-balance-pill" id="pb_balance_pill" style="display:none">
+                    <div>
+                      <div class="pb-balance-pill__lbl">Available balance</div>
+                      <div class="pb-balance-pill__amt" id="pb_bal_amt"></div>
+                    </div>
+                    <div style="text-align:right">
+                      <div class="pb-balance-pill__warn" id="pb_bal_warn">
+                        <i class="fa fa-triangle-exclamation" aria-hidden="true"></i> Insufficient funds
+                      </div>
+                      <div class="pb-balance-pill__after" id="pb_bal_after"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+                  <div class="BOA-form-group">
+                    <label for="pb_amount" class="BOA-label">
+                      Amount <span aria-hidden="true" style="color:#c8102e">*</span>
+                    </label>
+                    <div class="BOA-input-prefix">
+                      <span class="BOA-input-prefix__symbol">$</span>
+                      <input type="number" id="pb_amount" class="BOA-input"
+                        placeholder="0.00" min="0.01" step="0.01" required
+                        aria-required="true">
+                    </div>
+                  </div>
+                  <div class="BOA-form-group">
+                    <label for="pb_date" class="BOA-label">
+                      Payment Date <span aria-hidden="true" style="color:#c8102e">*</span>
+                    </label>
+                    <input type="date" id="pb_date" class="BOA-input" required aria-required="true">
+                  </div>
+                </div>
+
+                <!-- Frequency -->
+                <div class="BOA-form-group">
+                  <label for="pb_frequency" class="BOA-label">Frequency</label>
+                  <select id="pb_frequency" class="BOA-select">
+                    <option value="once">One-time payment</option>
+                    <option value="weekly">Weekly</option>
+                    <option value="biweekly">Every 2 weeks</option>
+                    <option value="monthly">Monthly (AutoPay)</option>
+                  </select>
+                </div>
+
+                <div class="BOA-form-group">
+                  <label for="pb_memo" class="BOA-label">
+                    Memo / Account # <span style="font-weight:400;color:#999">(optional)</span>
+                  </label>
+                  <input type="text" id="pb_memo" class="BOA-input"
+                    placeholder="Account or reference number on your bill…" maxlength="80">
+                </div>
+
+                <button type="submit" class="BOA-btn BOA-btn--primary BOA-btn--lg">
+                  <i class="fa fa-paper-plane" aria-hidden="true"></i> Schedule Payment
+                </button>
+              </form>
+            </div>
+          </div>
+
+        </div><!-- /left -->
+
+        <!-- RIGHT: Scheduled + history -->
+        <div>
+
+          <!-- Scheduled payments -->
+          <div class="shell-card" style="margin-bottom:1rem">
+            <div class="shell-card__head">
+              <h2 class="shell-card__title">
+                <i class="fa fa-clock" aria-hidden="true" style="color:#d97706;margin-right:.35rem"></i>
+                Upcoming &amp; Scheduled
+              </h2>
+              <span class="BOA-badge BOA-badge--warning" id="sched_count_badge"
+                aria-live="polite">0</span>
+            </div>
+            <div id="scheduled_list" aria-live="polite">
+              <!-- populated by JS -->
+            </div>
+          </div>
+
+          <!-- Payment history with filter -->
+          <div class="shell-card">
+            <div class="shell-card__head">
+              <h2 class="shell-card__title">
+                <i class="fa fa-clock-rotate-left" aria-hidden="true" style="color:#555;margin-right:.35rem"></i>
+                Payment History
+              </h2>
+              <select id="hist_filter" class="BOA-select" style="width:auto;font-size:.8rem;padding:.3rem .6rem"
+                aria-label="Filter history" onchange="renderHistory()">
+                <option value="all">All</option>
+                <option value="utilities">Utilities</option>
+                <option value="housing">Housing</option>
+                <option value="telecom">Telecom</option>
+                <option value="insurance">Insurance</option>
+                <option value="subscription">Subscription</option>
+              </select>
+            </div>
+            <div id="payment_history_list" aria-live="polite">
+              <!-- populated by JS -->
+            </div>
+          </div>
+
+        </div><!-- /right -->
+      </div>
+    </div>
+  </main>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       MODALS
+  ════════════════════════════════════════════════════════════════ -->
+
+  <!-- Add Biller Modal -->
+  <div id="modal-add-biller" class="BOA-modal-overlay" style="display:none"
+    role="dialog" aria-modal="true" aria-labelledby="add-biller-title">
+    <div class="BOA-modal">
+      <div class="BOA-modal__header">
+        <h3 class="BOA-modal__title" id="add-biller-title">
+          <i class="fa fa-plus" aria-hidden="true" style="margin-right:.4rem;color:#1a56db"></i>
+          Add New Biller
+        </h3>
+        <button class="BOA-modal__close" onclick="closeModal('modal-add-biller')" aria-label="Close">
+          <i class="fa fa-xmark" aria-hidden="true"></i>
+        </button>
+      </div>
+      <div class="BOA-modal__body">
+        <div id="ab_error" class="BOA-alert BOA-alert--error" style="display:none;margin-bottom:1rem">
+          <i class="fa fa-circle-xmark BOA-alert__icon" aria-hidden="true"></i>
+          <div class="BOA-alert__body">Biller name is required.</div>
+        </div>
+        <div class="BOA-form-group">
+          <label for="ab_name" class="BOA-label">Biller Name <span aria-hidden="true" style="color:#c8102e">*</span></label>
+          <input type="text" id="ab_name" class="BOA-input" placeholder="e.g. Natural Gas Company…"
+            autocomplete="organization">
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+          <div class="BOA-form-group">
+            <label for="ab_category" class="BOA-label">Category</label>
+            <select id="ab_category" class="BOA-select">
+              <option value="utilities">Utilities</option>
+              <option value="housing">Housing / Rent</option>
+              <option value="telecom">Telecom / Internet</option>
+              <option value="insurance">Insurance</option>
+              <option value="subscription">Subscription</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="BOA-form-group">
+            <label for="ab_typical_amount" class="BOA-label">Typical Amount</label>
+            <div class="BOA-input-prefix">
+              <span class="BOA-input-prefix__symbol">$</span>
+              <input type="number" id="ab_typical_amount" class="BOA-input"
+                placeholder="0.00" min="0" step="0.01">
+            </div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+          <div class="BOA-form-group">
+            <label for="ab_acct" class="BOA-label">Your Account # with Biller</label>
+            <input type="text" id="ab_acct" class="BOA-input" placeholder="Account on bill…"
+              autocomplete="off">
+          </div>
+          <div class="BOA-form-group">
+            <label for="ab_due_day" class="BOA-label">Typical Due Day</label>
+            <select id="ab_due_day" class="BOA-select">
+              <option value="">— Select —</option>
+              <option value="1">1st</option><option value="5">5th</option>
+              <option value="10">10th</option><option value="15">15th</option>
+              <option value="18">18th</option><option value="20">20th</option>
+              <option value="22">22nd</option><option value="25">25th</option>
+              <option value="28">28th</option><option value="30">30th</option>
+            </select>
+          </div>
+        </div>
+        <div class="BOA-form-group" style="margin-bottom:0">
+          <label class="BOA-checkbox">
+            <input type="checkbox" id="ab_autopay">
+            Enable AutoPay for this biller
+          </label>
+          <p class="BOA-help-text" style="margin-top:.35rem">AutoPay will automatically schedule the typical amount each month.</p>
+        </div>
+      </div>
+      <div class="BOA-modal__footer">
+        <button class="BOA-btn BOA-btn--secondary" onclick="closeModal('modal-add-biller')">Cancel</button>
+        <button class="BOA-btn BOA-btn--primary" onclick="addBiller()">
+          <i class="fa fa-plus" aria-hidden="true"></i> Add Biller
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Manage Billers Modal -->
+  <div id="modal-manage-billers" class="BOA-modal-overlay" style="display:none"
+    role="dialog" aria-modal="true" aria-labelledby="manage-billers-title">
+    <div class="BOA-modal BOA-modal--lg">
+      <div class="BOA-modal__header">
+        <h3 class="BOA-modal__title" id="manage-billers-title">
+          <i class="fa fa-sliders" aria-hidden="true" style="margin-right:.4rem;color:#003580"></i>
+          Manage Billers
+        </h3>
+        <button class="BOA-modal__close" onclick="closeModal('modal-manage-billers')" aria-label="Close">
+          <i class="fa fa-xmark" aria-hidden="true"></i>
+        </button>
+      </div>
+      <div class="BOA-modal__body" id="manage_billers_list" style="padding:0">
+        <!-- populated by JS -->
+      </div>
+      <div class="BOA-modal__footer">
+        <button class="BOA-btn BOA-btn--primary" onclick="closeModal('modal-manage-billers')">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Payment Success Modal -->
+  <div id="modal-pay-success" class="BOA-modal-overlay" style="display:none"
+    role="dialog" aria-modal="true" aria-labelledby="pay-success-title">
+    <div class="BOA-modal">
+      <div class="BOA-modal__header" style="background:#003580">
+        <h3 class="BOA-modal__title" id="pay-success-title" style="color:#fff">
+          <i class="fa fa-circle-check" aria-hidden="true" style="color:#4ade80;margin-right:.5rem"></i>
+          Payment Scheduled
+        </h3>
+        <button class="BOA-modal__close" onclick="closeModal('modal-pay-success')"
+          aria-label="Close" style="color:#fff">
+          <i class="fa fa-xmark" aria-hidden="true"></i>
+        </button>
+      </div>
+      <div class="BOA-modal__body">
+        <div class="BOA-alert BOA-alert--success" style="margin-bottom:1rem">
+          <i class="fa fa-circle-check BOA-alert__icon" aria-hidden="true"></i>
+          <div class="BOA-alert__body">Your payment has been scheduled successfully.</div>
+        </div>
+        <!-- Reference box -->
+        <div style="background:#f0f4fb;border:1px solid #c7d9f8;border-radius:6px;
+          padding:.8rem 1rem;display:flex;justify-content:space-between;
+          align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem">
+          <div style="font-size:.7rem;font-weight:700;text-transform:uppercase;
+            letter-spacing:.06em;color:#888">Confirmation #</div>
+          <div id="pay_confirm_ref" style="font-size:.95rem;font-weight:900;
+            color:#003580;font-family:monospace"></div>
+        </div>
+        <div id="pay_confirm_grid"></div>
+        <!-- New balance preview -->
+        <div id="pay_new_balance_box" style="display:none;margin-top:.75rem;
+          background:#f8f9fa;border:1px solid #e0e0e0;border-radius:6px;
+          padding:.7rem 1rem;display:flex;justify-content:space-between;
+          align-items:center">
+          <span style="font-size:.8rem;color:#555">New account balance</span>
+          <strong id="pay_new_balance" style="font-variant-numeric:tabular-nums;color:#003580"></strong>
+        </div>
+      </div>
+      <div class="BOA-modal__footer">
+        <button onclick="closeModal('modal-pay-success')" class="BOA-btn BOA-btn--secondary">Close</button>
+        <button onclick="closeModal('modal-pay-success');openModal('modal-add-biller')"
+          class="BOA-btn BOA-btn--outline">
+          <i class="fa fa-plus" aria-hidden="true"></i> Add Another Biller
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="shell-footer">
+    <div class="BOA-container shell-footer__inner">
+      <ul class="shell-footer__links">
+        <li><a href="../../index.html">Home</a></li>
+        <li><a href="../../help.html">Help</a></li>
+        <li><a href="../../privacy.html">Privacy</a></li>
+        <li><a href="../../logout.html">Sign Out</a></li>
+      </ul>
+      <p class="shell-footer__copy">© 2026 Bank of America Corporation. FDIC Insured.</p>
+    </div>
+  </footer>
+
+</div><!-- /shell-wrap -->
+
+<script src="../../js/ui.js"></script>
+<script src="../../js/checkAccess.js"></script>
+<script>
+/* ================================================================
+   CATEGORY CONFIG
+   ================================================================ */
+const CAT_ICONS = {
+  utilities:    { icon:'fa-bolt',          bg:'#fef3c7', color:'#d97706' },
+  housing:      { icon:'fa-house',         bg:'#dbeafe', color:'#1a56db' },
+  telecom:      { icon:'fa-wifi',          bg:'#ccfbf1', color:'#0d9488' },
+  insurance:    { icon:'fa-shield-halved', bg:'#dcfce7', color:'#16a34a' },
+  subscription: { icon:'fa-rotate',        bg:'#ede9fe', color:'#7c3aed' },
+  other:        { icon:'fa-building',      bg:'#f1f5f9', color:'#64748b' },
+};
+
+/* ================================================================
+   BILLER DATA  — amounts / due dates derived from data.js txns
+   ================================================================ */
+let billers = [
+  { id:1, name:'Electric Company',    category:'utilities',    typicalAmt:145.00, dueDay:18, acct:'EC-8821904',  autoPay:false },
+  { id:2, name:'Rent / Landlord',     category:'housing',      typicalAmt:1200.00,dueDay:1,  acct:'',            autoPay:true  },
+  { id:3, name:'Internet Service',    category:'telecom',      typicalAmt:79.99,  dueDay:22, acct:'ISP-00412',   autoPay:true  },
+  { id:4, name:'Mobile Phone Bill',   category:'telecom',      typicalAmt:95.00,  dueDay:15, acct:'MOB-33192',   autoPay:false },
+  { id:5, name:'Car Insurance',       category:'insurance',    typicalAmt:185.00, dueDay:5,  acct:'CI-441002',   autoPay:false },
+  { id:6, name:'Streaming Services',  category:'subscription', typicalAmt:22.99,  dueDay:3,  acct:'',            autoPay:true  },
+  { id:7, name:'Car Payment',         category:'other',        typicalAmt:548.00, dueDay:1,  acct:'AUTO-99120',  autoPay:true  },
+];
+
+/* Scheduled payments — derived from data and new ones added during session */
+let scheduled = [
+  { id:101, billerId:1, name:'Electric Company',    amount:145.00,  date:'2026-11-18', from:'2', fromLabel:'Advantage Plus Checking (****2001)', category:'utilities',    ref:'PB1A2B3C', freq:'once'    },
+  { id:102, billerId:3, name:'Internet Service',    amount:79.99,   date:'2026-11-22', from:'2', fromLabel:'Advantage Plus Checking (****2001)', category:'telecom',      ref:'PB4D5E6F', freq:'monthly' },
+  { id:103, billerId:6, name:'Streaming Services',  amount:22.99,   date:'2026-12-03', from:'2', fromLabel:'Advantage Plus Checking (****2001)', category:'subscription', ref:'PB7G8H9I', freq:'monthly' },
+];
+
+/* Payment history — pulled from data.js BOA_TRANSACTIONS (utilities/housing/subscr/auto) + session */
+let payHistory = [];
+
+/* Active category filter */
+let activeCatFilter = 'all';
+let selectedBiller  = null;
+
+/* ================================================================
+   INIT
+   ================================================================ */
+document.addEventListener('DOMContentLoaded', function () {
+  populateFromDropdown();
+  buildHistoryFromTransactions();
+  renderCatChips();
+  renderBillers();
+  renderScheduled();
+  renderHistory();
+  updateStats();
+  setDefaultDate();
+});
+
+/* ── Populate "Pay From" from BOA_ACCOUNTS (no loan/credit) ── */
+function populateFromDropdown() {
+  const sel = document.getElementById('pb_from');
+  // Keep only the placeholder option, remove the rest
+  while (sel.options.length > 1) sel.remove(1);
+  ['savings','checking','brokerage'].forEach(function (allowedType) {
+    Object.keys(BOA_ACCOUNTS).forEach(function (id) {
+      const a = BOA_ACCOUNTS[id];
+      if (a.type !== allowedType) return;
+      const opt = document.createElement('option');
+      opt.value            = id;
+      opt.dataset.balance  = a.balance;
+      opt.textContent      = a.label + ' (' + a.mask + ') — ' + boaFmt(a.balance);
+      sel.appendChild(opt);
+    });
+  });
+  sel.addEventListener('change', updateBalancePill);
+}
+
+/* ── Build history from BOA_TRANSACTIONS bill categories ── */
+function buildHistoryFromTransactions() {
+  const BILL_CATS = ['utilities','housing','auto','subscr'];
+  Object.keys(BOA_TRANSACTIONS).forEach(function (accId) {
+    BOA_TRANSACTIONS[accId].forEach(function (t) {
+      if (!BILL_CATS.includes(t.category)) return;
+      if (t.withdrawal == null) return;
+      const cat = t.category === 'subscr' ? 'subscription' :
+                  t.category === 'auto'   ? 'other'         : t.category;
+      payHistory.push({
+        id:       'hist_' + t.date + '_' + accId,
+        name:     t.desc,
+        category: cat,
+        amount:   t.withdrawal,
+        date:     t.date,
+        fromLabel:'Account ' + (BOA_ACCOUNTS[accId] ? BOA_ACCOUNTS[accId].mask : ''),
+        status:   t.status,
+      });
+    });
+  });
+  // Newest first
+  payHistory.sort((a,b) => b.date.localeCompare(a.date));
+}
+
+function setDefaultDate() {
+  const d = new Date();
+  if (d.getDay() === 6) d.setDate(d.getDate() + 2);
+  if (d.getDay() === 0) d.setDate(d.getDate() + 1);
+  document.getElementById('pb_date').value = d.toISOString().split('T')[0];
+  document.getElementById('pb_date').min   = new Date().toISOString().split('T')[0];
+}
+
+/* ================================================================
+   CATEGORY FILTER CHIPS
+   ================================================================ */
+function renderCatChips() {
+  const cats = ['all','utilities','housing','telecom','insurance','subscription','other'];
+  const labels = { all:'All Billers', utilities:'Utilities', housing:'Housing',
+    telecom:'Telecom', insurance:'Insurance', subscription:'Subscriptions', other:'Other' };
+  document.getElementById('pb_cat_chips').innerHTML = cats.map(cat =>
+    `<button type="button" class="pb-chip${cat === activeCatFilter ? ' active' : ''}"
+      onclick="setCatFilter('${cat}')" aria-pressed="${cat === activeCatFilter}">${labels[cat]}</button>`
+  ).join('');
+}
+
+function setCatFilter(cat) {
+  activeCatFilter = cat;
+  renderCatChips();
+  filterBillers(document.getElementById('biller_search').value);
+}
+
+/* ================================================================
+   BILLER GRID
+   ================================================================ */
+function renderBillers(list) {
+  list = list || billers;
+  const grid = document.getElementById('biller_grid');
+  const filtered = activeCatFilter === 'all'
+    ? list
+    : list.filter(b => b.category === activeCatFilter);
+
+  if (!filtered.length) {
+    grid.innerHTML = '<p style="font-size:.85rem;color:#888;text-align:center;padding:1rem;grid-column:1/-1">No billers found.</p>';
+    return;
+  }
+  grid.innerHTML = filtered.map(function (b) {
+    const c   = CAT_ICONS[b.category] || CAT_ICONS.other;
+    const sel = selectedBiller && selectedBiller.id === b.id;
+    // Next due date this month
+    const now = new Date();
+    const dueDate = b.dueDay ? new Date(now.getFullYear(), now.getMonth(), b.dueDay) : null;
+    const daysUntil = dueDate ? Math.ceil((dueDate - now) / 86400000) : null;
+    const dueSoon   = daysUntil !== null && daysUntil >= 0 && daysUntil <= 5;
+    return `<div class="pb-biller-card${sel ? ' selected' : ''}"
+      onclick="selectBiller(${b.id})" tabindex="0" role="listitem"
+      aria-label="${b.name}, ${b.category}${b.autoPay ? ', AutoPay on' : ''}"
+      onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectBiller(${b.id})}">
+      ${b.autoPay ? '<div class="pb-biller-card__autopay">AUTO</div>' : ''}
+      ${dueSoon ? `<div class="pb-biller-card__due"><i class="fa fa-triangle-exclamation" aria-hidden="true"></i> Due ${daysUntil === 0 ? 'today' : 'in ' + daysUntil + 'd'}</div>` : ''}
+      <div class="pb-biller-card__icon" style="background:${c.bg};color:${c.color}" aria-hidden="true">
+        <i class="fa ${c.icon}"></i>
+      </div>
+      <div style="min-width:0">
+        <div class="pb-biller-card__name">${b.name}</div>
+        <div class="pb-biller-card__meta">${b.typicalAmt ? boaFmt(b.typicalAmt) + ' · ' : ''}${b.category}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function filterBillers(q) {
+  const query = (q || '').toLowerCase();
+  const filtered = billers.filter(b =>
+    b.name.toLowerCase().includes(query) ||
+    b.category.toLowerCase().includes(query)
+  );
+  renderBillers(filtered);
+}
+
+/* ================================================================
+   BILLER SELECTION
+   ================================================================ */
+function selectBiller(id) {
+  selectedBiller = billers.find(b => b.id === id);
+  if (!selectedBiller) return;
+
+  renderBillers();
+
+  const c = CAT_ICONS[selectedBiller.category] || CAT_ICONS.other;
+  const now = new Date();
+  const dueDate = selectedBiller.dueDay
+    ? new Date(now.getFullYear(), now.getMonth(), selectedBiller.dueDay) : null;
+  const dueStr = dueDate
+    ? dueDate.toLocaleDateString('en-US',{month:'long',day:'numeric'}) : '—';
+
+  document.getElementById('pb_selected_biller_info').innerHTML = `
+    <div style="width:40px;height:40px;border-radius:10px;background:${c.bg};color:${c.color};
+      display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0"
+      aria-hidden="true"><i class="fa ${c.icon}"></i></div>
+    <div class="pb-selected-strip__info">
+      <div class="pb-selected-strip__name">${selectedBiller.name}</div>
+      <div class="pb-selected-strip__meta">
+        ${selectedBiller.acct ? 'Account: ' + selectedBiller.acct + ' &nbsp;·&nbsp; ' : ''}
+        ${selectedBiller.category}
+        ${selectedBiller.autoPay ? '&nbsp;·&nbsp; <span class="pb-autopay-on"><i class="fa fa-rotate" aria-hidden="true"></i> AutoPay On</span>' : '&nbsp;·&nbsp; <span class="pb-autopay-off">No AutoPay</span>'}
+      </div>
+      ${selectedBiller.dueDay ? `<div class="pb-selected-strip__due"><i class="fa fa-calendar-day" aria-hidden="true"></i> Typically due: ${dueStr}</div>` : ''}
+    </div>
+    <div style="text-align:right;flex-shrink:0">
+      <div style="font-size:.72rem;color:#888">Typical amount</div>
+      <div style="font-size:1.1rem;font-weight:900;color:#003580;font-variant-numeric:tabular-nums">
+        ${selectedBiller.typicalAmt ? boaFmt(selectedBiller.typicalAmt) : 'Variable'}
+      </div>
+    </div>`;
+
+  // Pre-fill typical amount
+  if (selectedBiller.typicalAmt) {
+    document.getElementById('pb_amount').value = selectedBiller.typicalAmt.toFixed(2);
+    updateBalancePill();
+  }
+
+  document.getElementById('payment_form_card').style.display = '';
+  document.getElementById('payment_form_card').scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+function clearBillerSelection() {
+  selectedBiller = null;
+  renderBillers();
+  document.getElementById('payment_form_card').style.display = 'none';
+  document.getElementById('pb_pay_error').style.display = 'none';
+  document.getElementById('pb_balance_pill').style.display = 'none';
+  document.getElementById('payment_form').reset();
+  setDefaultDate();
+}
+
+/* ================================================================
+   LIVE BALANCE PILL
+   ================================================================ */
+function updateBalancePill() {
+  const sel    = document.getElementById('pb_from');
+  const id     = sel.value;
+  const pill   = document.getElementById('pb_balance_pill');
+  if (!id) { pill.style.display = 'none'; return; }
+
+  const acc    = BOA_ACCOUNTS[id];
+  const amount = parseFloat(document.getElementById('pb_amount').value) || 0;
+  const after  = acc.balance - amount;
+
+  document.getElementById('pb_bal_amt').textContent  = boaFmt(acc.balance);
+  document.getElementById('pb_bal_after').textContent =
+    amount > 0 ? 'After payment: ' + boaFmt(after) : '';
+  document.getElementById('pb_bal_warn').style.display =
+    (amount > 0 && after < 0) ? 'block' : 'none';
+  pill.style.display = '';
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  document.getElementById('pb_amount').addEventListener('input', updateBalancePill);
+});
+
+/* ================================================================
+   ADD BILLER
+   ================================================================ */
+function addBiller() {
+  const name   = document.getElementById('ab_name').value.trim();
+  const cat    = document.getElementById('ab_category').value;
+  const acct   = document.getElementById('ab_acct').value.trim();
+  const amt    = parseFloat(document.getElementById('ab_typical_amount').value) || 0;
+  const dueDay = parseInt(document.getElementById('ab_due_day').value, 10) || null;
+  const auto   = document.getElementById('ab_autopay').checked;
+  const err    = document.getElementById('ab_error');
+
+  if (!name) { err.style.display = 'flex'; return; }
+  err.style.display = 'none';
+
+  billers.push({ id:Date.now(), name, category:cat, typicalAmt:amt||null, dueDay, acct, autoPay:auto });
+  renderBillers();
+  updateStats();
+
+  // Reset form
+  ['ab_name','ab_acct','ab_typical_amount'].forEach(id => { document.getElementById(id).value = ''; });
+  document.getElementById('ab_category').value = 'utilities';
+  document.getElementById('ab_due_day').value  = '';
+  document.getElementById('ab_autopay').checked = false;
+
+  closeModal('modal-add-biller');
+  showToast('"' + name + '" added to your billers.', 'success');
+}
+
+/* ================================================================
+   MANAGE BILLERS MODAL
+   ================================================================ */
+function openManageBillers() {
+  const list = document.getElementById('manage_billers_list');
+  list.innerHTML = billers.map(function (b) {
+    const c = CAT_ICONS[b.category] || CAT_ICONS.other;
+    return `<div style="display:flex;align-items:center;gap:.75rem;padding:.85rem 1.25rem;
+      border-bottom:1px solid #f0f0f0">
+      <div style="width:36px;height:36px;border-radius:8px;background:${c.bg};color:${c.color};
+        display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0"
+        aria-hidden="true"><i class="fa ${c.icon}"></i></div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:.875rem;font-weight:700;color:#0a2540">${b.name}</div>
+        <div style="font-size:.75rem;color:#888">${b.category}${b.acct ? ' · ' + b.acct : ''}${b.typicalAmt ? ' · ' + boaFmt(b.typicalAmt) : ''}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:.5rem">
+        <button class="BOA-btn BOA-btn--sm ${b.autoPay ? 'BOA-btn--success' : 'BOA-btn--secondary'}"
+          onclick="toggleAutoPay(${b.id})" title="${b.autoPay ? 'Disable AutoPay' : 'Enable AutoPay'}"
+          aria-label="${b.autoPay ? 'Disable' : 'Enable'} AutoPay for ${b.name}">
+          <i class="fa fa-rotate" aria-hidden="true"></i>
+          ${b.autoPay ? 'AutoPay On' : 'AutoPay Off'}
+        </button>
+        <button class="BOA-btn BOA-btn--sm BOA-btn--danger"
+          onclick="deleteBiller(${b.id})"
+          aria-label="Delete ${b.name}">
+          <i class="fa fa-trash" aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+  openModal('modal-manage-billers');
+}
+
+// AutoPay and delete are handled by inline onclick
+
+function toggleAutoPay(id) {
+  const b = billers.find(b => b.id === id);
+  if (!b) return;
+  b.autoPay = !b.autoPay;
+  openManageBillers();  // re-render modal
+  renderBillers();
+  updateStats();
+  showToast('AutoPay ' + (b.autoPay ? 'enabled' : 'disabled') + ' for "' + b.name + '"', b.autoPay ? 'success' : 'info');
+}
+
+function deleteBiller(id) {
+  const b = billers.find(b => b.id === id);
+  if (!b) return;
+  billers = billers.filter(b => b.id !== id);
+  if (selectedBiller && selectedBiller.id === id) clearBillerSelection();
+  openManageBillers();
+  renderBillers();
+  updateStats();
+  showToast('"' + b.name + '" removed from your billers.', 'info');
+}
+
+/* ================================================================
+   SCHEDULED PAYMENTS
+   ================================================================ */
+function renderScheduled() {
+  const container = document.getElementById('scheduled_list');
+  document.getElementById('sched_count_badge').textContent = scheduled.length;
+
+  if (!scheduled.length) {
+    container.innerHTML = '<p style="padding:1rem 1.25rem;font-size:.85rem;color:#888">No payments scheduled.</p>';
+    return;
+  }
+
+  const now = new Date();
+  container.innerHTML = scheduled
+    .slice().sort((a,b) => a.date.localeCompare(b.date))
+    .map(function (s) {
+      const dt       = new Date(s.date + 'T00:00:00');
+      const daysLeft = Math.ceil((dt - now) / 86400000);
+      const dateStr  = dt.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+      const urgent   = daysLeft >= 0 && daysLeft <= 3;
+      const freqBadge = s.freq && s.freq !== 'once'
+        ? `<span class="BOA-badge BOA-badge--info" style="font-size:.65rem;margin-left:.3rem">${s.freq}</span>` : '';
+      return `<div class="pb-sched-row">
+        <div class="pb-sched-icon${urgent ? ' pb-sched-icon--urgent' : ''}"
+          style="${urgent ? 'background:#fee2e2;color:#c8102e' : ''}" aria-hidden="true">
+          <i class="fa fa-clock"></i>
+        </div>
+        <div class="pb-sched-body">
+          <div class="pb-sched-name">${s.name}${freqBadge}</div>
+          <div class="pb-sched-meta ${urgent ? 'pb-sched-due-soon' : ''}">
+            ${urgent ? '<i class="fa fa-triangle-exclamation" aria-hidden="true"></i> ' : ''}
+            Due: ${dateStr} ${daysLeft === 0 ? '(today!)' : daysLeft > 0 ? '(in ' + daysLeft + ' days)' : '(overdue)'}
+          </div>
+          <div style="font-size:.72rem;color:#aaa">${s.fromLabel}</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0">
+          <div class="pb-sched-amount">${boaFmt(s.amount)}</div>
+          <button class="BOA-btn BOA-btn--sm BOA-btn--danger" style="margin-top:.3rem;font-size:.7rem"
+            onclick="cancelScheduled(${s.id})" aria-label="Cancel payment to ${s.name}">
+            <i class="fa fa-xmark" aria-hidden="true"></i> Cancel
+          </button>
+        </div>
+      </div>`;
+    }).join('');
+}
+
+function cancelScheduled(id) {
+  const s = scheduled.find(s => s.id === id);
+  if (!s) return;
+  scheduled = scheduled.filter(s => s.id !== id);
+  renderScheduled();
+  updateStats();
+  showToast('Scheduled payment to "' + s.name + '" cancelled.', 'info');
+}
+
+/* ================================================================
+   PAYMENT HISTORY
+   ================================================================ */
+function renderHistory() {
+  const container = document.getElementById('payment_history_list');
+  const filter    = document.getElementById('hist_filter').value;
+
+  const list = filter === 'all'
+    ? payHistory
+    : payHistory.filter(h => h.category === filter);
+
+  if (!list.length) {
+    container.innerHTML = '<p style="padding:1rem 1.25rem;font-size:.85rem;color:#888">No payment history found.</p>';
+    return;
+  }
+
+  container.innerHTML = list.map(function (h) {
+    const c = CAT_ICONS[h.category] || CAT_ICONS.other;
+    const dt = new Date(h.date + 'T00:00:00');
+    const dateStr = dt.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+    return `<div class="pb-hist-row">
+      <div class="pb-hist-icon" style="background:#dcfce7;color:#16a34a" aria-hidden="true">
+        <i class="fa fa-circle-check"></i>
+      </div>
+      <div class="pb-hist-body">
+        <div class="pb-hist-name">${h.name}</div>
+        <div class="pb-hist-sub">${dateStr} · ${h.fromLabel}</div>
+      </div>
+      <div class="pb-hist-amount pb-hist-amount--neg">${boaFmt(h.amount)}</div>
+    </div>`;
+  }).join('');
+}
+
+/* ================================================================
+   SUMMARY STATS  (all from live data)
+   ================================================================ */
+function updateStats() {
+  const now   = new Date();
+  const month = now.getMonth();
+  const year  = now.getFullYear();
+
+  // Total scheduled this month
+  const schedThisMonth = scheduled.filter(function (s) {
+    const d = new Date(s.date + 'T00:00:00');
+    return d.getMonth() === month && d.getFullYear() === year;
+  });
+  const schedTotal = schedThisMonth.reduce((s,x) => s + x.amount, 0);
+
+  // Total paid this month from history
+  const paidThisMonth = payHistory.filter(function (h) {
+    const d = new Date(h.date + 'T00:00:00');
+    return d.getMonth() === month && d.getFullYear() === year;
+  });
+  const paidTotal = paidThisMonth.reduce((s,x) => s + x.amount, 0);
+
+  // AutoPay count
+  const autoCount = billers.filter(b => b.autoPay).length;
+
+  // Next due
+  const upcoming = scheduled
+    .filter(s => new Date(s.date + 'T00:00:00') >= now)
+    .sort((a,b) => a.date.localeCompare(b.date));
+
+  document.getElementById('stat_due_this_month').textContent = boaFmt(schedTotal);
+  document.getElementById('stat_due_count').textContent      = schedThisMonth.length + ' bill' + (schedThisMonth.length !== 1 ? 's' : '') + ' scheduled';
+  document.getElementById('stat_paid_this_month').textContent = boaFmt(paidTotal);
+  document.getElementById('stat_paid_count').textContent      = paidThisMonth.length + ' payment' + (paidThisMonth.length !== 1 ? 's' : '') + ' made';
+  document.getElementById('stat_autopay_count').textContent   = autoCount;
+
+  if (upcoming.length) {
+    const next = upcoming[0];
+    const dt   = new Date(next.date + 'T00:00:00');
+    document.getElementById('stat_next_due').textContent  = dt.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+    document.getElementById('stat_next_name').textContent = next.name;
+  } else {
+    document.getElementById('stat_next_due').textContent  = '—';
+    document.getElementById('stat_next_name').textContent = 'No upcoming payments';
+  }
+}
+
+/* ================================================================
+   PAYMENT FORM SUBMIT
+   ================================================================ */
+document.addEventListener('DOMContentLoaded', function () {
+  document.getElementById('payment_form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const fromId = document.getElementById('pb_from').value;
+    const amount = parseFloat(document.getElementById('pb_amount').value);
+    const date   = document.getElementById('pb_date').value;
+    const freq   = document.getElementById('pb_frequency').value;
+    const memo   = document.getElementById('pb_memo').value.trim();
+    const errEl  = document.getElementById('pb_pay_error');
+    const errMsg = document.getElementById('pb_pay_error_msg');
+
+    if (!fromId) {
+      errMsg.textContent = 'Please select an account to pay from.';
+      errEl.style.display = 'flex'; return;
+    }
+    if (isNaN(amount) || amount <= 0) {
+      errMsg.textContent = 'Please enter a valid payment amount greater than $0.00.';
+      errEl.style.display = 'flex'; return;
+    }
+    if (!date) {
+      errMsg.textContent = 'Please select a payment date.';
+      errEl.style.display = 'flex'; return;
+    }
+    const acc = BOA_ACCOUNTS[fromId];
+    if (amount > acc.balance) {
+      errMsg.textContent = 'Insufficient funds. Available balance: ' + boaFmt(acc.balance) + '.';
+      errEl.style.display = 'flex'; return;
+    }
+    errEl.style.display = 'none';
+
+    // Deduct from account balance in session
+    acc.balance = Math.max(0, acc.balance - amount);
+
+    const ref       = 'PB' + Date.now().toString(36).toUpperCase();
+    const fromLabel = acc.label + ' (' + acc.mask + ')';
+    const dt        = new Intl.DateTimeFormat('en-US',{dateStyle:'long'}).format(new Date(date+'T00:00:00'));
+    const freqLabels = { once:'One-time', weekly:'Weekly', biweekly:'Every 2 weeks', monthly:'Monthly (AutoPay)' };
+    const billerName = selectedBiller ? selectedBiller.name : '—';
+
+    // Add to scheduled or history depending on date
+    const payDateObj = new Date(date + 'T00:00:00');
+    const today      = new Date(); today.setHours(0,0,0,0);
+    if (payDateObj <= today) {
+      // Treat as immediate — add to history
+      payHistory.unshift({ id:ref, name:billerName, category:selectedBiller?.category||'other',
+        amount, date, fromLabel, status:'Completed' });
+    } else {
+      scheduled.push({ id:Date.now(), billerId:selectedBiller?.id||0, name:billerName,
+        amount, date, from:fromId, fromLabel, category:selectedBiller?.category||'other',
+        ref, freq });
+    }
+
+    // Build confirm grid
+    const rows = [
+      ['Biller',     billerName],
+      ['Amount',     boaFmt(amount)],
+      ['Pay From',   fromLabel],
+      ['Date',       dt],
+      ['Frequency',  freqLabels[freq] || freq],
+    ];
+    if (memo) rows.push(['Memo', memo]);
+
+    document.getElementById('pay_confirm_ref').textContent = ref;
+    document.getElementById('pay_confirm_grid').innerHTML  = rows.map(function (r) {
+      const isAmt = r[0] === 'Amount';
+      return `<div class="pb-confirm-row">
+        <span>${r[0]}</span>
+        <strong style="${isAmt ? 'color:#16a34a;font-size:1rem' : 'color:#0a2540'}">${r[1]}</strong>
+      </div>`;
+    }).join('');
+
+    // Show new balance
+    const nbBox = document.getElementById('pay_new_balance_box');
+    document.getElementById('pay_new_balance').textContent = boaFmt(acc.balance);
+    nbBox.style.display = 'flex';
+
+    renderScheduled();
+    renderHistory();
+    updateStats();
+    // Refresh the from-dropdown text to show updated balance
+    populateFromDropdown();
+
+    openModal('modal-pay-success');
+    this.reset();
+    setDefaultDate();
+    clearBillerSelection();
+  });
+});
+</script>
+</body>
+</html>
